@@ -69,7 +69,7 @@ export const propertySchema = z.object({
   price: z.coerce.number().int().min(0, {
     message: 'price must be a positive number.',
   }),
-  category: z.string(),
+  genre: z.string(),
   description: z.string().refine(
     (description) => {
       const wordCount = description.split(' ').length;

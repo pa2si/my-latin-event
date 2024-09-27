@@ -4,14 +4,14 @@ import EmptyList from './EmptyList';
 import type { PropertyCardProps } from '@/utils/types';
 
 const PropertiesContainer = async ({
-  category,
+  genre,
   search,
 }: {
-  category?: string;
+  genre?: string;
   search?: string;
 }) => {
   const properties: PropertyCardProps[] = await fetchProperties({
-    category,
+    genre,
     search,
   });
 

@@ -1,5 +1,5 @@
 import { Style } from '@/utils/styles';
-import { LuFolderCheck } from 'react-icons/lu';
+import { FaMusic } from 'react-icons/fa';
 import Title from './Title';
 
 const Styles = ({ styles }: { styles: string }) => {
@@ -11,15 +11,15 @@ const Styles = ({ styles }: { styles: string }) => {
   }
   return (
     <div className="mt-4">
-      <Title text="What this place offers" />
+      <Title text="Expect this music styles" />
       <div className="grid md:grid-cols-2 gap-x-4">
         {stylesList.map((style) => {
           if (!style.selected) {
             return null;
           }
           return (
-            <div key={style.name} className="flex items-center gap-x-4 mb-2 ">
-              <LuFolderCheck className="h-6 w-6 text-primary" />
+            <div key={style.name} className="flex items-center gap-x-2 mb-2 ">
+              <FaMusic className="h-4 w-4 text-primary" />
               <span className="font-light text-sm capitalize">
                 {style.name}
               </span>

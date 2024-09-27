@@ -28,7 +28,7 @@ model Property {
   id          String     @id @default(uuid())
   name        String
   tagline     String
-  category    String
+  genre     String
   image       String
   country     String
   description String

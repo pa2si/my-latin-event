@@ -8,63 +8,62 @@ import { PiWarehouse, PiLighthouse, PiVan } from 'react-icons/pi';
 
 import { GoContainer } from 'react-icons/go';
 
-type Category = {
-  label: CategoryLabel;
+type Genre = {
+  label: GenreLabel;
   icon: IconType;
 };
 
-export type CategoryLabel =
-  | 'cabin'
-  | 'tent'
-  | 'airstream'
-  | 'cottage'
-  | 'container'
-  | 'caravan'
-  | 'tiny'
-  | 'magic'
-  | 'warehouse'
-  | 'lodge';
+export type GenreLabel =
+  | 'Latin'
+  | 'Salsa'
+  | 'Cumbia'
+  | 'Reggeaton'
+  | 'Bachata'
+  | 'Merengue'
+  | 'Bolero'
+  | 'Latin-Rock'
+  | 'Latin-Jazz'
+  | 'Andino';
 
-export const categories: Category[] = [
+export const genres: Genre[] = [
   {
-    label: 'cabin',
+    label: 'Latin',
     icon: MdCabin,
   },
   {
-    label: 'airstream',
+    label: 'Salsa',
     icon: PiVan,
   },
   {
-    label: 'tent',
+    label: 'Cumbia',
+    icon: GiWoodCabin,
+  },
+  {
+    label: 'Reggeaton',
     icon: TbTent,
   },
   {
-    label: 'warehouse',
+    label: 'Bachata',
     icon: PiWarehouse,
   },
   {
-    label: 'cottage',
+    label: 'Merengue',
     icon: TbBuildingCottage,
   },
   {
-    label: 'magic',
-    icon: GiMushroomHouse,
-  },
-  {
-    label: 'container',
-    icon: GoContainer,
-  },
-  {
-    label: 'caravan',
-    icon: TbCaravan,
-  },
-
-  {
-    label: 'tiny',
+    label: 'Bolero',
     icon: PiLighthouse,
   },
   {
-    label: 'lodge',
-    icon: GiWoodCabin,
+    label: 'Latin-Rock',
+    icon: GiMushroomHouse,
+  },
+  {
+    label: 'Latin-Jazz',
+    icon: GoContainer,
+  },
+  {
+    label: 'Andino',
+    icon: TbCaravan,
   },
 ];

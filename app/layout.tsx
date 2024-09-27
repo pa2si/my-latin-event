@@ -8,8 +8,8 @@ import { ClerkProvider } from '@clerk/nextjs';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'HomeAway',
-  description: 'Feel at home, away from home.',
+  title: 'My Latin Event',
+  description: 'Find your latin event',
 };
 
 export default function RootLayout({

@@ -172,14 +172,14 @@ export const createPropertyAction = async (
 
 export const fetchProperties = async ({
   search = '',
-  category,
+  genre,
 }: {
   search?: string;
-  category?: string;
+  genre?: string;
 }) => {
   const properties = await db.property.findMany({
     where: {
-      category,
+      genre,
       OR: [
         { name: { contains: search, mode: 'insensitive' } },
         { tagline: { contains: search, mode: 'insensitive' } },

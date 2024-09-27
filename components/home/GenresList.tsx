@@ -1,25 +1,19 @@
-import { categories } from '@/utils/categories';
+import { genres } from '@/utils/genres';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import Link from 'next/link';
 
-const CategoriesList = ({
-  category,
-  search,
-}: {
-  category?: string;
-  search?: string;
-}) => {
+const GenresList = ({ genre, search }: { genre?: string; search?: string }) => {
   const searchTerm = search ? `&search=${search}` : '';
   return (
     <section>
       <ScrollArea className="py-6">
         <div className="flex gap-x-4">
-          {categories.map((item) => {
-            const isActive = item.label === category; // category from query params
+          {genres.map((item) => {
+            const isActive = item.label === genre; // genre from query params
             return (
               <Link
                 key={item.label}
-                href={`/?category=${item.label}${searchTerm}`}
+                href={`/?genre=${item.label}${searchTerm}`}
               >
                 <article
                   className={`p-3 flex flex-col items-center cursor-pointer duration-300  hover:text-primary w-[100px] ${
@@ -38,4 +32,4 @@ const CategoriesList = ({
     </section>
   );
 };
-export default CategoriesList;
+export default GenresList;

@@ -1,3 +1,19 @@
+To do:
+rename Property to Event
+Create also Genres. When genres is Salsa the styles of Salsa shall appear.
+
+v 0.1.1
+
+- styles are now called as actual styles
+- categories are now called genres
+
+v 0.1.0
+
+- connected to db with prisma and hosted at supabase. Project name: my-latin-event
+- clerk auth project called : my-latin-event
+  - admin is github account
+- Amenities is now called Styles
+
 ### Next App
 
 ```sh

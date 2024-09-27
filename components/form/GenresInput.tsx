@@ -1,5 +1,5 @@
 import { Label } from '@/components/ui/label';
-import { categories } from '@/utils/categories';
+import { genres } from '@/utils/genres';
 import {
   Select,
   SelectContent,
@@ -8,16 +8,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const name = 'category';
+const name = 'genre';
 
-const CategoriesInput = ({ defaultValue }: { defaultValue?: string }) => {
+const GenresInput = ({ defaultValue }: { defaultValue?: string }) => {
   return (
     <div className="mb-2">
       <Label htmlFor={name} className="capitalize">
-        Categories
+        Genres
       </Label>
       <Select
-        defaultValue={defaultValue || categories[0].label}
+        defaultValue={defaultValue || genres[0].label}
         name={name}
         required
       >
@@ -25,7 +25,7 @@ const CategoriesInput = ({ defaultValue }: { defaultValue?: string }) => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {categories.map((item) => {
+          {genres.map((item) => {
             return (
               <SelectItem key={item.label} value={item.label}>
                 <span className="flex items-center gap-2">
@@ -40,4 +40,4 @@ const CategoriesInput = ({ defaultValue }: { defaultValue?: string }) => {
   );
 };
 
-export default CategoriesInput;
+export default GenresInput;
