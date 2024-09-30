@@ -485,9 +485,9 @@ export const deleteBookingAction = async (prevState: { bookingId: string }) => {
   }
 };
 
-export const fetchRentals = async () => {
+export const fetchMyEvents = async () => {
   const user = await getAuthUser();
-  const rentals = await db.event.findMany({
+  const myEvents = await db.event.findMany({
     where: {
       profileId: user.id,
     },
@@ -498,11 +498,11 @@ export const fetchRentals = async () => {
     },
   });
 
-  const rentalsWithBookingSums = await Promise.all(
-    rentals.map(async (rental) => {
+  const myEventsWithBookingSums = await Promise.all(
+    myEvents.map(async (myEvent) => {
       const totalNightsSum = await db.booking.aggregate({
         where: {
-          eventId: rental.id,
+          eventId: myEvent.id,
           paymentStatus: true,
         },
         _sum: {
@@ -512,7 +512,7 @@ export const fetchRentals = async () => {
 
       const orderTotalSum = await db.booking.aggregate({
         where: {
-          eventId: rental.id,
+          eventId: myEvent.id,
           paymentStatus: true,
         },
         _sum: {
@@ -521,17 +521,17 @@ export const fetchRentals = async () => {
       });
 
       return {
-        ...rental,
+        ...myEvent,
         totalNightsSum: totalNightsSum._sum.totalNights,
         orderTotalSum: orderTotalSum._sum.orderTotal,
       };
     })
   );
 
-  return rentalsWithBookingSums;
+  return myEventsWithBookingSums;
 };
 
-export const deleteRentalAction = async (prevState: { eventId: string }) => {
+export const deleteMyEventAction = async (prevState: { eventId: string }) => {
   const { eventId } = prevState;
   const user = await getAuthUser();
 
@@ -556,14 +556,14 @@ export const deleteRentalAction = async (prevState: { eventId: string }) => {
       },
     });
 
-    revalidatePath('/rentals');
-    return { message: 'Rental deleted successfully' };
+    revalidatePath('/my-events');
+    return { message: 'My Event deleted successfully' };
   } catch (error) {
     return renderError(error);
   }
 };
 
-export const fetchRentalDetails = async (eventId: string) => {
+export const fetchMyEventDetails = async (eventId: string) => {
   const user = await getAuthUser();
 
   return db.event.findUnique({
@@ -594,7 +594,7 @@ export const updateEventAction = async (
       },
     });
 
-    revalidatePath(`/rentals/${eventId}/edit`);
+    revalidatePath(`/my-events/${eventId}/edit`);
     return { message: 'Update Successful' };
   } catch (error) {
     return renderError(error);
@@ -622,7 +622,7 @@ export const updateEventImageAction = async (
         image: fullPath,
       },
     });
-    revalidatePath(`/rentals/${eventId}/edit`);
+    revalidatePath(`/my-events/${eventId}/edit`);
     return { message: 'Event Image Updated Successful' };
   } catch (error) {
     return renderError(error);

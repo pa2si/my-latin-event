@@ -50,7 +50,7 @@ const CreateEvent = () => {
           <CounterInput detail="baths" />
           <h3 className="text-lg mt-10 mb-6 font-medium">Styles</h3>
           <StylesInput />
-          <SubmitButton text="create rental" className="mt-12" />
+          <SubmitButton text="create event" className="mt-12" />
         </FormContainer>
       </div>
     </section>

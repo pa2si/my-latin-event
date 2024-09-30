@@ -1,5 +1,5 @@
 import {
-  fetchRentalDetails,
+  fetchMyEventDetails,
   updateEventImageAction,
   updateEventAction,
 } from '@/utils/actions';
@@ -16,8 +16,8 @@ import { redirect } from 'next/navigation';
 import { type Style } from '@/utils/styles';
 import ImageInputContainer from '@/components/form/ImageInputContainer';
 
-async function EditRentalPage({ params }: { params: { id: string } }) {
-  const event = await fetchRentalDetails(params.id);
+async function EditMyEventPage({ params }: { params: { id: string } }) {
+  const event = await fetchMyEventDetails(params.id);
 
   if (!event) redirect('/');
 
@@ -77,4 +77,4 @@ async function EditRentalPage({ params }: { params: { id: string } }) {
     </section>
   );
 }
-export default EditRentalPage;
+export default EditMyEventPage;

@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import {
   fetchEventDetails,
   findExistingReview,
-  deleteRentalAction,
+  deleteMyEventAction,
 } from '@/utils/actions';
 import Description from '@/components/events/Description';
 import { redirect } from 'next/navigation';
@@ -58,7 +58,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
         <div className="flex items-center gap-x-4">
           <ShareButton name={event.name} eventId={event.id} />
           <FavoriteToggleButton eventId={event.id} />
-          {isAdminUser && <DeleteRental eventId={event.id} />}
+          {isAdminUser && <DeleteMyEvent eventId={event.id} />}
         </div>
       </header>
       <ImageContainer mainImage={event.image} name={event.name} />
@@ -90,10 +90,10 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-const DeleteRental = ({ eventId }: { eventId: string }) => {
-  const deleteRental = deleteRentalAction.bind(null, { eventId });
+const DeleteMyEvent = ({ eventId }: { eventId: string }) => {
+  const deleteMyEvent = deleteMyEventAction.bind(null, { eventId });
   return (
-    <FormContainer action={deleteRental}>
+    <FormContainer action={deleteMyEvent}>
       <IconButton actionType="delete" variant="outline" />
     </FormContainer>
   );

@@ -1,5 +1,5 @@
 import EmptyList from '@/components/home/EmptyList';
-import { fetchRentals, deleteRentalAction } from '@/utils/actions';
+import { fetchMyEvents, deleteMyEventAction } from '@/utils/actions';
 import Link from 'next/link';
 
 import { formatCurrency } from '@/utils/format';
@@ -16,21 +16,21 @@ import {
 import FormContainer from '@/components/form/FormContainer';
 import { IconButton } from '@/components/form/Buttons';
 
-async function RentalsPage() {
-  const rentals = await fetchRentals();
+async function MyEventsPage() {
+  const myEvents = await fetchMyEvents();
 
-  if (rentals.length === 0) {
+  if (myEvents.length === 0) {
     return (
       <EmptyList
-        heading="No rentals to display."
-        message="Don't hesitate to create a rental."
+        heading="No events to display."
+        message="Don't hesitate to create an event."
       />
     );
   }
 
   return (
     <div className="mt-16">
-      <h4 className="mb-4 capitalize">Active Events : {rentals.length}</h4>
+      <h4 className="mb-4 capitalize">Active Events : {myEvents.length}</h4>
       <Table>
         <TableCaption>A list of all your events.</TableCaption>
         <TableHeader>
@@ -43,9 +43,9 @@ async function RentalsPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rentals.map((rental) => {
-            const { id: eventId, name, price } = rental;
-            const { totalNightsSum, orderTotalSum } = rental;
+          {myEvents.map((myEvent) => {
+            const { id: eventId, name, price } = myEvent;
+            const { totalNightsSum, orderTotalSum } = myEvent;
             return (
               <TableRow key={eventId}>
                 <TableCell>
@@ -61,10 +61,10 @@ async function RentalsPage() {
                 <TableCell>{formatCurrency(orderTotalSum)}</TableCell>
 
                 <TableCell className="flex items-center gap-x-2">
-                  <Link href={`/rentals/${eventId}/edit`}>
+                  <Link href={`/my-events/${eventId}/edit`}>
                     <IconButton actionType="edit"></IconButton>
                   </Link>
-                  <DeleteRental eventId={eventId} />
+                  <DeleteMyEvent eventId={eventId} />
                 </TableCell>
               </TableRow>
             );
@@ -75,13 +75,13 @@ async function RentalsPage() {
   );
 }
 
-const DeleteRental = ({ eventId }: { eventId: string }) => {
-  const deleteRental = deleteRentalAction.bind(null, { eventId });
+const DeleteMyEvent = ({ eventId }: { eventId: string }) => {
+  const deleteMyEvent = deleteMyEventAction.bind(null, { eventId });
   return (
-    <FormContainer action={deleteRental}>
+    <FormContainer action={deleteMyEvent}>
       <IconButton actionType="delete" />
     </FormContainer>
   );
 };
 
-export default RentalsPage;
+export default MyEventsPage;
