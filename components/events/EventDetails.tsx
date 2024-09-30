@@ -1,6 +1,6 @@
 import { formatQuantity } from '@/utils/format';
 
-type PropertyDetailsProps = {
+type EventDetailsProps = {
   details: {
     bedrooms: number;
     baths: number;
@@ -9,9 +9,9 @@ type PropertyDetailsProps = {
   };
 };
 
-function PropertyDetails({
+function EventDetails({
   details: { bedrooms, baths, guests, beds },
-}: PropertyDetailsProps) {
+}: EventDetailsProps) {
   return (
     <p className="text-md font-light ">
       <span>{formatQuantity(bedrooms, 'bedroom')} &middot; </span>
@@ -21,4 +21,4 @@ function PropertyDetails({
     </p>
   );
 }
-export default PropertyDetails;
+export default EventDetails;

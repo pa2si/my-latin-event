@@ -2,6 +2,10 @@ To do:
 rename Property to Event
 Create also Genres. When genres is Salsa the styles of Salsa shall appear.
 
+v 0.1.2
+
+- all names of Property or properties replaced with Event or events 
+
 v 0.1.1
 
 - styles are now called as actual styles

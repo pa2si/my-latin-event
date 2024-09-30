@@ -30,12 +30,12 @@ async function RentalsPage() {
 
   return (
     <div className="mt-16">
-      <h4 className="mb-4 capitalize">Active Properties : {rentals.length}</h4>
+      <h4 className="mb-4 capitalize">Active Events : {rentals.length}</h4>
       <Table>
-        <TableCaption>A list of all your properties.</TableCaption>
+        <TableCaption>A list of all your events.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Property Name</TableHead>
+            <TableHead>Event Name</TableHead>
             <TableHead>Nightly Rate </TableHead>
             <TableHead>Nights Booked</TableHead>
             <TableHead>Total Income</TableHead>
@@ -44,13 +44,13 @@ async function RentalsPage() {
         </TableHeader>
         <TableBody>
           {rentals.map((rental) => {
-            const { id: propertyId, name, price } = rental;
+            const { id: eventId, name, price } = rental;
             const { totalNightsSum, orderTotalSum } = rental;
             return (
-              <TableRow key={propertyId}>
+              <TableRow key={eventId}>
                 <TableCell>
                   <Link
-                    href={`/properties/${propertyId}`}
+                    href={`/events/${eventId}`}
                     className="underline text-muted-foreground tracking-wide"
                   >
                     {name}
@@ -61,10 +61,10 @@ async function RentalsPage() {
                 <TableCell>{formatCurrency(orderTotalSum)}</TableCell>
 
                 <TableCell className="flex items-center gap-x-2">
-                  <Link href={`/rentals/${propertyId}/edit`}>
+                  <Link href={`/rentals/${eventId}/edit`}>
                     <IconButton actionType="edit"></IconButton>
                   </Link>
-                  <DeleteRental propertyId={propertyId} />
+                  <DeleteRental eventId={eventId} />
                 </TableCell>
               </TableRow>
             );
@@ -75,8 +75,8 @@ async function RentalsPage() {
   );
 }
 
-const DeleteRental = ({ propertyId }: { propertyId: string }) => {
-  const deleteRental = deleteRentalAction.bind(null, { propertyId });
+const DeleteRental = ({ eventId }: { eventId: string }) => {
+  const deleteRental = deleteRentalAction.bind(null, { eventId });
   return (
     <FormContainer action={deleteRental}>
       <IconButton actionType="delete" />

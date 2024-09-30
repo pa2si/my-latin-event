@@ -1,7 +1,7 @@
 import {
   fetchRentalDetails,
-  updatePropertyImageAction,
-  updatePropertyAction,
+  updateEventImageAction,
+  updateEventAction,
 } from '@/utils/actions';
 import FormContainer from '@/components/form/FormContainer';
 import FormInput from '@/components/form/FormInput';
@@ -17,61 +17,61 @@ import { type Style } from '@/utils/styles';
 import ImageInputContainer from '@/components/form/ImageInputContainer';
 
 async function EditRentalPage({ params }: { params: { id: string } }) {
-  const property = await fetchRentalDetails(params.id);
+  const event = await fetchRentalDetails(params.id);
 
-  if (!property) redirect('/');
+  if (!event) redirect('/');
 
-  const defaultStyles: Style[] = JSON.parse(property.styles);
+  const defaultStyles: Style[] = JSON.parse(event.styles);
 
   return (
     <section>
-      <h1 className="text-2xl font-semibold mb-8 capitalize">Edit Property</h1>
+      <h1 className="text-2xl font-semibold mb-8 capitalize">Edit Event</h1>
       <div className="border p-8 rounded-md ">
         <ImageInputContainer
-          name={property.name}
+          name={event.name}
           text="Update Image"
-          action={updatePropertyImageAction}
-          image={property.image}
+          action={updateEventImageAction}
+          image={event.image}
         >
-          <input type="hidden" name="id" value={property.id} />
+          <input type="hidden" name="id" value={event.id} />
         </ImageInputContainer>
 
-        <FormContainer action={updatePropertyAction}>
-          <input type="hidden" name="id" value={property.id} />
+        <FormContainer action={updateEventAction}>
+          <input type="hidden" name="id" value={event.id} />
           <div className="grid md:grid-cols-2 gap-8 mb-4 mt-8">
             <FormInput
               name="name"
               type="text"
               label="Name (20 limit)"
-              defaultValue={property.name}
+              defaultValue={event.name}
             />
             <FormInput
               name="tagline"
               type="text "
               label="Tagline (30 limit)"
-              defaultValue={property.tagline}
+              defaultValue={event.tagline}
             />
-            <PriceInput defaultValue={property.price} />
-            <GenresInput defaultValue={property.genre} />
-            <CountriesInput defaultValue={property.country} />
+            <PriceInput defaultValue={event.price} />
+            <GenresInput defaultValue={event.genre} />
+            <CountriesInput defaultValue={event.country} />
           </div>
 
           <TextAreaInput
             name="description"
             labelText="Description (10 - 100 Words)"
-            defaultValue={property.description}
+            defaultValue={event.description}
           />
 
           <h3 className="text-lg mt-8 mb-4 font-medium">
             Accommodation Details
           </h3>
-          <CounterInput detail="guests" defaultValue={property.guests} />
-          <CounterInput detail="bedrooms" defaultValue={property.bedrooms} />
-          <CounterInput detail="beds" defaultValue={property.beds} />
-          <CounterInput detail="baths" defaultValue={property.baths} />
+          <CounterInput detail="guests" defaultValue={event.guests} />
+          <CounterInput detail="bedrooms" defaultValue={event.bedrooms} />
+          <CounterInput detail="beds" defaultValue={event.beds} />
+          <CounterInput detail="baths" defaultValue={event.baths} />
           <h3 className="text-lg mt-10 mb-6 font-medium">Styles</h3>
           <StylesInput defaultValue={defaultStyles} />
-          <SubmitButton text="edit property" className="mt-12" />
+          <SubmitButton text="edit event" className="mt-12" />
         </FormContainer>
       </div>
     </section>

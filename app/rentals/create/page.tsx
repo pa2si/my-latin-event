@@ -1,6 +1,6 @@
 import FormInput from '@/components/form/FormInput';
 import FormContainer from '@/components/form/FormContainer';
-import { createPropertyAction } from '@/utils/actions';
+import { createEventAction } from '@/utils/actions';
 import { SubmitButton } from '@/components/form/Buttons';
 import PriceInput from '@/components/form/PriceInput';
 import GenresInput from '@/components/form/GenresInput';
@@ -10,15 +10,13 @@ import ImageInput from '@/components/form/ImageInput';
 import CounterInput from '@/components/form/CounterInput';
 import StylesInput from '@/components/form/StylesInput';
 
-const CreateProperty = () => {
+const CreateEvent = () => {
   return (
     <section>
-      <h1 className="text-2xl font-semibold mb-8 capitalize">
-        create property
-      </h1>
+      <h1 className="text-2xl font-semibold mb-8 capitalize">create event</h1>
       <div className="border p-8 rounded-md">
         <h3 className="text-lg mb-4 font-medium">General Info</h3>
-        <FormContainer action={createPropertyAction}>
+        <FormContainer action={createEventAction}>
           <div className="grid md:grid-cols-2 gap-8 mb-4">
             <FormInput
               name="name"
@@ -58,4 +56,4 @@ const CreateProperty = () => {
     </section>
   );
 };
-export default CreateProperty;
+export default CreateEvent;

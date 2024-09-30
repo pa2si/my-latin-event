@@ -6,17 +6,14 @@ import { toggleFavoriteAction } from '@/utils/actions';
 import { CardSubmitButton } from '../form/Buttons';
 
 type FavoriteToggleFormProps = {
-  propertyId: string;
+  eventId: string;
   favoriteId: string | null;
 };
 
-function FavoriteToggleForm({
-  propertyId,
-  favoriteId,
-}: FavoriteToggleFormProps) {
+function FavoriteToggleForm({ eventId, favoriteId }: FavoriteToggleFormProps) {
   const pathname = usePathname();
   const toggleAction = toggleFavoriteAction.bind(null, {
-    propertyId,
+    eventId,
     favoriteId,
     pathname,
   });

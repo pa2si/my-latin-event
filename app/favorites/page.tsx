@@ -1,5 +1,5 @@
 import EmptyList from '@/components/home/EmptyList';
-import PropertiesList from '@/components/home/PropertiesList';
+import EventsList from '@/components/home/EventsList';
 import { fetchFavorites } from '@/utils/actions';
 
 const FavoritesPage = async () => {
@@ -9,6 +9,6 @@ const FavoritesPage = async () => {
     return <EmptyList />;
   }
 
-  return <PropertiesList properties={favorites} />;
+  return <EventsList events={favorites} />;
 };
 export default FavoritesPage;

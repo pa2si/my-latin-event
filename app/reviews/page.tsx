@@ -1,15 +1,12 @@
 import EmptyList from '@/components/home/EmptyList';
-import {
-  deleteReviewAction,
-  fetchPropertyReviewsByUser,
-} from '@/utils/actions';
+import { deleteReviewAction, fetchEventReviewsByUser } from '@/utils/actions';
 import ReviewCard from '@/components/reviews/ReviewCard';
-import Title from '@/components/properties/Title';
+import Title from '@/components/events/Title';
 import FormContainer from '@/components/form/FormContainer';
 import { IconButton } from '@/components/form/Buttons';
 
 const ReviewsPage = async () => {
-  const reviews = await fetchPropertyReviewsByUser();
+  const reviews = await fetchEventReviewsByUser();
   if (reviews.length === 0) return <EmptyList />;
 
   return (
@@ -18,7 +15,7 @@ const ReviewsPage = async () => {
       <section className="grid md:grid-cols-2 gap-8 mt-4 ">
         {reviews.map((review) => {
           const { comment, rating } = review;
-          const { name, image } = review.property;
+          const { name, image } = review.event;
           const reviewInfo = {
             comment,
             rating,

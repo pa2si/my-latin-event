@@ -3,7 +3,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { DateRange } from 'react-day-picker';
-import { useProperty } from '@/utils/store';
+import { useEvent } from '@/utils/store';
 
 import {
   generateDisabledDates,
@@ -15,7 +15,7 @@ import {
 const BookingCalendar = () => {
   const currentDate = new Date();
   const [range, setRange] = useState<DateRange | undefined>(defaultSelected);
-  const bookings = useProperty((state) => state.bookings);
+  const bookings = useEvent((state) => state.bookings);
   const { toast } = useToast();
   const blockedPeriods = generateBlockedPeriods({
     bookings,
@@ -35,7 +35,7 @@ const BookingCalendar = () => {
       }
       return false;
     });
-    useProperty.setState({ range });
+    useEvent.setState({ range });
   }, [toast, range, unavailableDates]);
 
   return (

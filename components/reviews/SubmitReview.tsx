@@ -7,7 +7,7 @@ import RatingInput from '@/components/form/RatingInput';
 import TextAreaInput from '@/components/form/TextAreaInput';
 import { Button } from '@/components/ui/button';
 import { createReviewAction } from '@/utils/actions';
-function SubmitReview({ propertyId }: { propertyId: string }) {
+function SubmitReview({ eventId }: { eventId: string }) {
   const [isReviewFormVisible, setIsReviewFormVisible] = useState(false);
   return (
     <div className="mt-8">
@@ -17,11 +17,11 @@ function SubmitReview({ propertyId }: { propertyId: string }) {
       {isReviewFormVisible && (
         <Card className="p-8 mt-8">
           <FormContainer action={createReviewAction}>
-            <input type="hidden" name="propertyId" value={propertyId} />
+            <input type="hidden" name="eventId" value={eventId} />
             <RatingInput name="rating" />
             <TextAreaInput
               name="comment"
-              labelText="your thoughts on this property"
+              labelText="your thoughts on this event"
               defaultValue="Amazing place !!!"
             />
             <SubmitButton text="Submit" className="mt-4" />

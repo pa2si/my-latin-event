@@ -16,15 +16,9 @@ import {
   LinkedinIcon,
 } from 'react-share';
 
-function ShareButton({
-  propertyId,
-  name,
-}: {
-  propertyId: string;
-  name: string;
-}) {
+function ShareButton({ eventId, name }: { eventId: string; name: string }) {
   const url = process.env.NEXT_PUBLIC_WEBSITE_URL;
-  const shareLink = `${url}/properties/${propertyId}`;
+  const shareLink = `${url}/events/${eventId}`;
 
   return (
     <Popover>

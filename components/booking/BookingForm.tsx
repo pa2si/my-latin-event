@@ -1,11 +1,11 @@
 import { calculateTotals } from '@/utils/calculateTotals';
 import { Card, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { useProperty } from '@/utils/store';
+import { useEvent } from '@/utils/store';
 import { formatCurrency } from '@/utils/format';
 
 const BookingForm = () => {
-  const { range, price } = useProperty((state) => state);
+  const { range, price } = useEvent((state) => state);
   const checkIn = range?.from as Date;
   const checkOut = range?.to as Date;
 

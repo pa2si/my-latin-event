@@ -1,18 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import CountryFlagAndName from './CountryFlagAndName';
-import PropertyRating from './PropertyRating';
+import EventRating from './EventRating';
 import FavoriteToggleButton from './FavoriteToggleButton';
-import { PropertyCardProps } from '@/utils/types';
+import { EventCardProps } from '@/utils/types';
 import { formatCurrency } from '@/utils/format';
 
-const PropertyCard = ({ property }: { property: PropertyCardProps }) => {
-  const { name, image, price } = property;
-  const { country, id: propertyId, tagline } = property;
+const EventCard = ({ event }: { event: EventCardProps }) => {
+  const { name, image, price } = event;
+  const { country, id: eventId, tagline } = event;
 
   return (
     <article className="group relative">
-      <Link href={`/properties/${propertyId}`}>
+      <Link href={`/events/${eventId}`}>
         <div className="relative h-[300px] mb-2 overflow-hidden rounded-md">
           <Image
             src={image}
@@ -26,8 +26,8 @@ const PropertyCard = ({ property }: { property: PropertyCardProps }) => {
           <h3 className="text-sm font-semibold mt-1">
             {name.substring(0, 30)}
           </h3>
-          {/* property rating */}
-          <PropertyRating inPage={false} propertyId={propertyId} />
+          {/* event rating */}
+          <EventRating inPage={false} eventId={eventId} />
         </div>
         <p className="text-sm mt-1 text-muted-foreground ">
           {tagline.substring(0, 40)}
@@ -43,9 +43,9 @@ const PropertyCard = ({ property }: { property: PropertyCardProps }) => {
       </Link>
       <div className="absolute top-5 right-5 z-5">
         {/* favorite toggle button*/}
-        <FavoriteToggleButton propertyId={propertyId} />
+        <FavoriteToggleButton eventId={eventId} />
       </div>
     </article>
   );
 };
-export default PropertyCard;
+export default EventCard;

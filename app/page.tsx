@@ -1,6 +1,6 @@
 import LoadingCards from '@/components/card/LoadingCards';
 import GenresList from '@/components/home/GenresList';
-import PropertiesContainer from '@/components/home/PropertiesContainer';
+import EventsContainer from '@/components/home/EventsContainer';
 import { Suspense } from 'react';
 
 const HomePage = ({
@@ -13,7 +13,7 @@ const HomePage = ({
       <section>
         <GenresList genre={searchParams?.genre} search={searchParams?.search} />
         <Suspense fallback={<LoadingCards />}>
-          <PropertiesContainer
+          <EventsContainer
             genre={searchParams?.genre}
             search={searchParams?.search}
           />

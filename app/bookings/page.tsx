@@ -29,7 +29,7 @@ const BookingsPage = async () => {
         <TableCaption>A list of your recent bookings.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Property Name</TableHead>
+            <TableHead>Event Name</TableHead>
             <TableHead>Country</TableHead>
             <TableHead>Nights</TableHead>
             <TableHead>Total</TableHead>
@@ -41,14 +41,14 @@ const BookingsPage = async () => {
         <TableBody>
           {bookings.map((booking) => {
             const { id, orderTotal, totalNights, checkIn, checkOut } = booking;
-            const { id: propertyId, name, country } = booking.property;
+            const { id: eventId, name, country } = booking.event;
             const startDate = formatDate(checkIn);
             const endDate = formatDate(checkOut);
             return (
               <TableRow key={id}>
                 <TableCell>
                   <Link
-                    href={`/properties/${propertyId}`}
+                    href={`/events/${eventId}`}
                     className="underline text-muted-foreground tracking-wide"
                   >
                     {name}

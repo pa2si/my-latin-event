@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   const booking = await db.booking.findUnique({
     where: { id: bookingId },
     include: {
-      property: {
+      event: {
         select: {
           name: true,
           image: true,
@@ -33,7 +33,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
     orderTotal,
     checkIn,
     checkOut,
-    property: { image, name },
+    event: { image, name },
   } = booking;
 
   try {

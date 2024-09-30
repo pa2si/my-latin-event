@@ -30,7 +30,7 @@ function NavSearch() {
   return (
     <Input
       type="search"
-      placeholder="find a property..."
+      placeholder="find an event..."
       className="max-w-xs dark:bg-muted "
       onChange={(e) => {
         setSearch(e.target.value);

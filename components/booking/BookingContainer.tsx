@@ -1,11 +1,11 @@
 'use client';
 
-import { useProperty } from '@/utils/store';
+import { useEvent } from '@/utils/store';
 import ConfirmBooking from './ConfirmBooking';
 import BookingForm from './BookingForm';
 
 const BookingContainer = () => {
-  const { range } = useProperty((state) => state);
+  const { range } = useEvent((state) => state);
   // console.log(range);
 
   if (!range || !range.from || !range.to) return null;

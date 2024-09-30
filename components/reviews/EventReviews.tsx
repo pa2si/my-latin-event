@@ -1,9 +1,9 @@
-import { fetchPropertyReviews } from '@/utils/actions';
-import Title from '@/components/properties/Title';
+import { fetchEventReviews } from '@/utils/actions';
+import Title from '@/components/events/Title';
 
 import ReviewCard from './ReviewCard';
-async function PropertyReviews({ propertyId }: { propertyId: string }) {
-  const reviews = await fetchPropertyReviews(propertyId);
+async function EventReviews({ eventId }: { eventId: string }) {
+  const reviews = await fetchEventReviews(eventId);
   if (reviews.length < 1) return null;
   return (
     <div className="mt-8">
@@ -24,4 +24,4 @@ async function PropertyReviews({ propertyId }: { propertyId: string }) {
     </div>
   );
 }
-export default PropertyReviews;
+export default EventReviews;

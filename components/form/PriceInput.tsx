@@ -2,7 +2,7 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Prisma } from '@prisma/client';
 
-const name = Prisma.PropertyScalarFieldEnum.price;
+const name = Prisma.EventScalarFieldEnum.price;
 // const name = 'price';
 type FormInputNumberProps = {
   defaultValue?: number;

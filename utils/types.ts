@@ -3,7 +3,7 @@ export type actionFunction = (
   formData: FormData
 ) => Promise<{ message: string }>;
 
-export type PropertyCardProps = {
+export type EventCardProps = {
   image: string;
   id: string;
   name: string;

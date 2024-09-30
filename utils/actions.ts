@@ -4,7 +4,7 @@ import {
   createReviewSchema,
   imageSchema,
   profileSchema,
-  propertySchema,
+  eventSchema,
   validateWithZodSchema,
 } from './schemas';
 import db from './db';
@@ -144,7 +144,7 @@ export const updateProfileImageAction = async (
   }
 };
 
-export const createPropertyAction = async (
+export const createEventAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
@@ -153,11 +153,11 @@ export const createPropertyAction = async (
     const rawData = Object.fromEntries(formData);
     const file = formData.get('image') as File;
 
-    const validatedFields = validateWithZodSchema(propertySchema, rawData);
+    const validatedFields = validateWithZodSchema(eventSchema, rawData);
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
     const fullPath = await uploadImage(validatedFile.image);
 
-    await db.property.create({
+    await db.event.create({
       data: {
         ...validatedFields,
         image: fullPath,
@@ -170,14 +170,14 @@ export const createPropertyAction = async (
   redirect('/');
 };
 
-export const fetchProperties = async ({
+export const fetchEvents = async ({
   search = '',
   genre,
 }: {
   search?: string;
   genre?: string;
 }) => {
-  const properties = await db.property.findMany({
+  const events = await db.event.findMany({
     where: {
       genre,
       OR: [
@@ -197,18 +197,14 @@ export const fetchProperties = async ({
       createdAt: 'desc',
     },
   });
-  return properties;
+  return events;
 };
 
-export const fetchFavoriteId = async ({
-  propertyId,
-}: {
-  propertyId: string;
-}) => {
+export const fetchFavoriteId = async ({ eventId }: { eventId: string }) => {
   const user = await getAuthUser();
   const favorite = await db.favorite.findFirst({
     where: {
-      propertyId,
+      eventId,
       profileId: user.id,
     },
     select: {
@@ -219,12 +215,12 @@ export const fetchFavoriteId = async ({
 };
 
 export const toggleFavoriteAction = async (prevState: {
-  propertyId: string;
+  eventId: string;
   favoriteId: string | null;
   pathname: string;
 }) => {
   const user = await getAuthUser();
-  const { propertyId, favoriteId, pathname } = prevState;
+  const { eventId, favoriteId, pathname } = prevState;
   try {
     if (favoriteId) {
       await db.favorite.delete({
@@ -235,7 +231,7 @@ export const toggleFavoriteAction = async (prevState: {
     } else {
       await db.favorite.create({
         data: {
-          propertyId,
+          eventId,
           profileId: user.id,
         },
       });
@@ -254,7 +250,7 @@ export const fetchFavorites = async () => {
       profileId: user.id,
     },
     select: {
-      property: {
+      event: {
         select: {
           id: true,
           name: true,
@@ -266,11 +262,11 @@ export const fetchFavorites = async () => {
       },
     },
   });
-  return favorites.map((favorite) => favorite.property);
+  return favorites.map((favorite) => favorite.event);
 };
 
-export const fetchPropertyDetails = (id: string) => {
-  return db.property.findUnique({
+export const fetchEventDetails = (id: string) => {
+  return db.event.findUnique({
     where: {
       id,
     },
@@ -301,17 +297,17 @@ export const createReviewAction = async (
         profileId: user.id,
       },
     });
-    revalidatePath(`/properties/${validatedFields.propertyId}`);
+    revalidatePath(`/events/${validatedFields.eventId}`);
     return { message: 'Review submitted successfully' };
   } catch (error) {
     return renderError(error);
   }
 };
 
-export async function fetchPropertyReviews(propertyId: string) {
+export async function fetchEventReviews(eventId: string) {
   const reviews = await db.review.findMany({
     where: {
-      propertyId,
+      eventId,
     },
     select: {
       id: true,
@@ -331,7 +327,7 @@ export async function fetchPropertyReviews(propertyId: string) {
   return reviews;
 }
 
-export const fetchPropertyReviewsByUser = async () => {
+export const fetchEventReviewsByUser = async () => {
   const user = await getAuthUser();
   const reviews = await db.review.findMany({
     where: {
@@ -341,7 +337,7 @@ export const fetchPropertyReviewsByUser = async () => {
       id: true,
       rating: true,
       comment: true,
-      property: {
+      event: {
         select: {
           name: true,
           image: true,
@@ -371,9 +367,9 @@ export const deleteReviewAction = async (prevState: { reviewId: string }) => {
   }
 };
 
-export async function fetchPropertyRating(propertyId: string) {
+export async function fetchEventRating(eventId: string) {
   const result = await db.review.groupBy({
-    by: ['propertyId'],
+    by: ['eventId'],
     _avg: {
       rating: true,
     },
@@ -381,7 +377,7 @@ export async function fetchPropertyRating(propertyId: string) {
       rating: true,
     },
     where: {
-      propertyId,
+      eventId,
     },
   });
 
@@ -392,20 +388,17 @@ export async function fetchPropertyRating(propertyId: string) {
   };
 }
 
-export const findExistingReview = async (
-  userId: string,
-  propertyId: string
-) => {
+export const findExistingReview = async (userId: string, eventId: string) => {
   return db.review.findFirst({
     where: {
       profileId: userId,
-      propertyId: propertyId,
+      eventId: eventId,
     },
   });
 };
 
 export const createBookingAction = async (prevState: {
-  propertyId: string;
+  eventId: string;
   checkIn: Date;
   checkOut: Date;
 }) => {
@@ -418,18 +411,18 @@ export const createBookingAction = async (prevState: {
   });
   let bookingId: null | string = null;
 
-  const { propertyId, checkIn, checkOut } = prevState;
-  const property = await db.property.findUnique({
-    where: { id: propertyId },
+  const { eventId, checkIn, checkOut } = prevState;
+  const event = await db.event.findUnique({
+    where: { id: eventId },
     select: { price: true },
   });
-  if (!property) {
-    return { message: 'Property not found' };
+  if (!event) {
+    return { message: 'Event not found' };
   }
   const { orderTotal, totalNights } = calculateTotals({
     checkIn,
     checkOut,
-    price: property.price,
+    price: event.price,
   });
 
   try {
@@ -440,7 +433,7 @@ export const createBookingAction = async (prevState: {
         orderTotal,
         totalNights,
         profileId: user.id,
-        propertyId,
+        eventId,
       },
     });
     bookingId = booking.id;
@@ -458,7 +451,7 @@ export const fetchBookings = async () => {
       paymentStatus: true,
     },
     include: {
-      property: {
+      event: {
         select: {
           id: true,
           name: true,
@@ -494,7 +487,7 @@ export const deleteBookingAction = async (prevState: { bookingId: string }) => {
 
 export const fetchRentals = async () => {
   const user = await getAuthUser();
-  const rentals = await db.property.findMany({
+  const rentals = await db.event.findMany({
     where: {
       profileId: user.id,
     },
@@ -509,7 +502,7 @@ export const fetchRentals = async () => {
     rentals.map(async (rental) => {
       const totalNightsSum = await db.booking.aggregate({
         where: {
-          propertyId: rental.id,
+          eventId: rental.id,
           paymentStatus: true,
         },
         _sum: {
@@ -519,7 +512,7 @@ export const fetchRentals = async () => {
 
       const orderTotalSum = await db.booking.aggregate({
         where: {
-          propertyId: rental.id,
+          eventId: rental.id,
           paymentStatus: true,
         },
         _sum: {
@@ -538,28 +531,28 @@ export const fetchRentals = async () => {
   return rentalsWithBookingSums;
 };
 
-export const deleteRentalAction = async (prevState: { propertyId: string }) => {
-  const { propertyId } = prevState;
+export const deleteRentalAction = async (prevState: { eventId: string }) => {
+  const { eventId } = prevState;
   const user = await getAuthUser();
 
   try {
-    const property = await db.property.findUnique({
-      where: { id: propertyId },
+    const event = await db.event.findUnique({
+      where: { id: eventId },
     });
 
-    if (!property) {
-      return { message: 'Property not found' };
+    if (!event) {
+      return { message: 'Event not found' };
     }
 
     const isAdminUser = user.id === process.env.ADMIN_USER_ID;
 
-    if (property.profileId !== user.id && !isAdminUser) {
-      return { message: 'Not authorized to delete this property' };
+    if (event.profileId !== user.id && !isAdminUser) {
+      return { message: 'Not authorized to delete this event' };
     }
 
-    await db.property.delete({
+    await db.event.delete({
       where: {
-        id: propertyId,
+        id: eventId,
       },
     });
 
@@ -570,30 +563,30 @@ export const deleteRentalAction = async (prevState: { propertyId: string }) => {
   }
 };
 
-export const fetchRentalDetails = async (propertyId: string) => {
+export const fetchRentalDetails = async (eventId: string) => {
   const user = await getAuthUser();
 
-  return db.property.findUnique({
+  return db.event.findUnique({
     where: {
-      id: propertyId,
+      id: eventId,
       profileId: user.id,
     },
   });
 };
 
-export const updatePropertyAction = async (
+export const updateEventAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
   const user = await getAuthUser();
-  const propertyId = formData.get('id') as string;
+  const eventId = formData.get('id') as string;
 
   try {
     const rawData = Object.fromEntries(formData);
-    const validatedFields = validateWithZodSchema(propertySchema, rawData);
-    await db.property.update({
+    const validatedFields = validateWithZodSchema(eventSchema, rawData);
+    await db.event.update({
       where: {
-        id: propertyId,
+        id: eventId,
         profileId: user.id,
       },
       data: {
@@ -601,36 +594,36 @@ export const updatePropertyAction = async (
       },
     });
 
-    revalidatePath(`/rentals/${propertyId}/edit`);
+    revalidatePath(`/rentals/${eventId}/edit`);
     return { message: 'Update Successful' };
   } catch (error) {
     return renderError(error);
   }
 };
 
-export const updatePropertyImageAction = async (
+export const updateEventImageAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
   const user = await getAuthUser();
-  const propertyId = formData.get('id') as string;
+  const eventId = formData.get('id') as string;
 
   try {
     const image = formData.get('image') as File;
     const validatedFields = validateWithZodSchema(imageSchema, { image });
     const fullPath = await uploadImage(validatedFields.image);
 
-    await db.property.update({
+    await db.event.update({
       where: {
-        id: propertyId,
+        id: eventId,
         profileId: user.id,
       },
       data: {
         image: fullPath,
       },
     });
-    revalidatePath(`/rentals/${propertyId}/edit`);
-    return { message: 'Property Image Updated Successful' };
+    revalidatePath(`/rentals/${eventId}/edit`);
+    return { message: 'Event Image Updated Successful' };
   } catch (error) {
     return renderError(error);
   }
@@ -642,7 +635,7 @@ export const fetchReservations = async () => {
   const reservations = await db.booking.findMany({
     where: {
       paymentStatus: true,
-      property: {
+      event: {
         profileId: user.id,
       },
     },
@@ -652,14 +645,14 @@ export const fetchReservations = async () => {
     },
 
     include: {
-      property: {
+      event: {
         select: {
           id: true,
           name: true,
           price: true,
           country: true,
         },
-      }, // include property details in the result
+      }, // include event details in the result
     },
   });
   return reservations;
@@ -669,7 +662,7 @@ export const fetchStats = async () => {
   await getAdminUser();
 
   const usersCount = await db.profile.count();
-  const propertiesCount = await db.property.count();
+  const eventsCount = await db.event.count();
   const bookingsCount = await db.booking.count({
     where: {
       paymentStatus: true,
@@ -678,7 +671,7 @@ export const fetchStats = async () => {
 
   return {
     usersCount,
-    propertiesCount,
+    eventsCount,
     bookingsCount,
   };
 };
@@ -717,7 +710,7 @@ export const fetchChartsData = async () => {
 
 export const fetchReservationStats = async () => {
   const user = await getAuthUser();
-  const properties = await db.property.count({
+  const events = await db.event.count({
     where: {
       profileId: user.id,
     },
@@ -729,14 +722,14 @@ export const fetchReservationStats = async () => {
       totalNights: true,
     },
     where: {
-      property: {
+      event: {
         profileId: user.id,
       },
     },
   });
 
   return {
-    properties,
+    events,
     nights: totals._sum.totalNights || 0,
     amount: totals._sum.orderTotal || 0,
   };

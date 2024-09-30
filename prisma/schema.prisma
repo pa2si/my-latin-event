@@ -18,13 +18,13 @@ model Profile {
   profileImage String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
-  properties   Property[]
+  events      Event[]
   favorites   Favorite[]
   reviews     Review[]
   bookings Booking[]
 }
 
-model Property {
+model Event {
   id          String     @id @default(uuid())
   name        String
   tagline     String
@@ -55,8 +55,8 @@ model Favorite {
   profile   Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
   profileId String
 
-  property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  propertyId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId String
 
 }
 
@@ -64,8 +64,8 @@ model Review {
   id        String   @id @default(uuid())
   profile   Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
   profileId String
-  property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  propertyId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId String
   rating    Int
   comment   String
   createdAt DateTime @default(now())
@@ -76,8 +76,8 @@ model Booking {
   id        String   @id @default(uuid())
   profile   Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
   profileId String
-  property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  propertyId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId String
   orderTotal     Int
   totalNights    Int
   checkIn   DateTime

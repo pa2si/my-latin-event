@@ -49,7 +49,7 @@ function validateFile() {
     }, 'File must be an image');
 }
 
-export const propertySchema = z.object({
+export const eventSchema = z.object({
   name: z
     .string()
     .min(2, {
@@ -96,7 +96,7 @@ export const propertySchema = z.object({
 });
 
 export const createReviewSchema = z.object({
-  propertyId: z.string(),
+  eventId: z.string(),
   rating: z.coerce.number().int().min(1).max(5),
   comment: z.string().min(10).max(1000),
 });

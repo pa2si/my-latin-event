@@ -16,7 +16,7 @@ import { findCountryByCode } from '@/utils/countries';
 import CountryFlagAndName from '../card/CountryFlagAndName';
 import Title from './Title';
 
-const PropertyMap = ({ countryCode }: { countryCode: string }) => {
+const EventMap = ({ countryCode }: { countryCode: string }) => {
   const defaultLocation = [51.505, -0.09] as [number, number];
   const location = findCountryByCode(countryCode)?.location as [number, number];
 
@@ -46,4 +46,4 @@ const PropertyMap = ({ countryCode }: { countryCode: string }) => {
     </div>
   );
 };
-export default PropertyMap;
+export default EventMap;
