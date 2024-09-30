@@ -12,14 +12,14 @@ function PriceInput({ defaultValue }: FormInputNumberProps) {
   return (
     <div className="mb-2">
       <Label htmlFor="price" className="capitalize">
-        Price ($)
+        Price (€)
       </Label>
       <Input
         id={name}
         type="number"
         name={name}
         min={0}
-        defaultValue={defaultValue || 100}
+        defaultValue={defaultValue || 8}
         required
       />
     </div>

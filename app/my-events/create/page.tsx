@@ -22,13 +22,13 @@ const CreateEvent = () => {
               name="name"
               type="text"
               label="Name (20 limit)"
-              defaultValue="Cabin in Latvia"
+              defaultValue="My Event"
             />
             <FormInput
               name="tagline"
               type="text "
               label="Tagline (30 limit)"
-              defaultValue="Dream Getaway Awaits You Here!"
+              defaultValue="This is your catchy event phrase"
             />
             <PriceInput />
             <GenresInput />

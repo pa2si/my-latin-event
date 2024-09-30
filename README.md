@@ -2,6 +2,10 @@ To do:
 rename Property to Event
 Create also Genres. When genres is Salsa the styles of Salsa shall appear.
 
+v 0.1.4
+
+- some changes of default values for create Event
+
 v 0.1.3
 
 - all names of rental or rentals are replaced with my-event or my-events
