@@ -10,7 +10,13 @@ import {
 
 const name = 'genre';
 
-const GenresInput = ({ defaultValue }: { defaultValue?: string }) => {
+const GenresInput = ({
+  defaultValue,
+  onChange,
+}: {
+  defaultValue?: string;
+  onChange: (value: string) => void;
+}) => {
   return (
     <div className="mb-2">
       <Label htmlFor={name} className="capitalize">
@@ -20,6 +26,7 @@ const GenresInput = ({ defaultValue }: { defaultValue?: string }) => {
         defaultValue={defaultValue || genres[0].label}
         name={name}
         required
+        onValueChange={onChange}
       >
         <SelectTrigger id={name}>
           <SelectValue />
@@ -28,9 +35,7 @@ const GenresInput = ({ defaultValue }: { defaultValue?: string }) => {
           {genres.map((item) => {
             return (
               <SelectItem key={item.label} value={item.label}>
-                <span className="flex items-center gap-2">
-                  <item.icon /> {item.label}
-                </span>
+                <span className="flex items-center gap-2">{item.label}</span>
               </SelectItem>
             );
           })}

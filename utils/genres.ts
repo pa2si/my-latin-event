@@ -17,6 +17,7 @@ export type GenreLabel =
   | 'Latin'
   | 'Salsa'
   | 'Cumbia'
+  | 'Tropical'
   | 'Reggeaton'
   | 'Bachata'
   | 'Merengue'
@@ -36,6 +37,10 @@ export const genres: Genre[] = [
   },
   {
     label: 'Cumbia',
+    icon: GiWoodCabin,
+  },
+  {
+    label: 'Tropical',
     icon: GiWoodCabin,
   },
   {

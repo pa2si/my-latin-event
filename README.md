@@ -1,6 +1,11 @@
 To do:
-rename Property to Event
-Create also Genres. When genres is Salsa the styles of Salsa shall appear.
+create the rest of Styles for the genres
+
+v 0.1.5
+
+- motion-framer installed
+- depending on wich genre i chose the styles will display correspondingly (getStyles.ts)
+-
 
 v 0.1.4
 
