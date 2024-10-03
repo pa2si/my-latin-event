@@ -24,7 +24,7 @@ export type GenreLabel =
   | 'Bolero'
   | 'Latin-Rock'
   | 'Latin-Jazz'
-  | 'Andino';
+  | 'Musica Andina';
 
 export const genres: Genre[] = [
   {
@@ -68,7 +68,7 @@ export const genres: Genre[] = [
     icon: GoContainer,
   },
   {
-    label: 'Andino',
+    label: 'Musica Andina',
     icon: TbCaravan,
   },
 ];

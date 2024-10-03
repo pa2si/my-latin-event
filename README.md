@@ -1,5 +1,9 @@
 To do:
-create the rest of Styles for the genres
+continue wieh create event form
+
+v 0.1.6
+
+- all styles created 
 
 v 0.1.5
 
