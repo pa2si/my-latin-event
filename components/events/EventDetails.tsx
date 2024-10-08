@@ -2,22 +2,20 @@ import { formatQuantity } from '@/utils/format';
 
 type EventDetailsProps = {
   details: {
-    bedrooms: number;
-    baths: number;
-    guests: number;
-    beds: number;
+    floors: number;
+    bars: number;
+    outdoorAreas: number;
   };
 };
 
 function EventDetails({
-  details: { bedrooms, baths, guests, beds },
+  details: { floors, bars, outdoorAreas },
 }: EventDetailsProps) {
   return (
     <p className="text-md font-light ">
-      <span>{formatQuantity(bedrooms, 'bedroom')} &middot; </span>
-      <span>{formatQuantity(baths, 'bath')} &middot; </span>
-      <span>{formatQuantity(guests, 'guest')} &middot; </span>
-      <span>{formatQuantity(beds, 'bed')}</span>
+      <span>{formatQuantity(floors, 'floor')} &middot; </span>
+      <span>{formatQuantity(bars, 'bar')} &middot; </span>
+      <span>{formatQuantity(outdoorAreas, 'outdoor area')} </span>
     </p>
   );
 }

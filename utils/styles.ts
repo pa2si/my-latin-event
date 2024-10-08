@@ -29,11 +29,12 @@ export const latinStyles: Style[] = [
   { name: 'Son', icon: FiBox, selected: false },
   { name: 'Cumbia', icon: FiAirplay, selected: false },
   { name: 'Reggeaton', icon: FiAirplay, selected: false },
+  { name: 'Dembow', icon: FiAirplay, selected: false },
+  { name: 'Bouyon', icon: FiAirplay, selected: false },
   { name: 'Bachata', icon: FiAirplay, selected: false },
   { name: 'Merengue', icon: FiAirplay, selected: false },
   { name: 'Hip Hop Latino', icon: FiAirplay, selected: false },
   { name: 'Tropical', icon: FiAirplay, selected: false },
-  { name: 'Dembow', icon: FiAirplay, selected: false },
   { name: 'Currulao', icon: FiAirplay, selected: false },
   { name: 'Vallenato', icon: FiAirplay, selected: false },
   { name: 'Bullerengue', icon: FiAirplay, selected: false },
@@ -90,6 +91,7 @@ export const reggeatonStyles: Style[] = [
   { name: 'Old School', icon: FiBox, selected: false },
   { name: 'Neo Perreo', icon: FiAirplay, selected: false },
   { name: 'Dembow', icon: FiAirplay, selected: false },
+  { name: 'Bouyon', icon: FiAirplay, selected: false },
 ];
 
 export const bachataStyles: Style[] = [

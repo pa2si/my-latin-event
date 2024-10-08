@@ -1,9 +1,13 @@
 To do:
-continue wieh create event form
+continue with create event form
+
+v 0.1.7
+
+- property details are now location details with its corresponding sections
 
 v 0.1.6
 
-- all styles created 
+- all styles created
 
 v 0.1.5
 

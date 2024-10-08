@@ -62,7 +62,7 @@ const CreateEvent = () => {
                 <FiMusic />
               </div>
             </div>
-            <StylesInput styles={styles} />
+            <StylesInput styles={styles || []} />
           </div>
 
           <TextAreaInput
@@ -73,14 +73,10 @@ const CreateEvent = () => {
             <CountriesInput />
             <ImageInput />
           </div>
-          <h3 className="text-lg mt-8 mb-4 font-medium">
-            Accommodation Details
-          </h3>
-          <CounterInput detail="guests" />
-          <CounterInput detail="bedrooms" />
-          <CounterInput detail="beds" />
-          <CounterInput detail="baths" />
-
+          <h3 className="text-lg mt-8 mb-4 font-medium">Location Details</h3>
+          <CounterInput detail="floors" />
+          <CounterInput detail="bars" />
+          <CounterInput detail="outdoorAreas" />
           <SubmitButton text="create event" className="mt-12" />
         </FormContainer>
       </div>

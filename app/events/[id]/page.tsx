@@ -38,8 +38,8 @@ const DynamicBookingWrapper = dynamic(
 const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const event = await fetchEventDetails(params.id);
   if (!event) redirect('/');
-  const { baths, bedrooms, beds, guests } = event;
-  const details = { baths, bedrooms, beds, guests };
+  const { floors, bars, outdoorAreas } = event;
+  const details = { floors, bars, outdoorAreas };
 
   const firstName = event.profile.firstName;
   const profileImage = event.profile.profileImage;
