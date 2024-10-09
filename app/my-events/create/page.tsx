@@ -14,12 +14,14 @@ import ImageInput from '@/components/form/ImageInput';
 import CounterInput from '@/components/form/CounterInput';
 import StylesInput from '@/components/form/StylesInput';
 import getStyles from '@/utils/getStyles';
+import { DatePicker } from '@/components/form/DatePicker';
 
 const defaultGenre = 'Latin'; // Set the default genre
 
 const CreateEvent = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>(defaultGenre);
   const [styles, setStyles] = useState(getStyles(defaultGenre));
+  const [eventDate, setEventDate] = useState<Date | null>(null); // New state for the date
 
   useEffect(() => {
     setStyles(getStyles(selectedGenre));
@@ -77,6 +79,12 @@ const CreateEvent = () => {
           <CounterInput detail="floors" />
           <CounterInput detail="bars" />
           <CounterInput detail="outdoorAreas" />
+          <DatePicker setDate={setEventDate} />
+          <input
+            type="hidden"
+            name="eventDate"
+            value={eventDate ? eventDate.toISOString() : ''}
+          />
           <SubmitButton text="create event" className="mt-12" />
         </FormContainer>
       </div>

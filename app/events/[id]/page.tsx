@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import FavoriteToggleButton from '@/components/card/FavoriteToggleButton';
 import EventRating from '@/components/card/EventRating';
 import BreadCrumbs from '@/components/events/BreadCrumbs';
@@ -38,8 +39,10 @@ const DynamicBookingWrapper = dynamic(
 const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const event = await fetchEventDetails(params.id);
   if (!event) redirect('/');
-  const { floors, bars, outdoorAreas } = event;
+  const { floors, bars, outdoorAreas, eventDate } = event;
   const details = { floors, bars, outdoorAreas };
+
+  const formattedDate = format(new Date(eventDate), 'PPP');
 
   const firstName = event.profile.firstName;
   const profileImage = event.profile.profileImage;
@@ -68,6 +71,9 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             <h1 className="text-xl font-bold">{event.name}</h1>
             <EventRating inPage eventId={event.id} />
           </div>
+          <p className="text-sm mt-2 text-gray-500">
+            Event Date: {formattedDate} {/* Display formatted date */}
+          </p>
           <EventDetails details={details} />
           <UserInfo profile={{ firstName, profileImage }} />
           <Separator className="mt-4" />

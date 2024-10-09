@@ -90,6 +90,15 @@ export const eventSchema = z.object({
     message: 'outdoor area amount must be a positive number.',
   }),
   styles: z.string(),
+  eventDate: z.preprocess((arg) => {
+    if (typeof arg === 'string' || arg instanceof Date) {
+      const date = new Date(arg);
+      if (!isNaN(date.getTime())) {
+        return date;
+      }
+    }
+    return new Date(); // Fallback to a default Date if the input is invalid
+  }, z.date()),
 });
 
 export const createReviewSchema = z.object({

@@ -1,6 +1,15 @@
 To do:
 continue with create event form
 
+v 0.1.8
+
+- DatePicker implemented in CreateEvent.
+  - adaption in:
+    - createEvent
+    - createEventAction (actions)
+    - EventDetailsPage
+    - schemas & prisma schemas
+
 v 0.1.7
 
 - property details are now location details with its corresponding sections

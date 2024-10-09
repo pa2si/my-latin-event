@@ -148,6 +148,7 @@ export const createEventAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
+  // console.log(Object.fromEntries(formData)); // Log form data
   const user = await getAuthUser();
   try {
     const rawData = Object.fromEntries(formData);
@@ -162,6 +163,7 @@ export const createEventAction = async (
         ...validatedFields,
         image: fullPath,
         profileId: user.id,
+        eventDate: validatedFields.eventDate as string | Date,
       },
     });
   } catch (error) {
@@ -591,6 +593,7 @@ export const updateEventAction = async (
       },
       data: {
         ...validatedFields,
+        eventDate: validatedFields.eventDate as string | Date,
       },
     });
 

@@ -65,12 +65,11 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
           <h3 className="text-lg mt-8 mb-4 font-medium">
             Accommodation Details
           </h3>
-          <CounterInput detail="guests" defaultValue={event.guests} />
-          <CounterInput detail="bedrooms" defaultValue={event.bedrooms} />
-          <CounterInput detail="beds" defaultValue={event.beds} />
-          <CounterInput detail="baths" defaultValue={event.baths} />
+          <CounterInput detail="guests" defaultValue={event.floors} />
+          <CounterInput detail="bedrooms" defaultValue={event.bars} />
+          <CounterInput detail="beds" defaultValue={event.outdoorAreas} />
           <h3 className="text-lg mt-10 mb-6 font-medium">Styles</h3>
-          <StylesInput defaultValue={defaultStyles} />
+          <StylesInput styles={defaultStyles} />
           <SubmitButton text="edit event" className="mt-12" />
         </FormContainer>
       </div>
