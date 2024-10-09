@@ -1,5 +1,15 @@
 To do:
-continue with create event form
+
+- continue with create event form
+- add edit button when creator or admin next to the delete button (admin view) (for event slug)
+- put profile component from salsa calendar in the menu
+
+WHATS DONE IN VERIONS
+
+v 0.1.9
+
+- DatePicker now in editMyEvents
+- Genres and corresponding Styles with booleans are fetched correctly in editMyEvents
 
 v 0.1.8
 

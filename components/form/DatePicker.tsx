@@ -13,17 +13,19 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-// Define the props for the DatePicker
 interface DatePickerProps {
   setDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  initialDate?: Date | null; // Accept initial date
 }
 
-export function DatePicker({ setDate }: DatePickerProps) {
-  const [date, setLocalDate] = React.useState<Date>();
+export function DatePicker({ setDate, initialDate }: DatePickerProps) {
+  const [date, setLocalDate] = React.useState<Date | undefined>(
+    initialDate || undefined
+  );
 
   const handleDateChange = (selectedDate: Date | undefined) => {
     setLocalDate(selectedDate);
-    setDate(selectedDate || null); // Ensure to call the parent's setDate
+    setDate(selectedDate || null);
   };
 
   return (
@@ -44,7 +46,7 @@ export function DatePicker({ setDate }: DatePickerProps) {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={handleDateChange} // Update on date selection
+          onSelect={handleDateChange}
           initialFocus
         />
       </PopoverContent>

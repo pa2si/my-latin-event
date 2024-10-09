@@ -1,36 +1,20 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { FiMusic } from 'react-icons/fi';
 import FormInput from '@/components/form/FormInput';
 import FormContainer from '@/components/form/FormContainer';
 import { createEventAction } from '@/utils/actions';
 import { SubmitButton } from '@/components/form/Buttons';
 import PriceInput from '@/components/form/PriceInput';
-import GenresInput from '@/components/form/GenresInput';
+import GenreAndStylesInput from '@/components/form/GenreAndStylesInput';
 import TextAreaInput from '@/components/form/TextAreaInput';
 import CountriesInput from '@/components/form/CountriesInput';
 import ImageInput from '@/components/form/ImageInput';
 import CounterInput from '@/components/form/CounterInput';
-import StylesInput from '@/components/form/StylesInput';
-import getStyles from '@/utils/getStyles';
-import { DatePicker } from '@/components/form/DatePicker';
+import DatePickerContainer from '@/components/form/DatePickerContainer';
+import { Style } from '@/utils/styles';
 
 const defaultGenre = 'Latin'; // Set the default genre
-
+const defaultStyles: Style[] = [];
 const CreateEvent = () => {
-  const [selectedGenre, setSelectedGenre] = useState<string>(defaultGenre);
-  const [styles, setStyles] = useState(getStyles(defaultGenre));
-  const [eventDate, setEventDate] = useState<Date | null>(null); // New state for the date
-
-  useEffect(() => {
-    setStyles(getStyles(selectedGenre));
-  }, [selectedGenre]);
-
-  const handleGenreChange = (genre: string) => {
-    setSelectedGenre(genre);
-  };
-
+  const initialDate: Date | null = null; // Or set to new Date() for today
   return (
     <section>
       <h1 className="text-2xl font-semibold mb-8 capitalize">create event</h1>
@@ -51,22 +35,11 @@ const CreateEvent = () => {
               defaultValue="This is your catchy event phrase"
             />
             <PriceInput />
-            <GenresInput
-              defaultValue={defaultGenre}
-              onChange={handleGenreChange}
+            <GenreAndStylesInput
+              defaultGenre={defaultGenre}
+              defaultStyles={defaultStyles}
             />
           </div>
-
-          <div className="mb-12 flex-row justify-center">
-            <div className="flex flex-row items-center gap-1 text-xl">
-              <h3 className="text-lg mt-10 mb-6 font-medium">Styles</h3>
-              <div className="mt-4">
-                <FiMusic />
-              </div>
-            </div>
-            <StylesInput styles={styles || []} />
-          </div>
-
           <TextAreaInput
             name="description"
             labelText="Description (10 - 1000 Words)"
@@ -79,12 +52,7 @@ const CreateEvent = () => {
           <CounterInput detail="floors" />
           <CounterInput detail="bars" />
           <CounterInput detail="outdoorAreas" />
-          <DatePicker setDate={setEventDate} />
-          <input
-            type="hidden"
-            name="eventDate"
-            value={eventDate ? eventDate.toISOString() : ''}
-          />
+          <DatePickerContainer initialDate={initialDate} />
           <SubmitButton text="create event" className="mt-12" />
         </FormContainer>
       </div>

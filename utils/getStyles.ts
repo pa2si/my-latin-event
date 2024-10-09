@@ -36,7 +36,7 @@ const getStyles = (genre: string) => {
       return latinJazzStyles;
     case 'Musica Andina':
       return musicaAndindaStyles;
-
+    default:
       return [];
   }
 };

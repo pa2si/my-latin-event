@@ -5,23 +5,30 @@ import {
 } from '@/utils/actions';
 import FormContainer from '@/components/form/FormContainer';
 import FormInput from '@/components/form/FormInput';
-import GenresInput from '@/components/form/GenresInput';
 import PriceInput from '@/components/form/PriceInput';
 import TextAreaInput from '@/components/form/TextAreaInput';
 import CountriesInput from '@/components/form/CountriesInput';
 import CounterInput from '@/components/form/CounterInput';
-import StylesInput from '@/components/form/StylesInput';
 import { SubmitButton } from '@/components/form/Buttons';
 import { redirect } from 'next/navigation';
-import { type Style } from '@/utils/styles';
 import ImageInputContainer from '@/components/form/ImageInputContainer';
+import GenreAndStylesInput from '@/components/form/GenreAndStylesInput';
+import DatePickerContainer from '@/components/form/DatePickerContainer';
+import { Style } from '@/utils/styles';
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {
   const event = await fetchMyEventDetails(params.id);
 
   if (!event) redirect('/');
 
-  const defaultStyles: Style[] = JSON.parse(event.styles);
+  let parsedStyles: Style[] = [];
+  try {
+    parsedStyles = JSON.parse(event.styles as string);
+  } catch (error) {
+    console.error('Error parsing styles:', error);
+    // If parsing fails, default to an empty array
+    parsedStyles = [];
+  }
 
   return (
     <section>
@@ -52,8 +59,10 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
               defaultValue={event.tagline}
             />
             <PriceInput defaultValue={event.price} />
-            <GenresInput defaultValue={event.genre} />
-            <CountriesInput defaultValue={event.country} />
+            <GenreAndStylesInput
+              defaultGenre={event.genre}
+              defaultStyles={parsedStyles}
+            />
           </div>
 
           <TextAreaInput
@@ -61,15 +70,18 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
             labelText="Description (10 - 100 Words)"
             defaultValue={event.description}
           />
+          <CountriesInput defaultValue={event.country} />
 
           <h3 className="text-lg mt-8 mb-4 font-medium">
             Accommodation Details
           </h3>
-          <CounterInput detail="guests" defaultValue={event.floors} />
-          <CounterInput detail="bedrooms" defaultValue={event.bars} />
-          <CounterInput detail="beds" defaultValue={event.outdoorAreas} />
-          <h3 className="text-lg mt-10 mb-6 font-medium">Styles</h3>
-          <StylesInput styles={defaultStyles} />
+          <CounterInput detail="floors" defaultValue={event.floors} />
+          <CounterInput detail="bars" defaultValue={event.bars} />
+          <CounterInput
+            detail="outdoorAreas"
+            defaultValue={event.outdoorAreas}
+          />
+          <DatePickerContainer initialDate={event.eventDate} />
           <SubmitButton text="edit event" className="mt-12" />
         </FormContainer>
       </div>
