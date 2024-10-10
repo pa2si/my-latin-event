@@ -91,13 +91,14 @@ export const eventSchema = z.object({
   }),
   styles: z.string(),
   eventDate: z.preprocess((arg) => {
+    // make sure this returns a Date or undefined
     if (typeof arg === 'string' || arg instanceof Date) {
       const date = new Date(arg);
       if (!isNaN(date.getTime())) {
         return date;
       }
     }
-    return new Date(); // Fallback to a default Date if the input is invalid
+    return undefined; // or null, based on how you handle empty dates
   }, z.date()),
 });
 

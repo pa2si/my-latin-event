@@ -1,10 +1,21 @@
 To do:
 
+- TimePicker needs to be added to editEvent
+- implement eventDateTimeEnd TimePicker. can be empty
+- implement restrictions in datePicker. cant select date in the past!
 - continue with create event form
 - add edit button when creator or admin next to the delete button (admin view) (for event slug)
 - put profile component from salsa calendar in the menu
+- implement a section where i can see my calender with all my events
+- implement a follow creator action and section where i can see all events from the followed creator
 
-WHATS DONE IN VERIONS
+WHATS DONE IN VERSIONS
+
+v 0.1.10
+
+- TimePicker implemented and added to DateAndTimePickerContainer
+- result gets added to eventDate and gets saved together with the DatePicker value in the db
+- therefore createEventAction got updated
 
 v 0.1.9
 

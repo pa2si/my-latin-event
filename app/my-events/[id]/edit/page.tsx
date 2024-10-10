@@ -13,7 +13,7 @@ import { SubmitButton } from '@/components/form/Buttons';
 import { redirect } from 'next/navigation';
 import ImageInputContainer from '@/components/form/ImageInputContainer';
 import GenreAndStylesInput from '@/components/form/GenreAndStylesInput';
-import DatePickerContainer from '@/components/form/DatePickerContainer';
+import DatePickerContainer from '@/components/form/DateAndTimePickerContainer';
 import { Style } from '@/utils/styles';
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {

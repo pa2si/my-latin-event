@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { Calendar as CalendarIcon, Clock } from 'lucide-react';
 import FavoriteToggleButton from '@/components/card/FavoriteToggleButton';
 import EventRating from '@/components/card/EventRating';
 import BreadCrumbs from '@/components/events/BreadCrumbs';
@@ -42,7 +43,8 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const { floors, bars, outdoorAreas, eventDate } = event;
   const details = { floors, bars, outdoorAreas };
 
-  const formattedDate = format(new Date(eventDate), 'PPP');
+  const formattedDate = format(new Date(eventDate), 'dd.MM.yy');
+  const formattedTime = format(new Date(eventDate), 'HH:mm');
 
   const firstName = event.profile.firstName;
   const profileImage = event.profile.profileImage;
@@ -71,8 +73,13 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             <h1 className="text-xl font-bold">{event.name}</h1>
             <EventRating inPage eventId={event.id} />
           </div>
-          <p className="text-sm mt-2 text-gray-500">
-            Event Date: {formattedDate} {/* Display formatted date */}
+          <p className="text-sm mt-2 text-gray-500 flex items-center">
+            <CalendarIcon className="mr-1" size={16} />
+            {formattedDate} {/* Display formatted date */}
+          </p>
+          <p className="text-sm mt-2 text-gray-500 flex items-center">
+            <Clock className="mr-1" size={16} />
+            {formattedTime} {/* Display formatted time */}
           </p>
           <EventDetails details={details} />
           <UserInfo profile={{ firstName, profileImage }} />

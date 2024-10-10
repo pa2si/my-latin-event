@@ -8,7 +8,7 @@ import TextAreaInput from '@/components/form/TextAreaInput';
 import CountriesInput from '@/components/form/CountriesInput';
 import ImageInput from '@/components/form/ImageInput';
 import CounterInput from '@/components/form/CounterInput';
-import DatePickerContainer from '@/components/form/DatePickerContainer';
+import DateAndTimePickerContainer from '@/components/form/DateAndTimePickerContainer';
 import { Style } from '@/utils/styles';
 
 const defaultGenre = 'Latin'; // Set the default genre
@@ -48,11 +48,13 @@ const CreateEvent = () => {
             <CountriesInput />
             <ImageInput />
           </div>
-          <h3 className="text-lg mt-8 mb-4 font-medium">Location Details</h3>
-          <CounterInput detail="floors" />
-          <CounterInput detail="bars" />
-          <CounterInput detail="outdoorAreas" />
-          <DatePickerContainer initialDate={initialDate} />
+          <div>
+            <h3 className="text-lg mt-8 mb-4 font-medium">Location Details</h3>
+            <CounterInput detail="floors" />
+            <CounterInput detail="bars" />
+            <CounterInput detail="outdoorAreas" />
+            <DateAndTimePickerContainer initialDate={initialDate} />
+          </div>
           <SubmitButton text="create event" className="mt-12" />
         </FormContainer>
       </div>

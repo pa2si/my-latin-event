@@ -576,28 +576,6 @@ export const fetchMyEventDetails = async (eventId: string) => {
   });
 };
 
-// export const fetchMyEventDetails = async (eventId: string) => {
-//   const user = await getAuthUser();
-
-//   const event = await db.event.findUnique({
-//     where: {
-//       id: eventId,
-//       profileId: user.id,
-//     },
-//   });
-
-//   // Check if the event exists
-//   if (!event) return null;
-
-//   // Parse the styles field if it's stored as JSON in the database
-//   const parsedStyles = event.styles ? JSON.parse(event.styles) : [];
-
-//   return {
-//     ...event,
-//     styles: parsedStyles, // Return parsed styles array
-//   };
-// };
-
 export const updateEventAction = async (
   prevState: any,
   formData: FormData
@@ -608,6 +586,10 @@ export const updateEventAction = async (
   try {
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
+    const eventDate = validatedFields.eventDate;
+    if (!(eventDate instanceof Date) || isNaN(eventDate.getTime())) {
+      throw new Error('Invalid event date');
+    }
     // console.log('Updating Event:', {
     //   ...validatedFields,
     //   eventDate: validatedFields.eventDate as string | Date,
@@ -620,7 +602,7 @@ export const updateEventAction = async (
       },
       data: {
         ...validatedFields,
-        eventDate: validatedFields.eventDate as string | Date,
+        eventDate: eventDate,
       },
     });
 
