@@ -90,7 +90,7 @@ export const eventSchema = z.object({
     message: 'outdoor area amount must be a positive number.',
   }),
   styles: z.string(),
-  eventDate: z.preprocess((arg) => {
+  eventDateAndTime: z.preprocess((arg) => {
     // make sure this returns a Date or undefined
     if (typeof arg === 'string' || arg instanceof Date) {
       const date = new Date(arg);

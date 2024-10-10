@@ -25,26 +25,26 @@ model Profile {
 }
 
 model Event {
-  id              String     @id @default(uuid())
-  name            String
-  tagline         String
-  genre           String
-  image           String
-  country         String
-  description     String
-  price           Int
-  floors          Int
-  bars            Int
-  outdoorAreas    Int
-  styles          String
-  eventDate       DateTime
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
-  profile         Profile    @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
-  profileId       String
-  favorites       Favorite[]
-  reviews         Review[]
-  bookings        Booking[]
+  id                  String     @id @default(uuid())
+  name                String
+  tagline             String
+  genre               String
+  image               String
+  country             String
+  description         String
+  price               Int
+  floors              Int
+  bars                Int
+  outdoorAreas        Int
+  styles              String
+  eventDateAndTime    DateTime
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  profile             Profile    @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
+  profileId           String
+  favorites           Favorite[]
+  reviews             Review[]
+  bookings            Booking[]
 }
 
 model Favorite {

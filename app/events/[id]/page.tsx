@@ -40,11 +40,11 @@ const DynamicBookingWrapper = dynamic(
 const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const event = await fetchEventDetails(params.id);
   if (!event) redirect('/');
-  const { floors, bars, outdoorAreas, eventDate } = event;
+  const { floors, bars, outdoorAreas, eventDateAndTime } = event;
   const details = { floors, bars, outdoorAreas };
 
-  const formattedDate = format(new Date(eventDate), 'dd.MM.yy');
-  const formattedTime = format(new Date(eventDate), 'HH:mm');
+  const formattedDate = format(new Date(eventDateAndTime), 'dd.MM.yy');
+  const formattedTime = format(new Date(eventDateAndTime), 'HH:mm');
 
   const firstName = event.profile.firstName;
   const profileImage = event.profile.profileImage;

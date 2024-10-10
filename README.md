@@ -11,6 +11,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.11
+
+- eventDate is now called eventDateAndTime in db and app
+
 v 0.1.10
 
 - TimePicker implemented and added to DateAndTimePickerContainer

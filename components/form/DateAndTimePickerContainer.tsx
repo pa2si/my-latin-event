@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { DatePicker } from '@/components/form/DatePicker';
 import TimePicker from './TimePicker';
 
-const DatePickerContainer = ({ initialDate }: { initialDate: Date | null }) => {
+const DateAndTimePickerContainer = ({
+  initialDate,
+}: {
+  initialDate: Date | null;
+}) => {
   const [eventDate, setEventDate] = useState<Date | null>(initialDate);
   const [hours, setHours] = useState<number>(20);
   const [minutes, setMinutes] = useState<number>(0);
@@ -31,7 +35,7 @@ const DatePickerContainer = ({ initialDate }: { initialDate: Date | null }) => {
         <DatePicker setDate={setEventDate} initialDate={eventDate} />
         <input
           type="hidden"
-          name="eventDate"
+          name="eventDateAndTime"
           value={combinedDateTime ? combinedDateTime.toISOString() : ''}
         />
         <TimePicker
@@ -47,4 +51,4 @@ const DatePickerContainer = ({ initialDate }: { initialDate: Date | null }) => {
   );
 };
 
-export default DatePickerContainer;
+export default DateAndTimePickerContainer;

@@ -163,7 +163,7 @@ export const createEventAction = async (
         ...validatedFields,
         image: fullPath,
         profileId: user.id,
-        eventDate: validatedFields.eventDate as string | Date,
+        eventDateAndTime: validatedFields.eventDateAndTime as string | Date,
       },
     });
   } catch (error) {
@@ -586,13 +586,16 @@ export const updateEventAction = async (
   try {
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
-    const eventDate = validatedFields.eventDate;
-    if (!(eventDate instanceof Date) || isNaN(eventDate.getTime())) {
+    const eventDateAndTime = validatedFields.eventDateAndTime;
+    if (
+      !(eventDateAndTime instanceof Date) ||
+      isNaN(eventDateAndTime.getTime())
+    ) {
       throw new Error('Invalid event date');
     }
     // console.log('Updating Event:', {
     //   ...validatedFields,
-    //   eventDate: validatedFields.eventDate as string | Date,
+    //   eventDateAndTime: validatedFields.eventDateAndTime as string | Date,
     // });
 
     await db.event.update({
@@ -602,7 +605,7 @@ export const updateEventAction = async (
       },
       data: {
         ...validatedFields,
-        eventDate: eventDate,
+        eventDateAndTime: eventDateAndTime,
       },
     });
 

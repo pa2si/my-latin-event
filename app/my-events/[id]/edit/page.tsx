@@ -13,7 +13,7 @@ import { SubmitButton } from '@/components/form/Buttons';
 import { redirect } from 'next/navigation';
 import ImageInputContainer from '@/components/form/ImageInputContainer';
 import GenreAndStylesInput from '@/components/form/GenreAndStylesInput';
-import DatePickerContainer from '@/components/form/DateAndTimePickerContainer';
+import DateAndTimePickerContainer from '@/components/form/DateAndTimePickerContainer';
 import { Style } from '@/utils/styles';
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {
@@ -81,7 +81,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
             detail="outdoorAreas"
             defaultValue={event.outdoorAreas}
           />
-          <DatePickerContainer initialDate={event.eventDate} />
+          <DateAndTimePickerContainer initialDate={event.eventDateAndTime} />
           <SubmitButton text="edit event" className="mt-12" />
         </FormContainer>
       </div>
