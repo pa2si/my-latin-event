@@ -10,12 +10,16 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.15
+
+- GenreAndStylesInout is now called GenreAndStylesContainer
+- the GenreAndStylesInout is now using excluded useGenreStyle function to make the component cleaner
+
 v 0.1.14
 
 - selectModal is now a reusable component
 - TimePicker is using the selectModal
 - GenrePicker is now also using the selectModal instead of shadCn select ui
-
 
 v 0.1.13
 

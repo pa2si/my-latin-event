@@ -12,7 +12,7 @@ import CounterInput from '@/components/form/CounterInput';
 import { SubmitButton } from '@/components/form/Buttons';
 import { redirect } from 'next/navigation';
 import ImageInputContainer from '@/components/form/ImageInputContainer';
-import GenreAndStylesInput from '@/components/form/GenreAndStylesInput';
+import GenreAndStylesContainer from '@/components/form/GenreAndStylesContainer';
 import DateAndTimePickerContainer from '@/components/form/DateAndTimePickerContainer';
 import { Style } from '@/utils/styles';
 
@@ -59,7 +59,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
               defaultValue={event.tagline}
             />
             <PriceInput defaultValue={event.price} />
-            <GenreAndStylesInput
+            <GenreAndStylesContainer
               defaultGenre={event.genre}
               defaultStyles={parsedStyles}
             />

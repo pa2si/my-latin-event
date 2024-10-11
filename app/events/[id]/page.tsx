@@ -23,6 +23,7 @@ import EventReviews from '@/components/reviews/EventReviews';
 import { auth } from '@clerk/nextjs/server';
 import FormContainer from '@/components/form/FormContainer';
 import { IconButton } from '@/components/form/Buttons';
+import Link from 'next/link';
 
 const DynamicMap = dynamic(() => import('@/components/events/EventMap'), {
   ssr: false,
@@ -51,6 +52,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   const { userId } = auth();
   const isNotOwner = event.profile.clerkId !== userId;
+  const isOwner = event.profile.clerkId === userId;
   const isAdminUser = userId === process.env.ADMIN_USER_ID;
   const reviewDoesNotExist =
     userId && isNotOwner && !(await findExistingReview(userId, event.id));
@@ -59,11 +61,12 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
     <section>
       <BreadCrumbs name={event.name} />
       <header className="flex justify-between items-center mt-4">
-        <h1 className="text-4xl font-bold ">{event.tagline}</h1>
+        <h1 className="text-4xl font-bold ">{event.name}</h1>
         <div className="flex items-center gap-x-4">
           <ShareButton name={event.name} eventId={event.id} />
           <FavoriteToggleButton eventId={event.id} />
           {isAdminUser && <DeleteMyEvent eventId={event.id} />}
+          {(isAdminUser || isOwner) && <EditMyEvent eventId={event.id} />}
         </div>
       </header>
       <ImageContainer mainImage={event.image} name={event.name} />
@@ -109,6 +112,14 @@ const DeleteMyEvent = ({ eventId }: { eventId: string }) => {
     <FormContainer action={deleteMyEvent}>
       <IconButton actionType="delete" variant="outline" />
     </FormContainer>
+  );
+};
+
+const EditMyEvent = ({ eventId }: { eventId: string }) => {
+  return (
+    <Link href={`/my-events/${eventId}/edit`}>
+      <IconButton actionType="edit" variant="outline" />
+    </Link>
   );
 };
 

@@ -3,7 +3,7 @@ import FormContainer from '@/components/form/FormContainer';
 import { createEventAction } from '@/utils/actions';
 import { SubmitButton } from '@/components/form/Buttons';
 import PriceInput from '@/components/form/PriceInput';
-import GenreAndStylesInput from '@/components/form/GenreAndStylesInput';
+import GenreAndStylesContainer from '@/components/form/GenreAndStylesContainer';
 import TextAreaInput from '@/components/form/TextAreaInput';
 import CountriesInput from '@/components/form/CountriesInput';
 import ImageInput from '@/components/form/ImageInput';
@@ -38,7 +38,7 @@ const CreateEvent = () => {
               defaultValue="This is your catchy event phrase"
             />
             <PriceInput />
-            <GenreAndStylesInput
+            <GenreAndStylesContainer
               defaultGenre={defaultGenre}
               defaultStyles={defaultStyles}
             />
