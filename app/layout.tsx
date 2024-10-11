@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
+        <body className={`debug-screens {${inter.className}`}>
           <Providers>
             <Navbar />
             <main className="container py-10">{children}</main>

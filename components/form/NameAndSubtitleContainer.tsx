@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import FormInput from '@/components/form/FormInput';
-import FormCheckbox from '@/components/form/FormCheckbox';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import FormInput from "@/components/form/FormInput";
+import FormCheckbox from "@/components/form/FormCheckbox";
 
 const NameAndSubtitleContainer = () => {
   const [showSubtitle, setShowSubtitle] = useState(false);
@@ -12,9 +13,9 @@ const NameAndSubtitleContainer = () => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-8 mb-4">
+    <div className="mb-4 grid gap-4 md:grid-cols-2 md:gap-8">
       {/* Name Input */}
-      <div className="flex gap-2 items-center justify-between ">
+      <div className="flex items-center justify-between gap-2">
         <div className="w-full">
           <FormInput
             name="name"
@@ -22,6 +23,7 @@ const NameAndSubtitleContainer = () => {
             label="Name"
             placeholder="Enter your event name"
             required={true}
+            defaultValue="My Event"
           />
         </div>
 
@@ -36,15 +38,24 @@ const NameAndSubtitleContainer = () => {
         </div>
       </div>
 
-      {/* Subtitle Input (conditionally rendered) */}
-      {showSubtitle && (
-        <FormInput
-          name="subtitle"
-          type="text"
-          label="Subtitle"
-          placeholder="Enter a subtitle like 'Volume 1'"
-        />
-      )}
+      {/* Subtitle Input conditionally rendered */}
+      <AnimatePresence>
+        {showSubtitle && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FormInput
+              name="subtitle"
+              type="text"
+              label="Subtitle"
+              placeholder="Enter a subtitle like 'Volume 1'"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
