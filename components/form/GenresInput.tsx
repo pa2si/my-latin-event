@@ -3,6 +3,7 @@ import { Label } from '@/components/ui/label';
 import { genres } from '@/utils/genres';
 import SelectModal from './SelectModal';
 import { SelectButton } from '@/components/form/Buttons';
+import { Button } from '../ui/button';
 
 const name = 'genre';
 
@@ -26,6 +27,19 @@ const GenresInput = ({
 
   return (
     <div className="mb-2">
+      {/* <div className="flex flex-col gap-3 w-32">
+        <Label htmlFor={name} className="capitalize">
+          Genres
+        </Label>
+
+        <Button
+          onClick={() => setModalVisible(true)}
+          className=""
+          type="button"
+        >
+          {selectedGenre}
+        </Button>
+      </div> */}
       <Label htmlFor={name} className="capitalize">
         Genres
       </Label>

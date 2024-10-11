@@ -10,6 +10,8 @@ import ImageInput from '@/components/form/ImageInput';
 import CounterInput from '@/components/form/CounterInput';
 import DateAndTimePickerContainer from '@/components/form/DateAndTimePickerContainer';
 import { Style } from '@/utils/styles';
+import { Button } from '@/components/ui/button';
+import EmptyList from '@/components/home/EmptyList';
 
 const defaultGenre = 'Latin'; // Set the default genre
 const defaultStyles: Style[] = [];
@@ -43,6 +45,10 @@ const CreateEvent = () => {
               defaultStyles={defaultStyles}
             />
           </div>
+          {/* <Button className="mt-4 capitalize" size="lg">
+            test
+          </Button> */}
+
           <TextAreaInput
             name="description"
             labelText="Description (10 - 1000 Words)"

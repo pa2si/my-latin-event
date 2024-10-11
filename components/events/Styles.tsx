@@ -11,7 +11,7 @@ const Styles = ({ styles }: { styles: string }) => {
   }
   return (
     <div className="mt-4">
-      <Title text="Expect this music styles" />
+      <Title text="music styles" />
       <div className="grid md:grid-cols-2 gap-x-4">
         {stylesList.map((style) => {
           if (!style.selected) {

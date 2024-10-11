@@ -81,6 +81,9 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             {formattedTime} {/* Display formatted time */}
           </p>
           <p className="text-md  text-muted-foreground ">{event.genre} Event</p>
+          <p className="text-md  text-muted-foreground ">
+            Ticket Price {event.price} €
+          </p>
           <EventDetails details={details} />
           <UserInfo profile={{ firstName, profileImage }} />
           <Separator className="mt-4" />

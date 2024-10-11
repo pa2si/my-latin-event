@@ -11,6 +11,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.17
+
+- Choose Price Button added next to PriceInput
+
 v 0.1.16
 
 - tagline is now called subtitle
