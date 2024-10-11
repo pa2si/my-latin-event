@@ -27,7 +27,7 @@ model Profile {
 model Event {
   id                  String     @id @default(uuid())
   name                String
-  tagline             String
+  subtitle            String
   genre               String
   image               String
   country             String

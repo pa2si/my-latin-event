@@ -1,5 +1,5 @@
 import EmptyList from '@/components/home/EmptyList';
-import { fetchMyEvents, deleteMyEventAction } from '@/utils/actions';
+import { fetchMyEvents } from '@/utils/actions';
 import Link from 'next/link';
 
 import { formatCurrency } from '@/utils/format';
@@ -13,8 +13,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import FormContainer from '@/components/form/FormContainer';
 import { IconButton } from '@/components/form/Buttons';
+import DeleteMyEvent from '@/components/events/DeleteMyEvent';
 
 async function MyEventsPage() {
   const myEvents = await fetchMyEvents();
@@ -74,14 +74,5 @@ async function MyEventsPage() {
     </div>
   );
 }
-
-const DeleteMyEvent = ({ eventId }: { eventId: string }) => {
-  const deleteMyEvent = deleteMyEventAction.bind(null, { eventId });
-  return (
-    <FormContainer action={deleteMyEvent}>
-      <IconButton actionType="delete" />
-    </FormContainer>
-  );
-};
 
 export default MyEventsPage;

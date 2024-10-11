@@ -1,5 +1,6 @@
 To do:
 
+- rename tagline into subtitle
 - implement eventDateTimeEnd TimePicker. can be empty
 - implement restrictions in datePicker. cant select date in the past!
 - continue with create event form
@@ -9,6 +10,11 @@ To do:
 - implement a follow creator action and section where i can see all events from the followed creator
 
 WHATS DONE IN VERSIONS
+
+v 0.1.16
+
+- tagline is now called subtitle
+- adaption of Event slug ui to new subtitle
 
 v 0.1.15
 
@@ -1785,10 +1791,10 @@ export const propertySchema = z.object({
   tagline: z
     .string()
     .min(2, {
-      message: 'tagline must be at least 2 characters.',
+      message: 'subtitle must be at least 2 characters.',
     })
     .max(100, {
-      message: 'tagline must be less than 100 characters.',
+      message: 'subtitle must be less than 100 characters.',
     }),
   price: z.coerce.number().int().min(0, {
     message: 'price must be a positive number.',
@@ -1867,9 +1873,9 @@ function CreateProperty() {
               defaultValue="Cabin in Latvia"
             />
             <FormInput
-              name="tagline"
+              name="subtitle"
               type="text "
-              label="Tagline (30 limit)"
+              label="Subtitle (30 limit)"
               defaultValue="Dream Getaway Awaits You Here!"
             />
             {/* price */}
@@ -2452,7 +2458,7 @@ export type PropertyCardProps = {
   image: string;
   id: string;
   name: string;
-  tagline: string;
+  subtitle: string;
   country: string;
   price: number;
 };
@@ -2473,13 +2479,13 @@ export const fetchProperties = async ({
       category,
       OR: [
         { name: { contains: search, mode: 'insensitive' } },
-        { tagline: { contains: search, mode: 'insensitive' } },
+        { subtitle: { contains: search, mode: 'insensitive' } },
       ],
     },
     select: {
       id: true,
       name: true,
-      tagline: true,
+      subtitle: true,
       country: true,
       image: true,
       price: true,
@@ -2707,7 +2713,7 @@ import { formatCurrency } from '@/utils/format';
 
 function PropertyCard({ property }: { property: PropertyCardProps }) {
   const { name, image, price } = property;
-  const { country, id: propertyId, tagline } = property;
+  const { country, id: propertyId, subtitle } = property;
 
   return (
     <article className="group relative">
@@ -2728,7 +2734,7 @@ function PropertyCard({ property }: { property: PropertyCardProps }) {
           {/* property rating */}
         </div>
         <p className="text-sm mt-1 text-muted-foreground ">
-          {tagline.substring(0, 40)}
+          {subtitle.substring(0, 40)}
         </p>
         <div className="flex justify-between items-center mt-1">
           <p className="text-sm mt-1 ">
@@ -3173,7 +3179,7 @@ export const fetchFavorites = async () => {
         select: {
           id: true,
           name: true,
-          tagline: true,
+          subtitle: true,
           price: true,
           country: true,
           image: true,
@@ -3303,7 +3309,7 @@ return (
   <section>
     <BreadCrumbs name={property.name} />
     <header className="flex justify-between items-center mt-4">
-      <h1 className="text-4xl font-bold ">{property.tagline}</h1>
+      <h1 className="text-4xl font-bold ">{property.subtitle}</h1>
       <div className="flex items-center gap-x-4">
         {/* share button */}
         <FavoriteToggleButton propertyId={property.id} />
@@ -5462,10 +5468,10 @@ async function EditRentalPage({ params }: { params: { id: string } }) {
               defaultValue={property.name}
             />
             <FormInput
-              name="tagline"
+              name="subtitle"
               type="text "
-              label="Tagline (30 limit)"
-              defaultValue={property.tagline}
+              label="Subtitle (30 limit)"
+              defaultValue={property.subtitle}
             />
             <PriceInput defaultValue={property.price} />
             <CategoriesInput defaultValue={property.category} />

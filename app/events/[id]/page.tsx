@@ -8,11 +8,7 @@ import EventDetails from '@/components/events/EventDetails';
 import ShareButton from '@/components/events/ShareButton';
 import UserInfo from '@/components/events/UserInfo';
 import { Separator } from '@/components/ui/separator';
-import {
-  fetchEventDetails,
-  findExistingReview,
-  deleteMyEventAction,
-} from '@/utils/actions';
+import { fetchEventDetails, findExistingReview } from '@/utils/actions';
 import Description from '@/components/events/Description';
 import { redirect } from 'next/navigation';
 import Styles from '@/components/events/Styles';
@@ -21,9 +17,8 @@ import dynamic from 'next/dynamic';
 import SubmitReview from '@/components/reviews/SubmitReview';
 import EventReviews from '@/components/reviews/EventReviews';
 import { auth } from '@clerk/nextjs/server';
-import FormContainer from '@/components/form/FormContainer';
-import { IconButton } from '@/components/form/Buttons';
-import Link from 'next/link';
+import DeleteMyEvent from '@/components/events/DeleteMyEvent';
+import EditMyEvent from '@/components/events/EditMyEvent';
 
 const DynamicMap = dynamic(() => import('@/components/events/EventMap'), {
   ssr: false,
@@ -65,25 +60,27 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
         <div className="flex items-center gap-x-4">
           <ShareButton name={event.name} eventId={event.id} />
           <FavoriteToggleButton eventId={event.id} />
-          {isAdminUser && <DeleteMyEvent eventId={event.id} />}
           {(isAdminUser || isOwner) && <EditMyEvent eventId={event.id} />}
+          {isAdminUser && <DeleteMyEvent eventId={event.id} />}
         </div>
       </header>
       <ImageContainer mainImage={event.image} name={event.name} />
       <section className="lg:grid lg:grid-cols-12 gap-x-12 mt-12">
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-8 flex flex-col gap-1 ">
           <div className="flex gap-x-4 items-center">
-            <h1 className="text-xl font-bold">{event.name}</h1>
+            <h2 className="text-xl font-bold">{event.name}</h2>
             <EventRating inPage eventId={event.id} />
           </div>
-          <p className="text-sm mt-2 text-gray-500 flex items-center">
+          <h3 className="text-muted-foreground">{event.subtitle}</h3>
+          <p className="text-sm  text-gray-500 flex items-center">
             <CalendarIcon className="mr-1" size={16} />
             {formattedDate} {/* Display formatted date */}
           </p>
-          <p className="text-sm mt-2 text-gray-500 flex items-center">
+          <p className="text-sm  text-gray-500 flex items-center">
             <Clock className="mr-1" size={16} />
             {formattedTime} {/* Display formatted time */}
           </p>
+          <p className="text-md  text-muted-foreground ">{event.genre} Event</p>
           <EventDetails details={details} />
           <UserInfo profile={{ firstName, profileImage }} />
           <Separator className="mt-4" />
@@ -103,23 +100,6 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
       {reviewDoesNotExist && <SubmitReview eventId={event.id} />}
       <EventReviews eventId={event.id} />
     </section>
-  );
-};
-
-const DeleteMyEvent = ({ eventId }: { eventId: string }) => {
-  const deleteMyEvent = deleteMyEventAction.bind(null, { eventId });
-  return (
-    <FormContainer action={deleteMyEvent}>
-      <IconButton actionType="delete" variant="outline" />
-    </FormContainer>
-  );
-};
-
-const EditMyEvent = ({ eventId }: { eventId: string }) => {
-  return (
-    <Link href={`/my-events/${eventId}/edit`}>
-      <IconButton actionType="edit" variant="outline" />
-    </Link>
   );
 };
 

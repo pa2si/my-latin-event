@@ -184,13 +184,13 @@ export const fetchEvents = async ({
       genre,
       OR: [
         { name: { contains: search, mode: 'insensitive' } },
-        { tagline: { contains: search, mode: 'insensitive' } },
+        { subtitle: { contains: search, mode: 'insensitive' } },
       ],
     },
     select: {
       id: true,
       name: true,
-      tagline: true,
+      subtitle: true,
       country: true,
       image: true,
       price: true,
@@ -256,7 +256,7 @@ export const fetchFavorites = async () => {
         select: {
           id: true,
           name: true,
-          tagline: true,
+          subtitle: true,
           price: true,
           country: true,
           image: true,

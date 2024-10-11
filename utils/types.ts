@@ -7,7 +7,7 @@ export type EventCardProps = {
   image: string;
   id: string;
   name: string;
-  tagline: string;
+  subtitle: string;
   country: string;
   price: number;
 };

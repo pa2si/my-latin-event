@@ -8,7 +8,7 @@ import { formatCurrency } from '@/utils/format';
 
 const EventCard = ({ event }: { event: EventCardProps }) => {
   const { name, image, price } = event;
-  const { country, id: eventId, tagline } = event;
+  const { country, id: eventId, subtitle } = event;
 
   return (
     <article className="group relative">
@@ -30,7 +30,7 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
           <EventRating inPage={false} eventId={eventId} />
         </div>
         <p className="text-sm mt-1 text-muted-foreground ">
-          {tagline.substring(0, 40)}
+          {subtitle.substring(0, 40)}
         </p>
         <div className="flex justify-between items-center mt-1">
           <p className="text-sm mt-1 ">

@@ -53,10 +53,10 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
               defaultValue={event.name}
             />
             <FormInput
-              name="tagline"
+              name="subtitle"
               type="text "
-              label="Tagline (30 limit)"
-              defaultValue={event.tagline}
+              label="Subtitle (30 limit)"
+              defaultValue={event.subtitle}
             />
             <PriceInput defaultValue={event.price} />
             <GenreAndStylesContainer

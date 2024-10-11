@@ -58,13 +58,13 @@ export const eventSchema = z.object({
     .max(100, {
       message: 'name must be less than 100 characters.',
     }),
-  tagline: z
+  subtitle: z
     .string()
     .min(2, {
-      message: 'tagline must be at least 2 characters.',
+      message: 'subtitle must be at least 2 characters.',
     })
     .max(100, {
-      message: 'tagline must be less than 100 characters.',
+      message: 'subtitle must be less than 100 characters.',
     }),
   price: z.coerce.number().int().min(0, {
     message: 'price must be a positive number.',

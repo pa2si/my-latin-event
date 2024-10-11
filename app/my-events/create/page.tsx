@@ -32,10 +32,10 @@ const CreateEvent = () => {
               defaultValue="My Event"
             />
             <FormInput
-              name="tagline"
+              name="subtitle"
               type="text"
-              label="Tagline (30 limit)"
-              defaultValue="This is your catchy event phrase"
+              label="Subtitle (30 limit)"
+              defaultValue="Volume 1"
             />
             <PriceInput />
             <GenreAndStylesContainer
