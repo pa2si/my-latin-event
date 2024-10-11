@@ -65,7 +65,9 @@ export const eventSchema = z.object({
     })
     .max(100, {
       message: 'subtitle must be less than 100 characters.',
-    }),
+    })
+    .optional()
+    .or(z.literal('')),
   price: z.coerce.number().int().min(0, {
     message: 'price must be a positive number.',
   }),

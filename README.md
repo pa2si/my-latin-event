@@ -11,6 +11,12 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.18
+
+- FormCheckbox created as reusable Checkbox
+- NameAndSubtitleContainer created which contains FormInput for name and a checknox that displays formInput for subtitles
+- selected price in the Choose Price button is now with text-primary
+
 v 0.1.17
 
 - Choose Price Button added next to PriceInput

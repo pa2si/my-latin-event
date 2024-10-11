@@ -1,3 +1,5 @@
+'use client';
+
 import FormInput from '@/components/form/FormInput';
 import FormContainer from '@/components/form/FormContainer';
 import { createEventAction } from '@/utils/actions';
@@ -10,45 +12,30 @@ import ImageInput from '@/components/form/ImageInput';
 import CounterInput from '@/components/form/CounterInput';
 import DateAndTimePickerContainer from '@/components/form/DateAndTimePickerContainer';
 import { Style } from '@/utils/styles';
-import { Button } from '@/components/ui/button';
-import EmptyList from '@/components/home/EmptyList';
+import NameAndSubtitleContainer from '@/components/form/NameAndSubtitleContainer';
 
-const defaultGenre = 'Latin'; // Set the default genre
+const defaultGenre = 'Latin';
 const defaultStyles: Style[] = [];
 
 const CreateEvent = () => {
   const defaultEventDateAndTime = new Date();
   defaultEventDateAndTime.setDate(defaultEventDateAndTime.getDate());
   defaultEventDateAndTime.setHours(20, 0, 0, 0);
+
   return (
     <section>
       <h1 className="text-2xl font-semibold mb-8 capitalize">create event</h1>
       <div className="border p-8 rounded-md">
         <h3 className="text-lg mb-4 font-medium">General Info</h3>
         <FormContainer action={createEventAction}>
+          <NameAndSubtitleContainer />
           <div className="grid md:grid-cols-2 gap-8 mb-4">
-            <FormInput
-              name="name"
-              type="text"
-              label="Name (100 limit)"
-              defaultValue="My Event"
-            />
-            <FormInput
-              name="subtitle"
-              type="text"
-              label="Subtitle (30 limit)"
-              defaultValue="Volume 1"
-            />
             <PriceInput />
             <GenreAndStylesContainer
               defaultGenre={defaultGenre}
               defaultStyles={defaultStyles}
             />
           </div>
-          {/* <Button className="mt-4 capitalize" size="lg">
-            test
-          </Button> */}
-
           <TextAreaInput
             name="description"
             labelText="Description (10 - 1000 Words)"

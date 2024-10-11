@@ -57,7 +57,11 @@ function PriceInput({ defaultValue }: FormInputNumberProps) {
             <div
               key={price}
               onClick={() => handlePriceChange(price)}
-              className="cursor-pointer hover:bg-gray-300 p-2 rounded flex items-center"
+              className={`cursor-pointer p-2 rounded flex items-center ${
+                price === selectedPrice
+                  ? 'text-primary font-bold'
+                  : 'hover:bg-gray-300'
+              }`}
             >
               €{price}
             </div>
