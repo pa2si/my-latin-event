@@ -90,16 +90,26 @@ export const eventSchema = z.object({
     message: 'outdoor area amount must be a positive number.',
   }),
   styles: z.string(),
-  eventDateAndTime: z.preprocess((arg) => {
-    // make sure this returns a Date or undefined
-    if (typeof arg === 'string' || arg instanceof Date) {
-      const date = new Date(arg);
-      if (!isNaN(date.getTime())) {
-        return date;
+  eventDateAndTime: z.preprocess(
+    (arg) => {
+      if (typeof arg === 'string' || arg instanceof Date) {
+        const date = new Date(arg);
+        if (!isNaN(date.getTime())) {
+          return date;
+        }
       }
-    }
-    return undefined; // or null, based on how you handle empty dates
-  }, z.date()),
+      return undefined; // or null, depending on how you handle empty dates
+    },
+    z.date().refine(
+      (date) => {
+        const now = new Date();
+        return date.getTime() > now.getTime() + 60 * 60 * 1000; // at least 1 hour ahead
+      },
+      {
+        message: 'The event must be scheduled at least 1 hour in the future.',
+      }
+    )
+  ),
 });
 
 export const createReviewSchema = z.object({

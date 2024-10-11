@@ -1,17 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DatePicker } from '@/components/form/DatePicker';
 import TimePicker from './TimePicker';
 
 const DateAndTimePickerContainer = ({
-  initialDate,
+  defaultValue,
 }: {
-  initialDate: Date | null;
+  defaultValue: Date | null;
 }) => {
-  const [eventDate, setEventDate] = useState<Date | null>(initialDate);
-  const [hours, setHours] = useState<number>(20);
-  const [minutes, setMinutes] = useState<number>(0);
+  const [date, setDate] = useState<Date | null>(defaultValue);
+  const [hours, setHours] = useState<number>(
+    defaultValue ? defaultValue.getHours() : 20
+  );
+  const [minutes, setMinutes] = useState<number>(
+    defaultValue ? defaultValue.getMinutes() : 0
+  );
+
+  useEffect(() => {
+    if (defaultValue) {
+      setDate(defaultValue);
+      setHours(defaultValue.getHours());
+      setMinutes(defaultValue.getMinutes());
+    }
+  }, [defaultValue]);
 
   const combineDateAndTime = (
     date: Date | null,
@@ -26,21 +38,21 @@ const DateAndTimePickerContainer = ({
     return combined;
   };
 
-  const combinedDateTime = combineDateAndTime(eventDate, hours, minutes);
+  const combinedDateTime = combineDateAndTime(date, hours, minutes);
 
   return (
     <>
       <h3 className="text-lg mt-8 mb-4 font-medium">Date & Time</h3>
       <div className="flex flex-col items-center justify-center gap-4">
-        <DatePicker setDate={setEventDate} initialDate={eventDate} />
+        <DatePicker setDate={setDate} initialDate={date} />
         <input
           type="hidden"
           name="eventDateAndTime"
           value={combinedDateTime ? combinedDateTime.toISOString() : ''}
         />
         <TimePicker
-          initialHours={20}
-          initialMinutes={0}
+          initialHours={hours}
+          initialMinutes={minutes}
           setTime={(newHours, newMinutes) => {
             setHours(newHours);
             setMinutes(newMinutes);

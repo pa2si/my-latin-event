@@ -8,13 +8,16 @@ import TextAreaInput from '@/components/form/TextAreaInput';
 import CountriesInput from '@/components/form/CountriesInput';
 import ImageInput from '@/components/form/ImageInput';
 import CounterInput from '@/components/form/CounterInput';
-import DateTimePickerContainer from '@/components/form/DateAndTimePickerContainer';
+import DateAndTimePickerContainer from '@/components/form/DateAndTimePickerContainer';
 import { Style } from '@/utils/styles';
 
 const defaultGenre = 'Latin'; // Set the default genre
 const defaultStyles: Style[] = [];
+
 const CreateEvent = () => {
-  const initialDate: Date | null = null; // Or set to new Date() for today
+  const defaultEventDateAndTime = new Date();
+  defaultEventDateAndTime.setDate(defaultEventDateAndTime.getDate());
+  defaultEventDateAndTime.setHours(20, 0, 0, 0);
   return (
     <section>
       <h1 className="text-2xl font-semibold mb-8 capitalize">create event</h1>
@@ -53,7 +56,9 @@ const CreateEvent = () => {
             <CounterInput detail="floors" />
             <CounterInput detail="bars" />
             <CounterInput detail="outdoorAreas" />
-            <DateTimePickerContainer initialDate={initialDate} />
+            <DateAndTimePickerContainer
+              defaultValue={defaultEventDateAndTime}
+            />
           </div>
           <SubmitButton text="create event" className="mt-12" />
         </FormContainer>

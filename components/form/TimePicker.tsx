@@ -72,6 +72,11 @@ const TimePicker: React.FC<TimePickerProps> = ({
     }
   }, [activePicker]);
 
+  useEffect(() => {
+    setHours(initialHours);
+    setMinutes(initialMinutes);
+  }, [initialHours, initialMinutes]);
+
   return (
     <>
       <div className="grid grid-flow-col text-center auto-cols-max border rounded-full p-4">

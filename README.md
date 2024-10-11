@@ -1,6 +1,5 @@
 To do:
 
-- TimePicker needs to be added to editEvent
 - implement eventDateTimeEnd TimePicker. can be empty
 - implement restrictions in datePicker. cant select date in the past!
 - continue with create event form
@@ -10,6 +9,17 @@ To do:
 - implement a follow creator action and section where i can see all events from the followed creator
 
 WHATS DONE IN VERSIONS
+
+v 0.1.13
+
+- TimePicker: dates in the past are now disables.
+- in schema: eventDateAndTime must be at least 1h in the future
+
+v 0.1.12
+
+- TimePicker now working in editMyEventPage
+- renaming of variables for dateAndTimePickerContainer
+- calendar now closes
 
 v 0.1.11
 

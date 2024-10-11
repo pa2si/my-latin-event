@@ -81,7 +81,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
             detail="outdoorAreas"
             defaultValue={event.outdoorAreas}
           />
-          <DateAndTimePickerContainer initialDate={event.eventDateAndTime} />
+          <DateAndTimePickerContainer defaultValue={event.eventDateAndTime} />
           <SubmitButton text="edit event" className="mt-12" />
         </FormContainer>
       </div>
