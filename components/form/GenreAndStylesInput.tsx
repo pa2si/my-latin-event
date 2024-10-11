@@ -35,13 +35,9 @@ const GenreAndStylesInput = ({
     );
   }, [selectedGenre, defaultStyles]);
 
-  const handleGenreChange = (genre: string) => {
-    setSelectedGenre(genre);
-  };
-
   return (
     <>
-      <GenresInput defaultValue={defaultGenre} onChange={handleGenreChange} />
+      <GenresInput defaultValue={defaultGenre} onChange={setSelectedGenre} />
       <div className="mb-12 flex-row justify-center">
         <div className="flex flex-row items-center gap-1 text-xl">
           <h3 className="text-lg mt-10 mb-6 font-medium">Styles</h3>

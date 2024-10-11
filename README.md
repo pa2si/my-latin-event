@@ -10,9 +10,16 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.14
+
+- selectModal is now a reusable component
+- TimePicker is using the selectModal
+- GenrePicker is now also using the selectModal instead of shadCn select ui
+
+
 v 0.1.13
 
-- TimePicker: dates in the past are now disables.
+- TimePicker: dates in the past are now disabled.
 - in schema: eventDateAndTime must be at least 1h in the future
 
 v 0.1.12

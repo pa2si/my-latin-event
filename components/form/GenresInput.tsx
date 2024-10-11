@@ -1,12 +1,8 @@
+import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { genres } from '@/utils/genres';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import SelectModal from './SelectModal';
+import { SelectButton } from '@/components/form/Buttons';
 
 const name = 'genre';
 
@@ -17,30 +13,48 @@ const GenresInput = ({
   defaultValue?: string;
   onChange: (value: string) => void;
 }) => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedGenre, setSelectedGenre] = useState(
+    defaultValue || genres[0].label
+  );
+
+  const handleGenreChange = (value: string) => {
+    setSelectedGenre(value);
+    onChange(value);
+    setModalVisible(false); // Close modal after selection
+  };
+
   return (
     <div className="mb-2">
       <Label htmlFor={name} className="capitalize">
         Genres
       </Label>
-      <Select
-        defaultValue={defaultValue || genres[0].label}
-        name={name}
-        required
-        onValueChange={onChange}
+      <SelectButton
+        text={selectedGenre}
+        onClick={() => setModalVisible(true)}
+        className="w-full"
+      />
+
+      <SelectModal
+        isVisible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        title="Choose a Genre"
       >
-        <SelectTrigger id={name}>
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {genres.map((item) => {
-            return (
-              <SelectItem key={item.label} value={item.label}>
-                <span className="flex items-center gap-2">{item.label}</span>
-              </SelectItem>
-            );
-          })}
-        </SelectContent>
-      </Select>
+        <div className="flex flex-col p-4 h-72 overflow-scroll items-center w-full">
+          {genres.map((item) => (
+            <div
+              key={item.label}
+              onClick={() => handleGenreChange(item.label)}
+              className="cursor-pointer hover:bg-gray-300 p-2 rounded flex items-center gap-2  "
+            >
+              {/* <item.icon className="text-lg" /> */}
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </div>
+      </SelectModal>
+
+      <input type="hidden" name={name} value={selectedGenre} />
     </div>
   );
 };

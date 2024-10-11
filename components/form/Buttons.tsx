@@ -118,3 +118,26 @@ export const IconButton = ({
     </Button>
   );
 };
+
+interface SelectButtonProps {
+  text: string;
+  onClick: () => void;
+  className?: string;
+}
+
+export const SelectButton: React.FC<SelectButtonProps> = ({
+  text,
+  onClick,
+  className = '',
+}) => {
+  return (
+    <Button
+      variant="outline"
+      onClick={onClick}
+      type="button"
+      className={` transition-all duration-300   ${className}`}
+    >
+      {text}
+    </Button>
+  );
+};
