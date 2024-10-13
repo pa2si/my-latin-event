@@ -1,12 +1,16 @@
 To do:
 
-- check the TODO extension
 - continue with create event form
 - put profile component from salsa calendar in the menu
 - implement a section where i can see my calender with all my events
 - implement a follow creator action and section where i can see all events from the followed creator
 
 WHATS DONE IN VERSIONS
+
+v 0.1.21
+
+- in eventDateAndTimeContainer when i create an event and dont select the ending then i send null to db. when i select the checkbox in create or editEvent with null i display as default the selected date and time from the beginning. when i already have endDateandTime and deselect it in the edit it stores again null in db
+- animation for appeariance of EventDateAndTime
 
 v 0.1.20
 

@@ -49,92 +49,114 @@ function validateFile() {
     }, "File must be an image");
 }
 
-export const eventSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "name must be at least 2 characters.",
-    })
-    .max(100, {
-      message: "name must be less than 100 characters.",
+export const eventSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, {
+        message: "name must be at least 2 characters.",
+      })
+      .max(100, {
+        message: "name must be less than 100 characters.",
+      }),
+    subtitle: z
+      .string()
+      .min(2, {
+        message: "subtitle must be at least 2 characters.",
+      })
+      .max(100, {
+        message: "subtitle must be less than 100 characters.",
+      })
+      .optional()
+      .or(z.literal("")),
+    price: z.coerce.number().int().min(0, {
+      message: "price must be a positive number.",
     }),
-  subtitle: z
-    .string()
-    .min(2, {
-      message: "subtitle must be at least 2 characters.",
-    })
-    .max(100, {
-      message: "subtitle must be less than 100 characters.",
-    })
-    .optional()
-    .or(z.literal("")),
-  price: z.coerce.number().int().min(0, {
-    message: "price must be a positive number.",
-  }),
-  genre: z.string(),
-  description: z.string().refine(
-    (description) => {
-      const wordCount = description.split(" ").length;
-      return wordCount >= 10 && wordCount <= 1000;
-    },
-    {
-      message: "description must be between 10 and 1000 words.",
-    },
-  ),
-  country: z.string(),
-  floors: z.coerce.number().int().min(0, {
-    message: "floor amount must be a positive number.",
-  }),
-  bars: z.coerce.number().int().min(0, {
-    message: "bar amount must be a positive number.",
-  }),
-  outdoorAreas: z.coerce.number().int().min(0, {
-    message: "outdoor area amount must be a positive number.",
-  }),
-  styles: z.string(),
-  eventDateAndTime: z.preprocess(
-    (arg) => {
-      if (typeof arg === "string" || arg instanceof Date) {
-        const date = new Date(arg);
-        if (!isNaN(date.getTime())) {
-          return date;
-        }
-      }
-      return undefined; // or null, depending on how you handle empty dates
-    },
-    z.date().refine(
-      (date) => {
-        const now = new Date();
-        return date.getTime() > now.getTime() + 60 * 60 * 1000; // at least 1 hour ahead
+    genre: z.string(),
+    description: z.string().refine(
+      (description) => {
+        const wordCount = description.split(" ").length;
+        return wordCount >= 10 && wordCount <= 1000;
       },
       {
-        message: "The event must be scheduled at least 1 hour in the future.",
+        message: "description must be between 10 and 1000 words.",
       },
     ),
-  ),
-  eventEndDateAndTime: z
-    .preprocess(
+    country: z.string(),
+    floors: z.coerce.number().int().min(0, {
+      message: "floor amount must be a positive number.",
+    }),
+    bars: z.coerce.number().int().min(0, {
+      message: "bar amount must be a positive number.",
+    }),
+    outdoorAreas: z.coerce.number().int().min(0, {
+      message: "outdoor area amount must be a positive number.",
+    }),
+    styles: z.string(),
+    eventDateAndTime: z.preprocess(
       (arg) => {
         if (typeof arg === "string" || arg instanceof Date) {
           const date = new Date(arg);
           if (!isNaN(date.getTime())) {
-            return date;
+            return date; // Return Date
           }
         }
-        return undefined;
+        return undefined; // If invalid, return undefined
       },
-      z.date().refine(
-        (date) => {
-          const now = new Date();
-          return date.getTime() > now.getTime() + 60 * 60 * 1000; // at least 1 hour ahead
-        },
-        {
-          message: "The event end time must be at least 1 hour in the future.",
-        },
-      ),
-    )
-    .optional(),
-});
+      z
+        .date({
+          required_error: "Invalid date",
+          invalid_type_error: "Invalid date",
+        })
+        .refine(
+          (date) => {
+            const now = new Date();
+            return date.getTime() > now.getTime() + 60 * 60 * 1000; // Ensure at least 1 hour ahead
+          },
+          {
+            message:
+              "The event must be scheduled at least 1 hour in the future.",
+          },
+        ),
+    ),
+    eventEndDateAndTime: z.preprocess(
+      (arg) => {
+        if (typeof arg === "string" || arg instanceof Date) {
+          const date = new Date(arg);
+          return isNaN(date.getTime()) ? null : date;
+        }
+        return null;
+      },
+      z
+        .date()
+        .nullable()
+        .refine(
+          (date) => {
+            if (date === null) return true; // Allow null values
+            const now = new Date();
+            return date.getTime() > now.getTime() + 60 * 60 * 1000; // Ensure at least 1 hour ahead
+          },
+          {
+            message:
+              "The event end time must be at least 1 hour in the future.",
+          },
+        ),
+    ),
+  })
+  .refine(
+    (data) => {
+      if (data.eventEndDateAndTime && data.eventDateAndTime) {
+        const diff =
+          data.eventEndDateAndTime.getTime() - data.eventDateAndTime.getTime();
+        return diff >= 60 * 60 * 1000; // Ensure 1-hour difference
+      }
+      return true;
+    },
+    {
+      message:
+        "The event end time must be at least 1 hour after the start time.",
+    },
+  );
 
 export const createReviewSchema = z.object({
   eventId: z.string(),

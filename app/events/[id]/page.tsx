@@ -41,14 +41,16 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
     event;
   const details = { floors, bars, outdoorAreas };
 
-  const formattedDate = format(new Date(eventDateAndTime), "dd.MM.yy");
-  const formattedTime = format(new Date(eventDateAndTime), "HH:mm");
-  const formattedEndDate = eventEndDateAndTime
-    ? format(new Date(eventEndDateAndTime), "dd.MM.yy")
-    : null;
-  const formattedEndTime = eventEndDateAndTime
-    ? format(new Date(eventEndDateAndTime), "HH:mm")
-    : null;
+  const formattedDate = format(eventDateAndTime, "dd.MM.yy");
+  const formattedTime = format(eventDateAndTime, "HH:mm");
+
+  const hasEndDateTime = eventEndDateAndTime !== null;
+  const formattedEndDate = hasEndDateTime
+    ? format(eventEndDateAndTime, "dd.MM.yy")
+    : "";
+  const formattedEndTime = hasEndDateTime
+    ? format(eventEndDateAndTime, "HH:mm")
+    : "";
 
   const firstName = event.profile.firstName;
   const profileImage = event.profile.profileImage;
@@ -83,16 +85,17 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
 
           <div className="flex items-center gap-x-2">
             <EventDateAndTime
-              formattedDate={formattedDate || ""}
-              formattedTime={formattedTime || ""}
+              formattedDate={formattedDate}
+              formattedTime={formattedTime}
               isStartDate={true}
             />
-
-            <EventDateAndTime
-              formattedDate={formattedEndDate || ""}
-              formattedTime={formattedEndTime || ""}
-              isStartDate={false}
-            />
+            {hasEndDateTime && (
+              <EventDateAndTime
+                formattedDate={formattedEndDate}
+                formattedTime={formattedEndTime}
+                isStartDate={false}
+              />
+            )}
           </div>
           <p className="text-md text-muted-foreground">{event.genre} Event</p>
           <p className="text-md text-muted-foreground">

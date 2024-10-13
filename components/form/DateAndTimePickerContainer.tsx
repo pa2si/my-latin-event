@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormCheckbox from "./FormCheckbox";
 import EventDateAndTimeInput from "./EventDateAndTimeInput";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DateAndTimePickerContainer = ({
   defaultValue,
   defaultEndValue,
 }: {
   defaultValue: Date | null;
-  defaultEndValue?: Date | null;
+  defaultEndValue?: Date | string | null;
 }) => {
   const [date, setDate] = useState<Date | null>(defaultValue);
   const [hours, setHours] = useState<number>(
@@ -19,15 +20,25 @@ const DateAndTimePickerContainer = ({
     defaultValue ? defaultValue.getMinutes() : 0,
   );
 
-  const [endDate, setEndDate] = useState<Date | null>(defaultEndValue || null);
+  const [endDate, setEndDate] = useState<Date | null>(
+    defaultEndValue && typeof defaultEndValue !== "string"
+      ? defaultEndValue
+      : null,
+  );
   const [endHours, setEndHours] = useState<number>(
-    defaultEndValue ? defaultEndValue.getHours() : 22,
+    defaultEndValue && typeof defaultEndValue !== "string"
+      ? defaultEndValue.getHours()
+      : hours,
   );
   const [endMinutes, setEndMinutes] = useState<number>(
-    defaultEndValue ? defaultEndValue.getMinutes() : 0,
+    defaultEndValue && typeof defaultEndValue !== "string"
+      ? defaultEndValue.getMinutes()
+      : minutes,
   );
 
-  const [showEndingInput, setShowEndingInput] = useState(!!defaultEndValue);
+  const [showEndingInput, setShowEndingInput] = useState(
+    !!defaultEndValue && defaultEndValue !== "",
+  );
 
   useEffect(() => {
     if (defaultValue) {
@@ -35,7 +46,7 @@ const DateAndTimePickerContainer = ({
       setHours(defaultValue.getHours());
       setMinutes(defaultValue.getMinutes());
     }
-    if (defaultEndValue) {
+    if (defaultEndValue && typeof defaultEndValue !== "string") {
       setEndDate(defaultEndValue);
       setEndHours(defaultEndValue.getHours());
       setEndMinutes(defaultEndValue.getMinutes());
@@ -47,8 +58,7 @@ const DateAndTimePickerContainer = ({
     if (checked && date) {
       // If checked, set endDate to the start date and update the time
       setEndDate(new Date(date));
-      const newEndHours = (hours + 2) % 24;
-      setEndHours(newEndHours);
+      setEndHours(hours);
       setEndMinutes(minutes);
     } else {
       // If unchecked, clear the end date
@@ -69,46 +79,58 @@ const DateAndTimePickerContainer = ({
     setHours(newHours);
     setMinutes(newMinutes);
     if (showEndingInput) {
-      const newEndHours = (newHours + 2) % 24;
-      setEndHours(newEndHours);
+      setEndHours(newHours);
       setEndMinutes(newMinutes);
     }
   };
 
   return (
-    <>
-      <EventDateAndTimeInput
-        date={date}
-        setDate={handleStartDateChange}
-        hours={hours}
-        minutes={minutes}
-        setTime={handleStartTimeChange}
-        label="Event Start Date & Time"
-        name="eventDateAndTime"
-      />
-      <div className="mt-4 flex items-center">
-        <FormCheckbox
-          id="set-ending"
-          label="Set ending time"
-          checked={showEndingInput}
-          onCheckedChange={handleCheckboxChange}
-        />
-      </div>
-      {showEndingInput && (
+    <div className="grid gap-4 md:grid-cols-2">
+      <div>
         <EventDateAndTimeInput
-          date={endDate}
-          setDate={setEndDate}
-          hours={endHours}
-          minutes={endMinutes}
-          setTime={(newHours, newMinutes) => {
-            setEndHours(newHours);
-            setEndMinutes(newMinutes);
-          }}
-          label="Event End Date & Time"
-          name="eventEndDateAndTime"
+          date={date}
+          setDate={handleStartDateChange}
+          hours={hours}
+          minutes={minutes}
+          setTime={handleStartTimeChange}
+          label="Event Start Date & Time"
+          name="eventDateAndTime"
         />
-      )}
-    </>
+        <div className="mt-4 flex items-center">
+          <FormCheckbox
+            id="set-ending"
+            label="Set ending time"
+            checked={showEndingInput}
+            onCheckedChange={handleCheckboxChange}
+          />
+        </div>
+      </div>
+
+      {/* End Date and Time Input conditionally rendered */}
+      <AnimatePresence>
+        {showEndingInput && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <EventDateAndTimeInput
+              date={endDate}
+              setDate={setEndDate}
+              hours={endHours}
+              minutes={endMinutes}
+              setTime={(newHours, newMinutes) => {
+                setEndHours(newHours);
+                setEndMinutes(newMinutes);
+              }}
+              label="Event End Date & Time"
+              name="eventEndDateAndTime"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

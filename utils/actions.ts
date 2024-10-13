@@ -144,7 +144,6 @@ export const updateProfileImageAction = async (
   }
 };
 
-//TODO: check if eventEndDateAndTime and eventDateAndTime can be implemented adain to ...validatedfields
 export const createEventAction = async (
   prevState: any,
   formData: FormData,
@@ -158,16 +157,16 @@ export const createEventAction = async (
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
     const fullPath = await uploadImage(validatedFile.image);
-
+    const eventDateAndTime = validatedFields.eventDateAndTime as Date;
+    const eventEndDateAndTime =
+      validatedFields.eventEndDateAndTime as Date | null;
     await db.event.create({
       data: {
         ...validatedFields,
         image: fullPath,
         profileId: user.id,
-        eventDateAndTime: validatedFields.eventDateAndTime as string | Date,
-        eventEndDateAndTime: validatedFields.eventEndDateAndTime as
-          | string
-          | Date,
+        eventDateAndTime,
+        eventEndDateAndTime,
       },
     });
   } catch (error) {
@@ -580,7 +579,6 @@ export const fetchMyEventDetails = async (eventId: string) => {
   });
 };
 
-//TODO: check if eventEndDateAndTime and eventDateAndTime can be implemented adain to ...validatedfields
 export const updateEventAction = async (
   prevState: any,
   formData: FormData,
@@ -591,20 +589,11 @@ export const updateEventAction = async (
   try {
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
-    const eventDateAndTime = validatedFields.eventDateAndTime;
-    const eventEndDateAndTime = validatedFields.eventEndDateAndTime;
-    if (
-      !(eventDateAndTime instanceof Date) ||
-      isNaN(eventDateAndTime.getTime())
-    ) {
-      throw new Error("Invalid event date");
-    }
-    if (
-      !(eventEndDateAndTime instanceof Date) ||
-      isNaN(eventEndDateAndTime.getTime())
-    ) {
-      throw new Error("Invalid event date");
-    }
+    const eventDateAndTime = validatedFields.eventDateAndTime as
+      | Date
+      | undefined;
+    const eventEndDateAndTime =
+      validatedFields.eventEndDateAndTime as Date | null;
     // console.log('Updating Event:', {
     //   ...validatedFields,
     //   eventDateAndTime: validatedFields.eventDateAndTime as string | Date,
@@ -617,8 +606,8 @@ export const updateEventAction = async (
       },
       data: {
         ...validatedFields,
-        eventDateAndTime: eventDateAndTime,
-        eventEndDateAndTime: eventEndDateAndTime,
+        eventDateAndTime,
+        eventEndDateAndTime,
       },
     });
 

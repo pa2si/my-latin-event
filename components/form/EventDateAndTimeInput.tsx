@@ -37,20 +37,24 @@ const EventDateAndTimeInput: React.FC<EventDateAndTimeProps> = ({
   const combinedDateTime = combineDateAndTime(date, hours, minutes);
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <h3 className="mb-4 mt-8 text-lg font-medium">{label}</h3>
-      <div className="flex flex-row items-center justify-center gap-4">
-        <DatePicker setDate={setDate} initialDate={date} />
-        <input
-          type="hidden"
-          name={name}
-          value={combinedDateTime ? combinedDateTime.toISOString() : ""}
-        />
-        <TimePicker
-          initialHours={hours}
-          initialMinutes={minutes}
-          setTime={setTime}
-        />
+    <div className="-2 flex flex-col gap-4">
+      <div>
+        <h3 className="mb-4 mt-8 text-lg font-medium">{label}</h3>
+      </div>
+      <div>
+        <div className="flex flex-row items-center justify-center gap-4">
+          <DatePicker setDate={setDate} initialDate={date} />
+          <input
+            type="hidden"
+            name={name}
+            value={combinedDateTime ? combinedDateTime.toISOString() : ""}
+          />
+          <TimePicker
+            initialHours={hours}
+            initialMinutes={minutes}
+            setTime={setTime}
+          />
+        </div>
       </div>
     </div>
   );

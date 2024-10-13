@@ -66,9 +66,9 @@ const TimePicker: React.FC<TimePickerProps> = ({
 
   return (
     <>
-      <div className="flex items-center justify-center rounded-xl bg-foreground px-4 py-2 drop-shadow-lg">
+      <div className="flex items-center justify-center rounded-xl bg-foreground px-2 py-1 drop-shadow-lg">
         <div
-          className="flex cursor-pointer flex-col items-center justify-center px-3 py-2"
+          className="flex cursor-pointer flex-col items-center justify-center px-1 py-2"
           onClick={() => setActivePicker("hour")}
         >
           <span className="font-mono text-2xl font-bold text-background">
@@ -78,7 +78,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
         </div>
         <div className="mx-1 pb-5 text-2xl font-bold text-background">:</div>
         <div
-          className="flex cursor-pointer flex-col items-center justify-center px-3 py-2"
+          className="flex cursor-pointer flex-col items-center justify-center px-1 py-2"
           onClick={() => setActivePicker("minute")}
         >
           <span className="font-mono text-2xl font-bold text-background">
@@ -90,9 +90,9 @@ const TimePicker: React.FC<TimePickerProps> = ({
 
       {/* second ui option */}
 
-      {/* <div className="grid auto-cols-max grid-flow-col gap-1 rounded-full p-4 text-center">
+      {/* <div className="grid auto-cols-max grid-flow-col rounded-full p-4 text-center">
         <div
-          className="bg-neutral rounded-box flex cursor-pointer flex-col rounded-xl bg-foreground/90 p-2 text-muted"
+          className="bg-neutral rounded-box flex cursor-pointer flex-col rounded-xl bg-foreground p-2 text-muted"
           onClick={() => setActivePicker("hour")}
           style={{ cursor: "pointer" }}
         >
@@ -102,7 +102,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
           <p className="text-muted-foreground">HH</p>
         </div>
         <div
-          className="bg-neutral rounded-box flex cursor-pointer flex-col rounded-xl bg-foreground/90 p-2 text-muted"
+          className="bg-neutral rounded-box flex cursor-pointer flex-col rounded-xl bg-foreground p-2 text-muted"
           onClick={() => setActivePicker("minute")}
           style={{ cursor: "pointer" }}
         >

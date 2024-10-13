@@ -76,7 +76,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
           />
           <DateAndTimePickerContainer
             defaultValue={event.eventDateAndTime}
-            defaultEndValue={event.eventEndDateAndTime}
+            defaultEndValue={event.eventEndDateAndTime || ""}
           />
           <SubmitButton text="edit event" className="mt-12" />
         </FormContainer>

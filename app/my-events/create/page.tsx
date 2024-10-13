@@ -51,6 +51,7 @@ const CreateEvent = () => {
             <CounterInput detail="outdoorAreas" />
             <DateAndTimePickerContainer
               defaultValue={defaultEventDateAndTime}
+              defaultEndValue=""
             />
           </div>
           <SubmitButton text="create event" className="mt-12" />
