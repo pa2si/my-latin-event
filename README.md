@@ -1,15 +1,18 @@
 To do:
 
-- rename tagline into subtitle
-- implement eventDateTimeEnd TimePicker. can be empty
-- implement restrictions in datePicker. cant select date in the past!
+- check the TODO extension
 - continue with create event form
-- add edit button when creator or admin next to the delete button (admin view) (for event slug)
 - put profile component from salsa calendar in the menu
 - implement a section where i can see my calender with all my events
 - implement a follow creator action and section where i can see all events from the followed creator
 
 WHATS DONE IN VERSIONS
+
+v 0.1.20
+
+- EventEndDateTimePicker implemented, also in db
+- subtitles in NameAndSubtitle can now be edited
+- when the checkbox add-subtitle is unchecked it sends empty string to db
 
 v 0.1.19
 
@@ -36,8 +39,8 @@ v 0.1.15
 
 - GenreAndStylesInout is now called GenreAndStylesContainer
 - the GenreAndStylesInout is now using excluded useGenreStyle function to make the component cleaner
-
-v 0.1.14
+  ^
+  v 0.1.14
 
 - selectModal is now a reusable component
 - TimePicker is using the selectModal

@@ -1,5 +1,5 @@
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 type FormInputProps = {
   name: string;
@@ -8,8 +8,8 @@ type FormInputProps = {
   defaultValue?: string;
   placeholder?: string;
   required?: boolean;
-  value?: number;
-  onChange?: (value: string) => void;
+  value?: number | string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 };
 
@@ -22,6 +22,7 @@ function FormInput({
   required,
   value,
   className,
+  onChange,
 }: FormInputProps) {
   return (
     <div className="mb-2">
@@ -34,6 +35,7 @@ function FormInput({
         type={type}
         defaultValue={defaultValue}
         placeholder={placeholder}
+        onChange={onChange}
         required={required}
         value={value}
         className={className}

@@ -1,29 +1,29 @@
-import * as z from 'zod';
-import { ZodSchema } from 'zod';
+import * as z from "zod";
+import { ZodSchema } from "zod";
 
 /* Profile Schema */
 export const profileSchema = z.object({
   firstName: z
     .string()
-    .min(2, { message: 'first name must be at least 2 characters.' }),
+    .min(2, { message: "first name must be at least 2 characters." }),
   lastName: z
     .string()
-    .min(2, { message: 'last name must be at least 2 characters.' }),
+    .min(2, { message: "last name must be at least 2 characters." }),
   username: z
     .string()
-    .min(2, { message: 'username must be at least 2 characters.' }),
+    .min(2, { message: "username must be at least 2 characters." }),
 });
 
 /*  validate With ZodSchema */
 export const validateWithZodSchema = <T>(
   schema: ZodSchema<T>,
-  data: unknown
+  data: unknown,
 ): T => {
   const result = schema.safeParse(data);
   if (!result.success) {
     const errors = result.error.errors.map((error) => error.message);
 
-    throw new Error(errors.join(', '));
+    throw new Error(errors.join(", "));
   }
   return result.data;
 };
@@ -36,7 +36,7 @@ export const imageSchema = z.object({
 /* validate File */
 function validateFile() {
   const maxUploadSize = 1024 * 1024;
-  const acceptedFileTypes = ['image/'];
+  const acceptedFileTypes = ["image/"];
   return z
     .instanceof(File)
     .refine((file) => {
@@ -46,55 +46,55 @@ function validateFile() {
       return (
         !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
       );
-    }, 'File must be an image');
+    }, "File must be an image");
 }
 
 export const eventSchema = z.object({
   name: z
     .string()
     .min(2, {
-      message: 'name must be at least 2 characters.',
+      message: "name must be at least 2 characters.",
     })
     .max(100, {
-      message: 'name must be less than 100 characters.',
+      message: "name must be less than 100 characters.",
     }),
   subtitle: z
     .string()
     .min(2, {
-      message: 'subtitle must be at least 2 characters.',
+      message: "subtitle must be at least 2 characters.",
     })
     .max(100, {
-      message: 'subtitle must be less than 100 characters.',
+      message: "subtitle must be less than 100 characters.",
     })
     .optional()
-    .or(z.literal('')),
+    .or(z.literal("")),
   price: z.coerce.number().int().min(0, {
-    message: 'price must be a positive number.',
+    message: "price must be a positive number.",
   }),
   genre: z.string(),
   description: z.string().refine(
     (description) => {
-      const wordCount = description.split(' ').length;
+      const wordCount = description.split(" ").length;
       return wordCount >= 10 && wordCount <= 1000;
     },
     {
-      message: 'description must be between 10 and 1000 words.',
-    }
+      message: "description must be between 10 and 1000 words.",
+    },
   ),
   country: z.string(),
   floors: z.coerce.number().int().min(0, {
-    message: 'floor amount must be a positive number.',
+    message: "floor amount must be a positive number.",
   }),
   bars: z.coerce.number().int().min(0, {
-    message: 'bar amount must be a positive number.',
+    message: "bar amount must be a positive number.",
   }),
   outdoorAreas: z.coerce.number().int().min(0, {
-    message: 'outdoor area amount must be a positive number.',
+    message: "outdoor area amount must be a positive number.",
   }),
   styles: z.string(),
   eventDateAndTime: z.preprocess(
     (arg) => {
-      if (typeof arg === 'string' || arg instanceof Date) {
+      if (typeof arg === "string" || arg instanceof Date) {
         const date = new Date(arg);
         if (!isNaN(date.getTime())) {
           return date;
@@ -108,10 +108,32 @@ export const eventSchema = z.object({
         return date.getTime() > now.getTime() + 60 * 60 * 1000; // at least 1 hour ahead
       },
       {
-        message: 'The event must be scheduled at least 1 hour in the future.',
-      }
-    )
+        message: "The event must be scheduled at least 1 hour in the future.",
+      },
+    ),
   ),
+  eventEndDateAndTime: z
+    .preprocess(
+      (arg) => {
+        if (typeof arg === "string" || arg instanceof Date) {
+          const date = new Date(arg);
+          if (!isNaN(date.getTime())) {
+            return date;
+          }
+        }
+        return undefined;
+      },
+      z.date().refine(
+        (date) => {
+          const now = new Date();
+          return date.getTime() > now.getTime() + 60 * 60 * 1000; // at least 1 hour ahead
+        },
+        {
+          message: "The event end time must be at least 1 hour in the future.",
+        },
+      ),
+    )
+    .optional(),
 });
 
 export const createReviewSchema = z.object({

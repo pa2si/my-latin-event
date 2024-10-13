@@ -38,6 +38,7 @@ model Event {
   outdoorAreas        Int
   styles              String
   eventDateAndTime    DateTime
+  eventEndDateAndTime DateTime?
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
   profile             Profile    @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)

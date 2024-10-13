@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { format, isBefore, startOfToday } from 'date-fns'; // import isBefore and startOfToday
-import { Calendar as CalendarIcon } from 'lucide-react';
+import * as React from "react";
+import { format, isBefore, startOfToday } from "date-fns"; // import isBefore and startOfToday
+import { Calendar as CalendarIcon } from "lucide-react";
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 
 interface DatePickerProps {
   setDate: React.Dispatch<React.SetStateAction<Date | null>>;
@@ -20,7 +20,7 @@ interface DatePickerProps {
 
 export function DatePicker({ setDate, initialDate }: DatePickerProps) {
   const [date, setLocalDate] = React.useState<Date | undefined>(
-    initialDate || undefined
+    initialDate || undefined,
   );
   const [open, setOpen] = React.useState(false);
 
@@ -37,15 +37,15 @@ export function DatePicker({ setDate, initialDate }: DatePickerProps) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant={'outline'}
+          variant={"outline"}
           className={cn(
-            'w-[280px] justify-start text-left font-normal',
-            !date && 'text-muted-foreground'
+            "w-[280px] justify-start text-left font-normal",
+            !date && "text-muted-foreground",
           )}
           onClick={() => setOpen(true)}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, 'PPP') : <span>Pick a date</span>}
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

@@ -2,38 +2,38 @@ import {
   fetchMyEventDetails,
   updateEventImageAction,
   updateEventAction,
-} from '@/utils/actions';
-import FormContainer from '@/components/form/FormContainer';
-import FormInput from '@/components/form/FormInput';
-import PriceInput from '@/components/form/PriceInput';
-import TextAreaInput from '@/components/form/TextAreaInput';
-import CountriesInput from '@/components/form/CountriesInput';
-import CounterInput from '@/components/form/CounterInput';
-import { SubmitButton } from '@/components/form/Buttons';
-import { redirect } from 'next/navigation';
-import ImageInputContainer from '@/components/form/ImageInputContainer';
-import GenreAndStylesContainer from '@/components/form/GenreAndStylesContainer';
-import DateAndTimePickerContainer from '@/components/form/DateAndTimePickerContainer';
-import { Style } from '@/utils/styles';
+} from "@/utils/actions";
+import FormContainer from "@/components/form/FormContainer";
+import FormInput from "@/components/form/FormInput";
+import PriceInput from "@/components/form/PriceInput";
+import TextAreaInput from "@/components/form/TextAreaInput";
+import CountriesInput from "@/components/form/CountriesInput";
+import CounterInput from "@/components/form/CounterInput";
+import { SubmitButton } from "@/components/form/Buttons";
+import { redirect } from "next/navigation";
+import ImageInputContainer from "@/components/form/ImageInputContainer";
+import GenreAndStylesContainer from "@/components/form/GenreAndStylesContainer";
+import DateAndTimePickerContainer from "@/components/form/DateAndTimePickerContainer";
+import { Style } from "@/utils/styles";
+import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer";
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {
   const event = await fetchMyEventDetails(params.id);
 
-  if (!event) redirect('/');
+  if (!event) redirect("/");
 
   let parsedStyles: Style[] = [];
   try {
     parsedStyles = JSON.parse(event.styles as string);
   } catch (error) {
-    console.error('Error parsing styles:', error);
-    // If parsing fails, default to an empty array
+    // console.error("Error parsing styles:", error);
     parsedStyles = [];
   }
 
   return (
     <section>
-      <h1 className="text-2xl font-semibold mb-8 capitalize">Edit Event</h1>
-      <div className="border p-8 rounded-md ">
+      <h1 className="mb-8 text-2xl font-semibold capitalize">Edit Event</h1>
+      <div className="rounded-md border p-8">
         <ImageInputContainer
           name={event.name}
           text="Update Image"
@@ -45,19 +45,12 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
 
         <FormContainer action={updateEventAction}>
           <input type="hidden" name="id" value={event.id} />
-          <div className="grid md:grid-cols-2 gap-8 mb-4 mt-8">
-            <FormInput
-              name="name"
-              type="text"
-              label="Name (20 limit)"
-              defaultValue={event.name}
-            />
-            <FormInput
-              name="subtitle"
-              type="text "
-              label="Subtitle (30 limit)"
-              defaultValue={event.subtitle}
-            />
+
+          <NameAndSubtitleContainer
+            defaultName={event.name}
+            defaultSubtitle={event.subtitle || ""}
+          />
+          <div className="mb-4 grid gap-8 md:grid-cols-2">
             <PriceInput defaultValue={event.price} />
             <GenreAndStylesContainer
               defaultGenre={event.genre}
@@ -72,7 +65,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
           />
           <CountriesInput defaultValue={event.country} />
 
-          <h3 className="text-lg mt-8 mb-4 font-medium">
+          <h3 className="mb-4 mt-8 text-lg font-medium">
             Accommodation Details
           </h3>
           <CounterInput detail="floors" defaultValue={event.floors} />
@@ -81,7 +74,10 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
             detail="outdoorAreas"
             defaultValue={event.outdoorAreas}
           />
-          <DateAndTimePickerContainer defaultValue={event.eventDateAndTime} />
+          <DateAndTimePickerContainer
+            defaultValue={event.eventDateAndTime}
+            defaultEndValue={event.eventEndDateAndTime}
+          />
           <SubmitButton text="edit event" className="mt-12" />
         </FormContainer>
       </div>
