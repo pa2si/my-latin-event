@@ -1,6 +1,7 @@
-'use client';
-import { ThemeProvider } from './theme-provider';
-import { Toaster } from '@/components/ui/toaster';
+"use client";
+import { ThemeProvider } from "./theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { EdgeStoreProvider } from "../lib/edgestore";
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +13,7 @@ function Providers({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <EdgeStoreProvider>{children}</EdgeStoreProvider>
       </ThemeProvider>
     </>
   );

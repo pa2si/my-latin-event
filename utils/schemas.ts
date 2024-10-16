@@ -51,6 +51,7 @@ function validateFile() {
 
 export const eventSchema = z
   .object({
+    image: z.string().url(),
     name: z
       .string()
       .min(2, {

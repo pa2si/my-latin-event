@@ -152,18 +152,15 @@ export const createEventAction = async (
   const user = await getAuthUser();
   try {
     const rawData = Object.fromEntries(formData);
-    const file = formData.get("image") as File;
 
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
-    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
-    const fullPath = await uploadImage(validatedFile.image);
     const eventDateAndTime = validatedFields.eventDateAndTime as Date;
     const eventEndDateAndTime =
       validatedFields.eventEndDateAndTime as Date | null;
+
     await db.event.create({
       data: {
         ...validatedFields,
-        image: fullPath,
         profileId: user.id,
         eventDateAndTime,
         eventEndDateAndTime,

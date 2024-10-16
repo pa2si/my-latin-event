@@ -1,11 +1,19 @@
 To do:
 
+- implement Edgestore image in edit page
 - continue with create event form
+- in profile module add a city section. this shall be used to display local events
 - put profile component from salsa calendar in the menu
-- implement a section where i can see my calender with all my events
+- implement a feature where i can say "going".
+  - create a page where i can see all my "goings" and include a calendar overview
 - implement a follow creator action and section where i can see all events from the followed creator
+- create a section where i can see all my purchased events.
 
 WHATS DONE IN VERSIONS
+
+v 0.1.22
+
+- implemented edgeStore image upload in create Event instead of using supabase storage including temp file logic
 
 v 0.1.21
 
