@@ -27,9 +27,9 @@ const CreateEvent = () => {
       <div className="rounded-md border p-8">
         <h3 className="mb-4 text-lg font-medium">General Info</h3>
         <FormContainer action={createEventAction}>
-          <ImageUploadContainer name="image" />
           <input type="hidden" name="image" />
-          <NameAndSubtitleContainer />
+          <ImageUploadContainer name="image" />
+          <NameAndSubtitleContainer defaultName="test" />
           <div className="mb-4 grid gap-8 md:grid-cols-2">
             <PriceInput />
             <GenreAndStylesContainer

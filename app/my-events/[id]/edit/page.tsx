@@ -16,6 +16,7 @@ import GenreAndStylesContainer from "@/components/form/GenreAndStylesContainer";
 import DateAndTimePickerContainer from "@/components/form/DateAndTimePickerContainer";
 import { Style } from "@/utils/styles";
 import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer";
+import ImageUploadContainer from "@/components/form/ImageUploadContainer";
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {
   const event = await fetchMyEventDetails(params.id);
@@ -34,18 +35,19 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
     <section>
       <h1 className="mb-8 text-2xl font-semibold capitalize">Edit Event</h1>
       <div className="rounded-md border p-8">
-        <ImageInputContainer
+        {/* <ImageUploadContainer name="image" defaultImageUrl={event.image} /> */}
+        {/* <ImageInputContainer
           name={event.name}
           text="Update Image"
           action={updateEventImageAction}
           image={event.image}
         >
           <input type="hidden" name="id" value={event.id} />
-        </ImageInputContainer>
+        </ImageInputContainer> */}
 
         <FormContainer action={updateEventAction}>
           <input type="hidden" name="id" value={event.id} />
-
+          <ImageUploadContainer name="image" defaultImage={event.image} />
           <NameAndSubtitleContainer
             defaultName={event.name}
             defaultSubtitle={event.subtitle || ""}

@@ -1,5 +1,3 @@
-"use client";
-
 import { formatFileSize } from "@edgestore/react/utils";
 import { UploadCloudIcon, X } from "lucide-react";
 import * as React from "react";
@@ -49,16 +47,15 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const image = React.useMemo(() => {
       if (typeof value === "string") {
-        // in case an url is passed in, use it to display the image
+        // in case an URL is passed in, use it to display the image
         return value;
       } else if (value) {
-        // in case a file is passed in, create a base64 url to display the image
+        // in case a file is passed in, create a base64 URL to display the image
         return URL.createObjectURL(value);
       }
       return null;
     }, [value]);
 
-    // dropzone configuration
     const {
       getRootProps,
       getInputProps,
@@ -80,7 +77,6 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
       ...dropzoneOptions,
     });
 
-    // styling
     const dropZoneClassName = React.useMemo(
       () =>
         twMerge(
@@ -88,7 +84,7 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           isFocused && variants.active,
           disabled && variants.disabled,
           image && variants.image,
-          (isDragReject ?? fileRejections[0]) && variants.reject,
+          (isDragReject || fileRejections[0]) && variants.reject,
           isDragAccept && variants.accept,
           className,
         ).trim(),
@@ -103,9 +99,9 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
       ],
     );
 
-    // error validation messages
+    // Error validation message
     const errorMessage = React.useMemo(() => {
-      if (fileRejections[0]) {
+      if (fileRejections.length > 0) {
         const { errors } = fileRejections[0];
         if (errors[0]?.code === "file-too-large") {
           return ERROR_MESSAGES.fileTooLarge(dropzoneOptions?.maxSize ?? 0);
@@ -160,7 +156,7 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
               className="group absolute right-0 top-0 -translate-y-1/4 translate-x-1/4 transform"
               onClick={(e) => {
                 e.stopPropagation();
-                void onChange?.(undefined);
+                void onChange?.(undefined); // Clears the image on click
               }}
             >
               <div className="flex h-5 w-5 items-center justify-center rounded-md border border-solid border-gray-500 bg-white transition-all duration-300 hover:h-6 hover:w-6 dark:border-gray-400 dark:bg-black">

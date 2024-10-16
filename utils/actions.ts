@@ -152,8 +152,11 @@ export const createEventAction = async (
   const user = await getAuthUser();
   try {
     const rawData = Object.fromEntries(formData);
+    console.log("Raw form data:", rawData);
 
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
+    console.log("Validated fields:", validatedFields);
+
     const eventDateAndTime = validatedFields.eventDateAndTime as Date;
     const eventEndDateAndTime =
       validatedFields.eventEndDateAndTime as Date | null;
@@ -497,6 +500,7 @@ export const fetchMyEvents = async () => {
       id: true,
       name: true,
       price: true,
+      image: true,
     },
   });
 

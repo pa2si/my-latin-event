@@ -51,7 +51,7 @@ function validateFile() {
 
 export const eventSchema = z
   .object({
-    image: z.string().url(),
+    image: z.string().url({ message: "Invalid image URL" }),
     name: z
       .string()
       .min(2, {

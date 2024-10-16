@@ -1,6 +1,5 @@
 To do:
 
-- implement Edgestore image in edit page
 - continue with create event form
 - in profile module add a city section. this shall be used to display local events
 - put profile component from salsa calendar in the menu
@@ -10,6 +9,10 @@ To do:
 - create a section where i can see all my purchased events.
 
 WHATS DONE IN VERSIONS
+
+v 0.1.23
+
+- i can now edit the image with the singleImageDropbox using Edgestore method
 
 v 0.1.22
 
