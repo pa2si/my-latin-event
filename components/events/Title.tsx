@@ -1,4 +1,4 @@
 const Title = ({ text }: { text: string }) => {
-  return <h3 className="text-lg font-bold  mb-2">{text}</h3>;
+  return <h3 className="mb-2 text-lg font-bold">{text}</h3>;
 };
 export default Title;

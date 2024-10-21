@@ -20,6 +20,7 @@ import { auth } from "@clerk/nextjs/server";
 import DeleteMyEvent from "@/components/events/DeleteMyEvent";
 import EditMyEvent from "@/components/events/EditMyEvent";
 import EventDateAndTime from "@/components/events/EventDateAndTime";
+import { FaMusic } from "react-icons/fa";
 
 const DynamicMap = dynamic(() => import("@/components/events/EventMap"), {
   ssr: false,
@@ -97,7 +98,10 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               />
             )}
           </div>
-          <p className="text-md text-muted-foreground">{event.genre} Event</p>
+          <div className="text-md flex items-center gap-2 text-muted-foreground">
+            <FaMusic className="h-4 w-4 text-primary" />
+            {event.genre} Event
+          </div>
           <p className="text-md text-muted-foreground">
             Ticket Price {event.price} €
           </p>

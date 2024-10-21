@@ -13,7 +13,7 @@ const EventDateAndTime = ({
   isStartDate,
 }: EventDateAndTimeProps) => {
   return (
-    <div>
+    <div className="flex flex-col gap-1">
       <p className="flex items-center text-sm text-gray-500">
         {/* Show CalendarIcon only if it's the start date */}
         {isStartDate && formattedDate && (

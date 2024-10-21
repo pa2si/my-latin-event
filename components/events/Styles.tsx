@@ -1,6 +1,7 @@
-import { Style } from '@/utils/styles';
-import { FaMusic } from 'react-icons/fa';
-import Title from './Title';
+import { Style } from "@/utils/styles";
+import { FaMusic } from "react-icons/fa";
+import Title from "./Title";
+import { Badge } from "../ui/badge";
 
 const Styles = ({ styles }: { styles: string }) => {
   const stylesList: Style[] = JSON.parse(styles as string);
@@ -11,19 +12,21 @@ const Styles = ({ styles }: { styles: string }) => {
   }
   return (
     <div className="mt-4">
-      <Title text="music styles" />
-      <div className="grid md:grid-cols-2 gap-x-4">
+      <Title text="Music Styles" />
+      <div className="grid gap-x-4 md:grid-cols-2">
         {stylesList.map((style) => {
           if (!style.selected) {
             return null;
           }
           return (
-            <div key={style.name} className="flex items-center gap-x-2 mb-2 ">
-              <FaMusic className="h-4 w-4 text-primary" />
-              <span className="font-light text-sm capitalize">
+            <Badge
+              key={style.name}
+              className="mb-2 flex w-fit items-center gap-x-2"
+            >
+              <span className="text-sm font-light capitalize">
                 {style.name}
               </span>
-            </div>
+            </Badge>
           );
         })}
       </div>

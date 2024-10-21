@@ -12,7 +12,12 @@ To do:
 
 WHATS DONE IN VERSIONS
 
-v 0.1.25
+v 0.1.26
+
+- Styles are now displayed with badge component from shadCn in events slug
+- Genre has now a melody note icon
+
+v 0.1.26
 
 - GenresInput and StylesInput work now without a container --> GenresAndStylesContainer is deleted. They work with a new instance of Zustand coming from store.ts.
   - redesigned the grid for stylesInput
