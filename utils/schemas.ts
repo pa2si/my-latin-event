@@ -35,13 +35,13 @@ export const imageSchema = z.object({
 
 /* validate File */
 function validateFile() {
-  const maxUploadSize = 1024 * 1024;
+  const maxUploadSize = 1024 * 1024 * 5;
   const acceptedFileTypes = ["image/"];
   return z
     .instanceof(File)
     .refine((file) => {
       return !file || file.size <= maxUploadSize;
-    }, `File size must be less than 1 MB`)
+    }, `File size must be less than 5 MB`)
     .refine((file) => {
       return (
         !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
@@ -51,7 +51,6 @@ function validateFile() {
 
 export const eventSchema = z
   .object({
-    image: z.string().url({ message: "Invalid image URL" }),
     name: z
       .string()
       .min(2, {

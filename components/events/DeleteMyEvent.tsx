@@ -1,6 +1,6 @@
-import { deleteMyEventAction } from '@/utils/actions';
-import FormContainer from '../form/FormContainer';
-import { IconButton } from '../form/Buttons';
+import { deleteMyEventAction } from "@/utils/actions";
+import FormContainer from "../form/FormContainer";
+import { IconButton } from "../form/Buttons";
 
 const DeleteMyEvent = ({ eventId }: { eventId: string }) => {
   const deleteMyEvent = deleteMyEventAction.bind(null, { eventId });

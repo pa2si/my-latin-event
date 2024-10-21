@@ -1,7 +1,8 @@
 "use client";
+
 import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { EdgeStoreProvider } from "../lib/edgestore";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (

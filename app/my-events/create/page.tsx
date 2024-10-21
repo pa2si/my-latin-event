@@ -1,4 +1,3 @@
-import FormInput from "@/components/form/FormInput";
 import FormContainer from "@/components/form/FormContainer";
 import { createEventAction } from "@/utils/actions";
 import { SubmitButton } from "@/components/form/Buttons";
@@ -11,8 +10,7 @@ import CounterInput from "@/components/form/CounterInput";
 import DateAndTimePickerContainer from "@/components/form/DateAndTimePickerContainer";
 import { Style } from "@/utils/styles";
 import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer";
-import ImageUploadContainer from "@/components/form/ImageUploadContainer";
-222;
+
 const defaultGenre = "Latin";
 const defaultStyles: Style[] = [];
 
@@ -27,8 +25,7 @@ const CreateEvent = () => {
       <div className="rounded-md border p-8">
         <h3 className="mb-4 text-lg font-medium">General Info</h3>
         <FormContainer action={createEventAction}>
-          <input type="hidden" name="image" />
-          <ImageUploadContainer name="image" />
+          <ImageInput />
           <NameAndSubtitleContainer defaultName="test" />
           <div className="mb-4 grid gap-8 md:grid-cols-2">
             <PriceInput />
@@ -43,7 +40,6 @@ const CreateEvent = () => {
           />
           <div className="mt-4 grid gap-8 sm:grid-cols-2">
             <CountriesInput />
-            {/* <ImageInput /> */}
           </div>
           <div>
             <h3 className="mb-4 mt-8 text-lg font-medium">Location Details</h3>

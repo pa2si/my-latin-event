@@ -8,13 +8,9 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "hakffmpeswkxuaqagoix.supabase.co",
-      },
-      {
-        protocol: "https",
         hostname: "files.edgestore.dev",
         port: "",
-        pathname: "/50qf9guk0eznyh1w/publicImages/_public/**",
+        pathname: "/50qf9guk0eznyh1w/eventImages/_public/**",
       },
     ],
   },

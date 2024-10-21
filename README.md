@@ -1,5 +1,6 @@
 To do:
 
+-
 - continue with create event form
 - in profile module add a city section. this shall be used to display local events
 - put profile component from salsa calendar in the menu
@@ -9,6 +10,11 @@ To do:
 - create a section where i can see all my purchased events.
 
 WHATS DONE IN VERSIONS
+
+v 0.1.24
+
+- edge store is now fully implemented only in the backend and integrated in the server actions (upload and delete). images are getting deleted from edge store server when deleting an event. and when update an event, the current image gets first deleted and then the new image uploaded. no frontend implementation like in the versions 0.1.22 und 0.1.23.
+- made an npm audit fix
 
 v 0.1.23
 

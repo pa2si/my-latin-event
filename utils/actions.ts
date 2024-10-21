@@ -8,15 +8,15 @@ import {
   validateWithZodSchema,
 } from "./schemas";
 import db from "./db";
-import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
+import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { uploadImage } from "./supabase";
 import { calculateTotals } from "./calculateTotals";
 import { formatDate } from "./format";
+import { backendClient } from "@/lib/edgestore-server";
 
 /* Helper Functions */
-const getAuthUser = async () => {
+export const getAuthUser = async () => {
   const user = await currentUser();
   if (!user) {
     throw new Error("You must be logged in to access this route");
@@ -144,26 +144,41 @@ export const updateProfileImageAction = async (
   }
 };
 
+export const uploadImage = async (file: File): Promise<string> => {
+  try {
+    const res = await backendClient.eventImages.upload({
+      content: {
+        blob: new Blob([file], { type: file.type }), // Use file type for proper content-type
+        extension: file.name.split(".").pop() || "", // Extract file extension from filename
+      },
+    });
+
+    return res.url;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw new Error("Failed to upload image");
+  }
+};
+
 export const createEventAction = async (
   prevState: any,
   formData: FormData,
 ): Promise<{ message: string }> => {
-  // console.log(Object.fromEntries(formData)); // Log form data
   const user = await getAuthUser();
   try {
     const rawData = Object.fromEntries(formData);
-    console.log("Raw form data:", rawData);
+    const file = formData.get("image") as File;
 
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
-    console.log("Validated fields:", validatedFields);
-
+    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+    const fullPath = await uploadImage(validatedFile.image);
     const eventDateAndTime = validatedFields.eventDateAndTime as Date;
     const eventEndDateAndTime =
       validatedFields.eventEndDateAndTime as Date | null;
-
     await db.event.create({
       data: {
         ...validatedFields,
+        image: fullPath,
         profileId: user.id,
         eventDateAndTime,
         eventEndDateAndTime,
@@ -556,6 +571,17 @@ export const deleteMyEventAction = async (prevState: { eventId: string }) => {
       return { message: "Not authorized to delete this event" };
     }
 
+    // Delete the image from EdgeStore
+    if (event.image) {
+      try {
+        await backendClient.eventImages.deleteFile({
+          url: event.image,
+        });
+      } catch (error) {
+        console.error("Failed to delete image from EdgeStore:", error);
+      }
+    }
+
     await db.event.delete({
       where: {
         id: eventId,
@@ -595,10 +621,39 @@ export const updateEventAction = async (
       | undefined;
     const eventEndDateAndTime =
       validatedFields.eventEndDateAndTime as Date | null;
-    // console.log('Updating Event:', {
-    //   ...validatedFields,
-    //   eventDateAndTime: validatedFields.eventDateAndTime as string | Date,
-    // });
+
+    const existingEvent = await db.event.findUnique({
+      where: { id: eventId, profileId: user.id },
+      select: { image: true },
+    });
+
+    if (!existingEvent) {
+      throw new Error(
+        "Event not found or you don't have permission to edit it",
+      );
+    }
+
+    let imagePath = existingEvent.image;
+
+    // Check if a new image is being uploaded
+    if (formData.get("newImage") === "true") {
+      const file = formData.get("image") as File;
+      if (file && file.size > 0) {
+        const validatedFile = validateWithZodSchema(imageSchema, {
+          image: file,
+        });
+
+        // Delete the old image if it exists
+        if (existingEvent.image) {
+          await backendClient.eventImages.deleteFile({
+            url: existingEvent.image,
+          });
+        }
+
+        // Upload the new image
+        imagePath = await uploadImage(validatedFile.image);
+      }
+    }
 
     await db.event.update({
       where: {
@@ -607,6 +662,7 @@ export const updateEventAction = async (
       },
       data: {
         ...validatedFields,
+        image: imagePath,
         eventDateAndTime,
         eventEndDateAndTime,
       },
@@ -614,34 +670,6 @@ export const updateEventAction = async (
 
     revalidatePath(`/my-events/${eventId}/edit`);
     return { message: "Update Successful" };
-  } catch (error) {
-    return renderError(error);
-  }
-};
-
-export const updateEventImageAction = async (
-  prevState: any,
-  formData: FormData,
-): Promise<{ message: string }> => {
-  const user = await getAuthUser();
-  const eventId = formData.get("id") as string;
-
-  try {
-    const image = formData.get("image") as File;
-    const validatedFields = validateWithZodSchema(imageSchema, { image });
-    const fullPath = await uploadImage(validatedFields.image);
-
-    await db.event.update({
-      where: {
-        id: eventId,
-        profileId: user.id,
-      },
-      data: {
-        image: fullPath,
-      },
-    });
-    revalidatePath(`/my-events/${eventId}/edit`);
-    return { message: "Event Image Updated Successful" };
   } catch (error) {
     return renderError(error);
   }
