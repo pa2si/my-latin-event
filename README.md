@@ -1,6 +1,7 @@
 To do:
 
--
+- in events slug the music note image shall be in front of Genre not infront of music style
+  - the music styles shall be like in my salsa calendar!
 - continue with create event form
 - in profile module add a city section. this shall be used to display local events
 - put profile component from salsa calendar in the menu
@@ -10,6 +11,11 @@ To do:
 - create a section where i can see all my purchased events.
 
 WHATS DONE IN VERSIONS
+
+v 0.1.25
+
+- GenresInput and StylesInput work now without a container --> GenresAndStylesContainer is deleted. They work with a new instance of Zustand coming from store.ts.
+  - redesigned the grid for stylesInput
 
 v 0.1.24
 

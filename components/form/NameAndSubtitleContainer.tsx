@@ -27,7 +27,7 @@ const NameAndSubtitleContainer = ({
   return (
     <div className="mb-4 grid gap-4 md:grid-cols-2 md:gap-8">
       {/* Name Input */}
-      <div className="flex items-center justify-between gap-2">
+      <div className="">
         <div className="w-full">
           <FormInput
             name="name"
@@ -40,7 +40,7 @@ const NameAndSubtitleContainer = ({
         </div>
 
         {/* Checkbox for Subtitle */}
-        <div className="mt-4 flex-grow">
+        <div className="ml-1 mt-5 flex-grow">
           <FormCheckbox
             id="add-subtitle"
             label="Add Subtitle"

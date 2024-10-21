@@ -2,7 +2,6 @@ import FormContainer from "@/components/form/FormContainer";
 import { createEventAction } from "@/utils/actions";
 import { SubmitButton } from "@/components/form/Buttons";
 import PriceInput from "@/components/form/PriceInput";
-import GenreAndStylesContainer from "@/components/form/GenreAndStylesContainer";
 import TextAreaInput from "@/components/form/TextAreaInput";
 import CountriesInput from "@/components/form/CountriesInput";
 import ImageInput from "@/components/form/ImageInput";
@@ -10,6 +9,8 @@ import CounterInput from "@/components/form/CounterInput";
 import DateAndTimePickerContainer from "@/components/form/DateAndTimePickerContainer";
 import { Style } from "@/utils/styles";
 import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer";
+import GenresInput from "@/components/form/GenresInput";
+import StylesInput from "@/components/form/StylesInput";
 
 const defaultGenre = "Latin";
 const defaultStyles: Style[] = [];
@@ -29,15 +30,22 @@ const CreateEvent = () => {
           <NameAndSubtitleContainer defaultName="test" />
           <div className="mb-4 grid gap-8 md:grid-cols-2">
             <PriceInput />
-            <GenreAndStylesContainer
-              defaultGenre={defaultGenre}
+            <GenresInput
+              defaultValue={defaultGenre}
               defaultStyles={defaultStyles}
             />
           </div>
+
+          <StylesInput
+            defaultGenre={defaultGenre}
+            defaultStyles={defaultStyles}
+          />
+
           <TextAreaInput
             name="description"
             labelText="Description (10 - 1000 Words)"
           />
+          <h3 className="mb-4 mt-12 text-lg font-medium">Direction</h3>
           <div className="mt-4 grid gap-8 sm:grid-cols-2">
             <CountriesInput />
           </div>

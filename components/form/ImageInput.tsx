@@ -42,6 +42,12 @@ const ImageInput: React.FC<ImageInputProps> = ({ imageUrl }) => {
     }
   };
 
+  const handleSelectClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   return (
     <div
       className={`relative mb-4 flex h-52 w-52 cursor-pointer flex-col items-center justify-center rounded-lg ${
@@ -83,7 +89,8 @@ const ImageInput: React.FC<ImageInputProps> = ({ imageUrl }) => {
             <span className="text-sm">drag & drop to upload</span>
           </div>
           <button
-            className="absolute bottom-8 rounded-lg bg-gray-500 px-4 py-1 text-sm text-gray-100 transition-colors duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-gray-300"
+            onClick={handleSelectClick}
+            className="absolute bottom-8 rounded-lg bg-gray-500 px-4 py-1 text-sm text-gray-100 transition-colors duration-200 hover:bg-primary focus:outline-none focus:ring-1 focus:ring-gray-600"
             type="button"
           >
             select

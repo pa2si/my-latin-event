@@ -1,30 +1,34 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import getStyles from '@/utils/getStyles';
-import { Style } from '@/utils/styles';
+import { useEffect } from "react";
+import getStyles from "@/utils/getStyles";
+import { Style } from "@/utils/styles";
+import { useGenreStylesStore } from "./store";
 
-export function useGenreStyles(defaultGenre: string, defaultStyles: Style[]) {
-  const [selectedGenre, setSelectedGenre] = useState<string>(defaultGenre);
-  const [styles, setStyles] = useState<Style[]>(() => {
-    const allStyles = getStyles(defaultGenre) || [];
-    return allStyles.map((style) => ({
-      ...style,
-      selected: defaultStyles.some((s) => s.name === style.name && s.selected),
-    }));
-  });
+export function useGenreStyles(initialGenre: string, initialStyles: Style[]) {
+  const { selectedGenre, setSelectedGenre, styles, setStyles } =
+    useGenreStylesStore();
 
   useEffect(() => {
-    const allStyles = getStyles(selectedGenre) || [];
-    setStyles(
-      allStyles.map((style) => ({
+    if (!selectedGenre) {
+      setSelectedGenre(initialGenre);
+    }
+  }, [initialGenre, selectedGenre, setSelectedGenre]);
+
+  useEffect(() => {
+    const fetchStyles = async () => {
+      const allStyles = (await getStyles(selectedGenre)) || [];
+      const updatedStyles = allStyles.map((style) => ({
         ...style,
-        selected: defaultStyles.some(
-          (s) => s.name === style.name && s.selected
+        selected: initialStyles.some(
+          (s) => s.name === style.name && s.selected,
         ),
-      }))
-    );
-  }, [selectedGenre, defaultStyles]);
+      }));
+      setStyles(updatedStyles);
+    };
+
+    fetchStyles();
+  }, [selectedGenre, initialStyles, setStyles]);
 
   return {
     selectedGenre,
