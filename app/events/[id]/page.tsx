@@ -72,7 +72,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           <ShareButton name={event.name} eventId={event.id} />
           <FavoriteToggleButton eventId={event.id} />
           {(isAdminUser || isOwner) && <EditMyEvent eventId={event.id} />}
-          {isAdminUser && <DeleteMyEvent eventId={event.id} />}
+          {(isAdminUser || isOwner) && <DeleteMyEvent eventId={event.id} />}
         </div>
       </header>
       <ImageContainer mainImage={event.image} name={event.name} />

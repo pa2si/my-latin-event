@@ -96,29 +96,6 @@ export const fetchProfile = async () => {
   return profile;
 };
 
-// export const updateProfileAction = async (
-//   prevState: any,
-//   formData: FormData,
-// ): Promise<{ message: string }> => {
-//   const user = await getAuthUser();
-//   try {
-//     const rawData = Object.fromEntries(formData);
-
-//     const validatedFields = validateWithZodSchema(profileSchema, rawData);
-
-//     await db.profile.update({
-//       where: {
-//         clerkId: user.id,
-//       },
-//       data: validatedFields,
-//     });
-//     revalidatePath("/profile");
-//     return { message: "Profile updated successfully" };
-//   } catch (error) {
-//     return renderError(error);
-//   }
-// };
-
 export const updateProfileAction = async (
   prevState: any,
   formData: FormData,

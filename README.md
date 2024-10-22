@@ -12,6 +12,12 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.28
+
+- new supabase db connected in .env
+- in event slug now also the isUser can see the deleteEvent.
+- updated prisma
+
 v 0.1.27
 
 - Profile Image update is now also using ImageInput with responsive dimensions. No extra uploadImage button. UpdateProfileImageAction is therefore deleted.
