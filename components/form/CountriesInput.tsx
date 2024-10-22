@@ -1,14 +1,14 @@
-import { Label } from '@/components/ui/label';
-import { formattedCountries } from '@/utils/countries';
+import { Label } from "@/components/ui/label";
+import { formattedCountries } from "@/utils/countries";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-const name = 'country';
+const name = "country";
 
 const CountriesInput = ({ defaultValue }: { defaultValue?: string }) => {
   return (

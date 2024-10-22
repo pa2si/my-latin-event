@@ -7,9 +7,13 @@ import { MdOutlineCancel } from "react-icons/md";
 
 interface ImageInputProps {
   imageUrl?: string;
+  isProfileImage?: boolean;
 }
 
-const ImageInput: React.FC<ImageInputProps> = ({ imageUrl }) => {
+const ImageInput: React.FC<ImageInputProps> = ({
+  imageUrl,
+  isProfileImage,
+}) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -50,7 +54,7 @@ const ImageInput: React.FC<ImageInputProps> = ({ imageUrl }) => {
 
   return (
     <div
-      className={`relative mb-4 flex h-52 w-52 cursor-pointer flex-col items-center justify-center rounded-lg ${
+      className={`relative mb-4 flex ${isProfileImage ? "h-32 w-32" : "h-52 w-52"} cursor-pointer flex-col items-center justify-center rounded-lg ${
         imagePreview
           ? ""
           : "transition-color border-2 border-dashed duration-200 hover:border-primary"
@@ -84,13 +88,17 @@ const ImageInput: React.FC<ImageInputProps> = ({ imageUrl }) => {
         </>
       ) : (
         <>
-          <div className="pointer-events-none flex flex-col items-center text-4xl text-gray-400">
+          <div
+            className={`pointer-events-none flex flex-col items-center ${isProfileImage ? "pb-6 text-2xl" : "text-4xl"} text-gray-400`}
+          >
             <IoCloudUploadOutline />
-            <span className="text-sm">drag & drop to upload</span>
+            <span className={`${isProfileImage ? "text-center" : ""} text-sm`}>
+              drag & drop to upload
+            </span>
           </div>
           <button
             onClick={handleSelectClick}
-            className="absolute bottom-8 rounded-lg bg-gray-500 px-4 py-1 text-sm text-gray-100 transition-colors duration-200 hover:bg-primary focus:outline-none focus:ring-1 focus:ring-gray-600"
+            className={`absolute ${isProfileImage ? "bottom-3 px-1 py-0 text-xs" : "bottom-8 px-4 py-1 text-sm"} rounded-lg bg-gray-500 px-4 py-1 text-gray-100 transition-colors duration-200 hover:bg-primary focus:outline-none focus:ring-1 focus:ring-gray-600`}
             type="button"
           >
             select

@@ -96,6 +96,29 @@ export const fetchProfile = async () => {
   return profile;
 };
 
+// export const updateProfileAction = async (
+//   prevState: any,
+//   formData: FormData,
+// ): Promise<{ message: string }> => {
+//   const user = await getAuthUser();
+//   try {
+//     const rawData = Object.fromEntries(formData);
+
+//     const validatedFields = validateWithZodSchema(profileSchema, rawData);
+
+//     await db.profile.update({
+//       where: {
+//         clerkId: user.id,
+//       },
+//       data: validatedFields,
+//     });
+//     revalidatePath("/profile");
+//     return { message: "Profile updated successfully" };
+//   } catch (error) {
+//     return renderError(error);
+//   }
+// };
+
 export const updateProfileAction = async (
   prevState: any,
   formData: FormData,
@@ -104,41 +127,28 @@ export const updateProfileAction = async (
   try {
     const rawData = Object.fromEntries(formData);
 
+    const image = formData.get("image") as File | null;
     const validatedFields = validateWithZodSchema(profileSchema, rawData);
 
-    await db.profile.update({
-      where: {
-        clerkId: user.id,
-      },
-      data: validatedFields,
-    });
-    revalidatePath("/profile");
-    return { message: "Profile updated successfully" };
-  } catch (error) {
-    return renderError(error);
-  }
-};
+    let profileImage = prevState.profileImage;
 
-export const updateProfileImageAction = async (
-  prevState: any,
-  formData: FormData,
-) => {
-  const user = await getAuthUser();
-  try {
-    const image = formData.get("image") as File;
-    const validatedFields = validateWithZodSchema(imageSchema, { image });
-    const fullPath = await uploadImage(validatedFields.image);
+    if (image) {
+      const validatedImage = validateWithZodSchema(imageSchema, { image });
+      profileImage = await uploadImage(validatedImage.image);
+    }
 
     await db.profile.update({
       where: {
         clerkId: user.id,
       },
       data: {
-        profileImage: fullPath,
+        ...validatedFields,
+        profileImage: profileImage, // Update image only if it's uploaded
       },
     });
+
     revalidatePath("/profile");
-    return { message: "Profile image updated successfully" };
+    return { message: "Profile updated successfully" };
   } catch (error) {
     return renderError(error);
   }

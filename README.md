@@ -12,6 +12,11 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.27
+
+- Profile Image update is now also using ImageInput with responsive dimensions. No extra uploadImage button. UpdateProfileImageAction is therefore deleted.
+- InputFields for location set but commented out in createEvent 
+
 v 0.1.26
 
 - Styles are now displayed with badge component from shadCn in events slug

@@ -1,29 +1,23 @@
-import FormContainer from '@/components/form/FormContainer';
-import {
-  updateProfileAction,
-  fetchProfile,
-  updateProfileImageAction,
-} from '@/utils/actions';
-import FormInput from '@/components/form/FormInput';
-import { SubmitButton } from '@/components/form/Buttons';
-import ImageInputContainer from '@/components/form/ImageInputContainer';
+import FormContainer from "@/components/form/FormContainer";
+import { updateProfileAction, fetchProfile } from "@/utils/actions";
+import FormInput from "@/components/form/FormInput";
+import { SubmitButton } from "@/components/form/Buttons";
+import ImageInput from "@/components/form/ImageInput";
+import { Label } from "@/components/ui/label";
 
 const ProfilePage = async () => {
   const profile = await fetchProfile();
 
   return (
     <section>
-      <h1 className="text-2xl font-semibold mb-8 capitalize">user profile</h1>
-      <div className="border p-8 rounded-md">
-        <ImageInputContainer
-          image={profile.profileImage}
-          name={profile.username}
-          action={updateProfileImageAction}
-          text="Update Profile Image"
-        />
-
+      <h1 className="mb-8 text-2xl font-semibold capitalize">user profile</h1>
+      <div className="rounded-md border p-8">
+        <p className="mb-1">
+          <Label>Profile Image</Label>
+        </p>
         <FormContainer action={updateProfileAction}>
-          <div className="grid gap-4 md:grid-cols-2 mt-4 ">
+          <ImageInput imageUrl={profile.profileImage} isProfileImage={true} />
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
             <FormInput
               type="text"
               name="firstName"
