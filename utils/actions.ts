@@ -154,6 +154,7 @@ export const createEventAction = async (
   const user = await getAuthUser();
   try {
     const rawData = Object.fromEntries(formData);
+    console.log("thats the raw data", rawData);
     const file = formData.get("image") as File;
 
     const validatedFields = validateWithZodSchema(eventSchema, rawData);

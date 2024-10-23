@@ -12,6 +12,17 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.29
+
+- dev --turbo activated for run dev
+- AddressInputContainer implemented in createEvent
+  - inside there are FormInputs for location, country, city, street, postal code, google maps link
+  - Google Maps Auto Complete implementated for these forms
+  - couuntry has an own Component called CountryInput.
+  - it also displays flags with library
+  - google maps input is read only.
+- schema and Event prisma module updated with : location, city, street, postalCode, country, googleMapsLink
+
 v 0.1.28
 
 - new supabase db connected in .env
@@ -21,7 +32,7 @@ v 0.1.28
 v 0.1.27
 
 - Profile Image update is now also using ImageInput with responsive dimensions. No extra uploadImage button. UpdateProfileImageAction is therefore deleted.
-- InputFields for location set but commented out in createEvent 
+- InputFields for location set but commented out in createEvent
 
 v 0.1.26
 

@@ -12,6 +12,7 @@ import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer
 import GenresInput from "@/components/form/GenresInput";
 import StylesInput from "@/components/form/StylesInput";
 import FormInput from "@/components/form/FormInput";
+import AddressInputContainer from "@/components/form/AddressInputContainer";
 
 const defaultGenre = "Latin";
 const defaultStyles: Style[] = [];
@@ -47,41 +48,7 @@ const CreateEvent = () => {
             labelText="Description (10 - 1000 Words)"
           />
           <h3 className="mb-4 mt-12 text-lg font-medium">Direction</h3>
-          <div className="mt-4 grid gap-8 sm:grid-cols-2">
-            {/* <FormInput
-              name="location"
-              type="text"
-              placeholder="Enter the location name"
-              required={true}
-            />
-            <FormInput
-              name="streetAndNumber"
-              type="text"
-              label="Street & Number"
-              placeholder="Enter the street"
-              required={true}
-            />
-            <FormInput
-              name="city"
-              type="text"
-              placeholder="Enter the street and number"
-              required={true}
-            />
-            <FormInput
-              name="postalCode"
-              type="text"
-              placeholder="Enter the postal Code"
-              required={false}
-            /> */}
-            <CountriesInput />
-            {/* <FormInput
-              name="googleMapsLink"
-              type="text"
-              label="Google Maps Link"
-              placeholder="Enter the postal Code"
-              required={false}
-            /> */}
-          </div>
+          <AddressInputContainer />
           <div>
             <h3 className="mb-4 mt-8 text-lg font-medium">Location Details</h3>
             <CounterInput detail="floors" />

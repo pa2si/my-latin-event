@@ -1,15 +1,22 @@
-import { findCountryByCode } from '@/utils/countries';
+import { getCountryCodeByName } from "@/utils/countries";
 
-const CountryFlagAndName = ({ countryCode }: { countryCode: string }) => {
-  const validCountry = findCountryByCode(countryCode)!;
+const CountryFlagAndName = ({
+  country,
+}: {
+  country: { flag: string; name: string };
+}) => {
   const countryName =
-    validCountry!.name.length > 20
-      ? `${validCountry!.name.substring(0, 20)}...`
-      : validCountry!.name;
+    country.name.length > 20
+      ? `${country.name.substring(0, 20)}...`
+      : country.name;
+
+  const counterCode = getCountryCodeByName(countryName);
+
   return (
-    <span className="flex justify-between items-center gap-2 text-sm ">
-      {validCountry?.flag} {countryName}
+    <span className="flex items-center justify-between gap-2 text-sm">
+      {country.flag} {counterCode}
     </span>
   );
 };
+
 export default CountryFlagAndName;

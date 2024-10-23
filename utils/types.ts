@@ -1,13 +1,13 @@
 export type actionFunction = (
   prevState: any,
-  formData: FormData
+  formData: FormData,
 ) => Promise<{ message: string }>;
 
 export type EventCardProps = {
   image: string;
   id: string;
   name: string;
-  subtitle: string;
+  subtitle: string | null;
   country: string;
   price: number;
 };

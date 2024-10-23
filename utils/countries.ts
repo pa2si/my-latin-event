@@ -1,4 +1,4 @@
-import countries from 'world-countries';
+import countries from "world-countries";
 
 export const formattedCountries = countries.map((item) => ({
   code: item.cca2,
@@ -10,3 +10,13 @@ export const formattedCountries = countries.map((item) => ({
 
 export const findCountryByCode = (code: string) =>
   formattedCountries.find((item) => item.code === code);
+
+export const findCountryByName = (name: string) =>
+  formattedCountries.find(
+    (item) => item.name.toLowerCase() === name.trim().toLowerCase(),
+  );
+
+export const getCountryCodeByName = (name: string): string | undefined => {
+  const country = findCountryByName(name);
+  return country ? country.code : undefined;
+};

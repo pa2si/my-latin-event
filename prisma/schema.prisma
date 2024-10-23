@@ -28,9 +28,14 @@ model Event {
   id                  String     @id @default(uuid())
   name                String
   subtitle            String?
+  location            String
+  city                String
+  street              String
+  postalCode          String?
+  country             String
+  googleMapsLink      String?
   genre               String
   image               String
-  country             String
   description         String
   price               Int
   floors              Int

@@ -5,10 +5,12 @@ import EventRating from "./EventRating";
 import FavoriteToggleButton from "./FavoriteToggleButton";
 import { EventCardProps } from "@/utils/types";
 import { formatCurrency } from "@/utils/format";
+import { findCountryByName } from "@/utils/countries";
 
 const EventCard = ({ event }: { event: EventCardProps }) => {
-  const { name, image, price } = event;
-  const { country, id: eventId, subtitle } = event;
+  const { name, image, price, country, id: eventId, subtitle } = event;
+
+  const validCountry = findCountryByName(country);
 
   return (
     <article className="group relative">
@@ -40,7 +42,7 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
             night
           </p>
           {/* country flag */}
-          <CountryFlagAndName countryCode={country} />
+          {validCountry && <CountryFlagAndName country={validCountry} />}
         </div>
       </Link>
       <div className="z-5 absolute right-5 top-5">

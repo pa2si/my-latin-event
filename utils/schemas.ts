@@ -69,6 +69,34 @@ export const eventSchema = z
       })
       .optional()
       .or(z.literal("")),
+    location: z
+      .string()
+      .min(1, {
+        message: "location name is required",
+      })
+      .max(200, { message: "location must not exceed 100 characters" }),
+    city: z
+      .string()
+      .min(1, {
+        message: "city is required",
+      })
+      .max(200, { message: "location must not exceed 100 characters" }),
+    street: z
+      .string()
+      .min(1, { message: "Street address is required" })
+      .max(100, { message: "Street address must not exceed 100 characters" }),
+    postalCode: z
+      .string()
+      .max(100, { message: "Postal code must not exceed 100 characters" })
+      .optional(),
+    country: z
+      .string()
+      .min(1, { message: "Country is required" })
+      .max(100, { message: "Country must not exceed 100 characters" }),
+    googleMapsLink: z
+      .string()
+      .max(100, { message: "Google Maps link must not exceed 100 characters" })
+      .optional(),
     price: z.coerce.number().int().min(0, {
       message: "price must be a positive number.",
     }),
@@ -82,7 +110,6 @@ export const eventSchema = z
         message: "description must be between 10 and 1000 words.",
       },
     ),
-    country: z.string(),
     floors: z.coerce.number().int().min(0, {
       message: "floor amount must be a positive number.",
     }),
