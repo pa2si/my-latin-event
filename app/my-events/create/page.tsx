@@ -45,7 +45,7 @@ const CreateEvent = () => {
 
           <TextAreaInput
             name="description"
-            labelText="Description (10 - 1000 Words)"
+            labelText="Description (max 100 Words)"
           />
           <h3 className="mb-4 mt-12 text-lg font-medium">Direction</h3>
           <AddressInputContainer />

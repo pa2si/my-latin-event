@@ -1,8 +1,8 @@
-import EmptyList from '@/components/home/EmptyList';
-import CountryFlagAndName from '@/components/card/CountryFlagAndName';
-import Link from 'next/link';
+import EmptyList from "@/components/home/EmptyList";
+import CountryFlagAndName from "@/components/card/CountryFlagAndName";
+import Link from "next/link";
 
-import { formatDate, formatCurrency } from '@/utils/format';
+import { formatDate, formatCurrency } from "@/utils/format";
 import {
   Table,
   TableBody,
@@ -11,11 +11,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
-import FormContainer from '@/components/form/FormContainer';
-import { IconButton } from '@/components/form/Buttons';
-import { fetchBookings, deleteBookingAction } from '@/utils/actions';
+import FormContainer from "@/components/form/FormContainer";
+import { IconButton } from "@/components/form/Buttons";
+import { fetchBookings, deleteBookingAction } from "@/utils/actions";
 
 const BookingsPage = async () => {
   const bookings = await fetchBookings();
@@ -49,13 +49,13 @@ const BookingsPage = async () => {
                 <TableCell>
                   <Link
                     href={`/events/${eventId}`}
-                    className="underline text-muted-foreground tracking-wide"
+                    className="tracking-wide text-muted-foreground underline"
                   >
                     {name}
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <CountryFlagAndName countryCode={country} />
+                  <CountryFlagAndName country={country} />
                 </TableCell>
                 <TableCell>{totalNights}</TableCell>
                 <TableCell>{formatCurrency(orderTotal)}</TableCell>

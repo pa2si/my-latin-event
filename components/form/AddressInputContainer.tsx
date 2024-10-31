@@ -5,14 +5,27 @@ import useGoogleAutocomplete from "@/utils/useGoogleAutocomplete";
 import FormInput from "./FormInput";
 import CountryInput from "./CountryInput";
 
-const AddressInputContainer = () => {
+interface AddressInputContainerProps {
+  defaultValues?: {
+    location: string;
+    city: string;
+    street: string;
+    postalCode?: string;
+    country: string;
+    googleMapsLink?: string;
+  };
+}
+
+const AddressInputContainer = ({
+  defaultValues,
+}: AddressInputContainerProps) => {
   const [formData, setFormData] = useState({
-    location: "",
-    city: "",
-    street: "",
-    postalCode: "",
-    country: "",
-    googleMapsLink: "",
+    location: defaultValues?.location ?? "",
+    city: defaultValues?.city ?? "",
+    street: defaultValues?.street ?? "",
+    postalCode: defaultValues?.postalCode ?? "",
+    country: defaultValues?.country ?? "",
+    googleMapsLink: defaultValues?.googleMapsLink ?? "",
   });
 
   const { locationRef, cityRef, streetRef, postalCodeRef, countryRef } =
@@ -29,6 +42,7 @@ const AddressInputContainer = () => {
         label="Location Name"
         name="location"
         type="text"
+        defaultValue={defaultValues?.location}
         ref={locationRef}
         value={formData.location}
         onChange={handleChange}
@@ -78,6 +92,7 @@ const AddressInputContainer = () => {
         name="googleMapsLink"
         type="text"
         value={formData.googleMapsLink}
+        placeholder="Will be genereated automatically"
         readOnly // Make it read-only as the value will come from Google Maps
       />
     </div>

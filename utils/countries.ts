@@ -11,10 +11,15 @@ export const formattedCountries = countries.map((item) => ({
 export const findCountryByCode = (code: string) =>
   formattedCountries.find((item) => item.code === code);
 
-export const findCountryByName = (name: string) =>
-  formattedCountries.find(
+export const findCountryByName = (name: string) => {
+  if (!name) {
+    return undefined;
+  }
+
+  return formattedCountries.find(
     (item) => item.name.toLowerCase() === name.trim().toLowerCase(),
   );
+};
 
 export const getCountryCodeByName = (name: string): string | undefined => {
   const country = findCountryByName(name);

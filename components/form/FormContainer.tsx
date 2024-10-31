@@ -22,7 +22,10 @@ const FormContainer = ({
   useEffect(() => {
     const { message } = state;
     if (message) {
-      toast({ description: message });
+      toast({
+        description: message,
+        className: "bg-primary text-white",
+      });
     }
   }, [state, toast]);
 

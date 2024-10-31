@@ -11,10 +11,11 @@ interface CountryInputProps {
   placeholder?: string;
   required?: boolean;
   className?: string;
+  defaultValue?: string;
 }
 
 const CountryInput = forwardRef<HTMLInputElement, CountryInputProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, defaultValue, ...props }, ref) => {
     const [selectedCountry, setSelectedCountry] = useState<{
       name: string;
       flag: string;
@@ -73,6 +74,7 @@ const CountryInput = forwardRef<HTMLInputElement, CountryInputProps>(
             {...props}
             type="text"
             ref={ref}
+            defaultValue={defaultValue}
             onChange={handleInputChange}
             onFocus={() => props.value && setShowDropdown(true)}
             className={cn(className, selectedCountry && "pl-10")}

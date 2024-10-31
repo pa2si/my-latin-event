@@ -12,6 +12,20 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.30
+
+- middleware: removed the public route for edgeStore
+- CountryAndFlagName adapted and therefore also its component render in  
+  EventCard, EventMap and bookings page.tsx
+- addressInputContainer receives now defaultValues
+  - also added in editMyEvent
+- schemas: description, bars, floors, outdoorAreas are now optional
+- also adapted in prisma schema
+- CountryInput now recieves defaultValue
+- toast in FormContainer now with bg-primary
+- frontend validation for TextAreaInput in creaetEvent
+  - now max words 100!
+
 v 0.1.29
 
 - dev --turbo activated for run dev

@@ -10,8 +10,6 @@ import { findCountryByName } from "@/utils/countries";
 const EventCard = ({ event }: { event: EventCardProps }) => {
   const { name, image, price, country, id: eventId, subtitle } = event;
 
-  const validCountry = findCountryByName(country);
-
   return (
     <article className="group relative">
       <Link href={`/events/${eventId}`}>
@@ -42,7 +40,7 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
             night
           </p>
           {/* country flag */}
-          {validCountry && <CountryFlagAndName country={validCountry} />}
+         <CountryFlagAndName country={country} />
         </div>
       </Link>
       <div className="z-5 absolute right-5 top-5">

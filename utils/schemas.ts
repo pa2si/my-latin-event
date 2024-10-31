@@ -46,7 +46,7 @@ function validateFile() {
       return (
         !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
       );
-    }, "File must be an image");
+    }, "You must upload an image file");
 }
 
 export const eventSchema = z
@@ -87,7 +87,7 @@ export const eventSchema = z
       .max(100, { message: "Street address must not exceed 100 characters" }),
     postalCode: z
       .string()
-      .max(100, { message: "Postal code must not exceed 100 characters" })
+      .max(50, { message: "Postal code must not exceed 50 characters" })
       .optional(),
     country: z
       .string()
@@ -95,30 +95,27 @@ export const eventSchema = z
       .max(100, { message: "Country must not exceed 100 characters" }),
     googleMapsLink: z
       .string()
-      .max(100, { message: "Google Maps link must not exceed 100 characters" })
+      .max(200, { message: "Google Maps link must not exceed 200 characters" })
       .optional(),
     price: z.coerce.number().int().min(0, {
       message: "price must be a positive number.",
     }),
     genre: z.string(),
-    description: z.string().refine(
-      (description) => {
-        const wordCount = description.split(" ").length;
-        return wordCount >= 10 && wordCount <= 1000;
-      },
-      {
-        message: "description must be between 10 and 1000 words.",
-      },
-    ),
-    floors: z.coerce.number().int().min(0, {
-      message: "floor amount must be a positive number.",
-    }),
-    bars: z.coerce.number().int().min(0, {
-      message: "bar amount must be a positive number.",
-    }),
-    outdoorAreas: z.coerce.number().int().min(0, {
-      message: "outdoor area amount must be a positive number.",
-    }),
+    description: z
+      .string()
+      .refine(
+        (description) => {
+          const wordCount = description.split(" ").length;
+          return wordCount <= 100;
+        },
+        {
+          message: "description must not exceed 100 words.",
+        },
+      )
+      .optional(),
+    floors: z.coerce.number().int().min(0).nullable().optional(),
+    bars: z.coerce.number().int().min(0).nullable().optional(),
+    outdoorAreas: z.coerce.number().int().min(0).nullable().optional(),
     styles: z.string(),
     eventDateAndTime: z.preprocess(
       (arg) => {

@@ -16,15 +16,15 @@ import { findCountryByCode } from '@/utils/countries';
 import CountryFlagAndName from '../card/CountryFlagAndName';
 import Title from './Title';
 
-const EventMap = ({ countryCode }: { countryCode: string }) => {
+const EventMap = ({ country }: { country: string }) => {
   const defaultLocation = [51.505, -0.09] as [number, number];
-  const location = findCountryByCode(countryCode)?.location as [number, number];
+  const location = findCountryByCode(country)?.location as [number, number];
 
   return (
     <div className="mt-4">
       <div className="mb-4 ">
         <Title text="Where you will be staying" />
-        <CountryFlagAndName countryCode={countryCode} />
+        <CountryFlagAndName country={country} />
       </div>
       <MapContainer
         scrollWheelZoom={false}

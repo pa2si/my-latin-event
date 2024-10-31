@@ -18,10 +18,10 @@ model Profile {
   profileImage String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
-  events      Event[]
-  favorites   Favorite[]
-  reviews     Review[]
-  bookings Booking[]
+  events       Event[]
+  favorites    Favorite[]
+  reviews      Review[]
+  bookings     Booking[]
 }
 
 model Event {
@@ -35,13 +35,13 @@ model Event {
   country             String
   googleMapsLink      String?
   genre               String
-  image               String
-  description         String
-  price               Int
-  floors              Int
-  bars                Int
-  outdoorAreas        Int
   styles              String
+  image               String
+  description         String?
+  price               Int
+  floors              Int?
+  bars                Int?
+  outdoorAreas        Int?
   eventDateAndTime    DateTime
   eventEndDateAndTime DateTime?
   createdAt           DateTime   @default(now())
@@ -70,8 +70,8 @@ model Review {
   id        String   @id @default(uuid())
   profile   Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
   profileId String
-  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  eventId String
+  event     Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId   String
   rating    Int
   comment   String
   createdAt DateTime @default(now())
@@ -79,16 +79,16 @@ model Review {
 }
 
 model Booking {
-  id        String   @id @default(uuid())
-  profile   Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
-  profileId String
-  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  eventId String
-  orderTotal     Int
-  totalNights    Int
-  checkIn   DateTime
-  checkOut  DateTime
+  id            String   @id @default(uuid())
+  profile       Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
+  profileId     String
+  event         Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId       String
+  orderTotal    Int
+  totalNights   Int
+  checkIn       DateTime
+  checkOut      DateTime
   paymentStatus Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

@@ -1,20 +1,21 @@
-import { getCountryCodeByName } from "@/utils/countries";
+import { getCountryCodeByName, findCountryByName } from "@/utils/countries";
 
-const CountryFlagAndName = ({
-  country,
-}: {
-  country: { flag: string; name: string };
-}) => {
-  const countryName =
-    country.name.length > 20
-      ? `${country.name.substring(0, 20)}...`
-      : country.name;
+const CountryFlagAndName = ({ country }: { country: string }) => {
+  const validCountry = findCountryByName(country);
 
-  const counterCode = getCountryCodeByName(countryName);
+  if (!validCountry) {
+    return;
+  }
+
+  const { flag, name } = validCountry;
+  const countryName = name.length > 20 ? `${name.substring(0, 20)}...` : name;
+
+  // Get the country code
+  const countryCode = getCountryCodeByName(countryName);
 
   return (
     <span className="flex items-center justify-between gap-2 text-sm">
-      {country.flag} {counterCode}
+      {flag} {countryCode}
     </span>
   );
 };

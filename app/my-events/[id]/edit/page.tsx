@@ -12,6 +12,7 @@ import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer
 import ImageInput from "@/components/form/ImageInput";
 import GenresInput from "@/components/form/GenresInput";
 import StylesInput from "@/components/form/StylesInput";
+import AddressInputContainer from "@/components/form/AddressInputContainer";
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {
   const event = await fetchMyEventDetails(params.id);
@@ -50,20 +51,33 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
           />
           <TextAreaInput
             name="description"
-            labelText="Description (10 - 100 Words)"
-            defaultValue={event.description}
+            labelText="Description (max 100 Words)"
+            defaultValue={event.description || ""}
           />
           <h3 className="mb-4 mt-12 text-lg font-medium">Direction</h3>
-          <div className="mt-4 grid gap-8 sm:grid-cols-2">
+          <AddressInputContainer
+            defaultValues={{
+              location: event.location ?? "",
+              city: event.city ?? "",
+              street: event.street ?? "",
+              postalCode: event.postalCode ?? "",
+              country: event.country ?? "",
+              googleMapsLink: event.googleMapsLink ?? "",
+            }}
+          />
+          {/* <div className="mt-4 grid gap-8 sm:grid-cols-2">
             <CountriesInput defaultValue={event.country} />
-          </div>
+          </div> */}
 
           <h3 className="mb-4 mt-8 text-lg font-medium">Location Details</h3>
-          <CounterInput detail="floors" defaultValue={event.floors} />
-          <CounterInput detail="bars" defaultValue={event.bars} />
+          <CounterInput
+            detail="floors"
+            defaultValue={event.floors ?? undefined}
+          />
+          <CounterInput detail="bars" defaultValue={event.bars ?? undefined} />
           <CounterInput
             detail="outdoorAreas"
-            defaultValue={event.outdoorAreas}
+            defaultValue={event.outdoorAreas ?? undefined}
           />
           <DateAndTimePickerContainer
             defaultValue={event.eventDateAndTime}
