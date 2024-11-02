@@ -4,11 +4,11 @@ import FavoriteToggleButton from "@/components/card/FavoriteToggleButton";
 import EventRating from "@/components/card/EventRating";
 import BreadCrumbs from "@/components/events/BreadCrumbs";
 import ImageContainer from "@/components/events/ImageContainer";
-import EventDetails from "@/components/events/EventDetails";
+import LocationDetails from "@/components/events/LocationDetails";
 import ShareButton from "@/components/events/ShareButton";
 import UserInfo from "@/components/events/UserInfo";
 import { Separator } from "@/components/ui/separator";
-import { fetchEventDetails, findExistingReview } from "@/utils/actions";
+import { fetchLocationDetails, findExistingReview } from "@/utils/actions";
 import Description from "@/components/events/Description";
 import { redirect } from "next/navigation";
 import Styles from "@/components/events/Styles";
@@ -35,12 +35,12 @@ const DynamicBookingWrapper = dynamic(
   },
 );
 
-const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
-  const event = await fetchEventDetails(params.id);
+const LocationDetailsPage = async ({ params }: { params: { id: string } }) => {
+  const event = await fetchLocationDetails(params.id);
   if (!event) redirect("/");
   const { floors, bars, outdoorAreas, eventDateAndTime, eventEndDateAndTime } =
     event;
-  const details = { floors, bars, outdoorAreas };
+  const details = event ? { floors, bars, outdoorAreas } : null;
 
   const formattedDate = format(eventDateAndTime, "dd.MM.yy");
   const formattedTime = format(eventDateAndTime, "HH:mm");
@@ -105,15 +105,20 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           <p className="text-md text-muted-foreground">
             Ticket Price {event.price} €
           </p>
-          <EventDetails details={details} />
+          <LocationDetails details={details} />
           <UserInfo profile={{ firstName, profileImage }} />
           <Separator className="mt-4" />
-          <Description description={event.description} />
+          {event.description && <Description description={event.description} />}
           <Styles styles={event.styles} />
-          <DynamicMap countryCode={event.country} />
+          <DynamicMap
+            name={event.location}
+            country={event.country}
+            city={event.city}
+            street={event.street}
+            postalCode={event.postalCode}
+          />
         </div>
         <div className="flex flex-col items-center lg:col-span-4">
-          {/* calendar */}
           <DynamicBookingWrapper
             eventId={event.id}
             price={event.price}
@@ -127,4 +132,4 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default EventDetailsPage;
+export default LocationDetailsPage;

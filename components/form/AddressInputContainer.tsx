@@ -92,8 +92,8 @@ const AddressInputContainer = ({
         name="googleMapsLink"
         type="text"
         value={formData.googleMapsLink}
-        placeholder="Will be genereated automatically"
-        readOnly // Make it read-only as the value will come from Google Maps
+        onChange={handleChange}
+        placeholder="Auto generated or paste here"
       />
     </div>
   );

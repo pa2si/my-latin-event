@@ -1,4 +1,4 @@
-import { fetchMyEventDetails, updateEventAction } from "@/utils/actions";
+import { fetchMyLocationDetails, updateEventAction } from "@/utils/actions";
 import FormContainer from "@/components/form/FormContainer";
 import PriceInput from "@/components/form/PriceInput";
 import TextAreaInput from "@/components/form/TextAreaInput";
@@ -15,7 +15,7 @@ import StylesInput from "@/components/form/StylesInput";
 import AddressInputContainer from "@/components/form/AddressInputContainer";
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {
-  const event = await fetchMyEventDetails(params.id);
+  const event = await fetchMyLocationDetails(params.id);
 
   if (!event) redirect("/");
 

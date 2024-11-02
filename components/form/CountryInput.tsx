@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState, useRef } from "react";
 import FormInput from "./FormInput";
 import { formattedCountries } from "@/utils/countries";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,7 @@ interface CountryInputProps {
 
 const CountryInput = forwardRef<HTMLInputElement, CountryInputProps>(
   ({ className, defaultValue, ...props }, ref) => {
+    const containerRef = useRef<HTMLDivElement>(null);
     const [selectedCountry, setSelectedCountry] = useState<{
       name: string;
       flag: string;
@@ -23,6 +24,23 @@ const CountryInput = forwardRef<HTMLInputElement, CountryInputProps>(
     const [showDropdown, setShowDropdown] = useState(false);
     const [filteredCountries, setFilteredCountries] =
       useState(formattedCountries);
+
+    // close country dropdown when clicked outside
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          containerRef.current &&
+          !containerRef.current.contains(event.target as Node)
+        ) {
+          setShowDropdown(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
     useEffect(() => {
       if (props.value) {
@@ -63,7 +81,7 @@ const CountryInput = forwardRef<HTMLInputElement, CountryInputProps>(
     };
 
     return (
-      <div className="relative">
+      <div ref={containerRef} className="relative">
         <div className="relative">
           {selectedCountry && (
             <div className="absolute left-3 top-[29px] z-10 text-xl">

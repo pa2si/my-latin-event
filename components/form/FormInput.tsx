@@ -12,7 +12,7 @@ type FormInputProps = {
   value?: number | string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
-  readOnly?: boolean;
+
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
 };
 
@@ -28,7 +28,6 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       value,
       className,
       onChange,
-      readOnly,
       onFocus,
     },
     ref,
@@ -49,7 +48,6 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
           value={value}
           className={className}
           ref={ref}
-          readOnly={readOnly}
           onFocus={onFocus}
         />
       </div>

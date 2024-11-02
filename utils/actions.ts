@@ -273,7 +273,7 @@ export const fetchFavorites = async () => {
   return favorites.map((favorite) => favorite.event);
 };
 
-export const fetchEventDetails = (id: string) => {
+export const fetchLocationDetails = (id: string) => {
   return db.event.findUnique({
     where: {
       id,
@@ -583,7 +583,7 @@ export const deleteMyEventAction = async (prevState: { eventId: string }) => {
   }
 };
 
-export const fetchMyEventDetails = async (eventId: string) => {
+export const fetchMyLocationDetails = async (eventId: string) => {
   const user = await getAuthUser();
 
   return db.event.findUnique({

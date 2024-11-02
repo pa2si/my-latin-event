@@ -39,9 +39,9 @@ model Event {
   image               String
   description         String?
   price               Int
-  floors              Int?
-  bars                Int?
-  outdoorAreas        Int?
+  floors              Int
+  bars                Int
+  outdoorAreas        Int
   eventDateAndTime    DateTime
   eventEndDateAndTime DateTime?
   createdAt           DateTime   @default(now())

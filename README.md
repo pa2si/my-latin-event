@@ -12,6 +12,19 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.31
+
+- in createEvent the googleMapsLink is now also available for user Input (no ReadOnly anymore)
+  - useGoogleAutocomplete adapted for that
+- in schema country, bars and outdoorAreas is now not optional anymore as it starts with 0
+- event details are only shown in event slug if value is bigger than 0
+- eventDetails renamed to LocationDetails
+- Maps recieves now the props of country, city, street and postalCode and displays the ubication
+- description in event slug now renders conditionally if there is a description
+- EventDetails is now called LocationDetails
+- fetchEventDetails is now called fetchLocationDetails
+- fetchMyEventDetails is now called fetchMyLocationDetails
+
 v 0.1.30
 
 - middleware: removed the public route for edgeStore

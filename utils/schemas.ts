@@ -113,9 +113,9 @@ export const eventSchema = z
         },
       )
       .optional(),
-    floors: z.coerce.number().int().min(0).nullable().optional(),
-    bars: z.coerce.number().int().min(0).nullable().optional(),
-    outdoorAreas: z.coerce.number().int().min(0).nullable().optional(),
+    floors: z.coerce.number().int().min(0),
+    bars: z.coerce.number().int().min(0),
+    outdoorAreas: z.coerce.number().int().min(0),
     styles: z.string(),
     eventDateAndTime: z.preprocess(
       (arg) => {
