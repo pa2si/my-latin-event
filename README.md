@@ -13,6 +13,11 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.33
+
+- slogan integrated in profile
+  - attention: modified updateProfile action
+
 v 0.1.32
 
 - New UI for event slug

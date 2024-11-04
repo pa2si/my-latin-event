@@ -14,20 +14,19 @@ function LocationDetails({ details }: LocationDetailsProps) {
   const { floors, bars, outdoorAreas } = details;
 
   const items = [
-    floors > 0 && formatQuantity(floors, "floor"),
-    bars > 0 && formatQuantity(bars, "bar"),
-    outdoorAreas > 0 && formatQuantity(outdoorAreas, "outdoor area"),
-  ].filter(Boolean);
+    { value: floors, label: "floor" },
+    { value: bars, label: "bar" },
+    { value: outdoorAreas, label: "outdoor area" },
+  ].filter((item) => item.value > 0);
 
   if (items.length === 0) return null;
 
   return (
-    // <p className="text-md mt-1 font-light">
-    // classes for new UI
     <p className="text-sm text-muted-foreground">
       {items.map((item, index) => (
         <span key={index}>
-          {item}
+          <span className="text-primary">{item.value}</span>
+          {` ${item.value === 1 ? item.label : item.label + "s"}`}
           {index < items.length - 1 && <span> &middot; </span>}
         </span>
       ))}

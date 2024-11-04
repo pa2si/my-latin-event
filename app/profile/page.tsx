@@ -36,6 +36,12 @@ const ProfilePage = async () => {
               label="Username"
               defaultValue={profile.username}
             />
+            <FormInput
+              type="text"
+              name="slogan"
+              label="Slogan (optional)"
+              defaultValue={profile.slogan || undefined}
+            />
           </div>
           <SubmitButton text="Update Profile" className="mt-8" />
         </FormContainer>

@@ -113,6 +113,7 @@ const LocationDetailsPage = async ({ params }: { params: { id: string } }) => {
             profile={{
               firstName: event.profile.firstName,
               profileImage: event.profile.profileImage,
+              slogan: event.profile.slogan,
             }}
           />
         </CardContent>
@@ -124,9 +125,9 @@ const LocationDetailsPage = async ({ params }: { params: { id: string } }) => {
           <h3 className="mb-4 text-lg font-semibold">Venue Features</h3>
           <LocationDetails
             details={{
-              floors: event.floors,
-              bars: event.bars,
-              outdoorAreas: event.outdoorAreas,
+              floors: floors,
+              bars: bars,
+              outdoorAreas: outdoorAreas,
             }}
           />
         </CardContent>
@@ -317,6 +318,7 @@ const LocationDetailsPage = async ({ params }: { params: { id: string } }) => {
                       profile={{
                         firstName: event.profile.firstName,
                         profileImage: event.profile.profileImage,
+                        slogan: event.profile.slogan,
                       }}
                     />
                   </CardContent>

@@ -102,14 +102,22 @@ export const updateProfileAction = async (
 ): Promise<{ message: string }> => {
   const user = await getAuthUser();
   try {
+    const currentProfile = await db.profile.findUnique({
+      where: { clerkId: user.id },
+      select: { profileImage: true },
+    });
+
     const rawData = Object.fromEntries(formData);
 
-    const image = formData.get("image") as File | null;
     const validatedFields = validateWithZodSchema(profileSchema, rawData);
 
-    let profileImage = prevState.profileImage;
+    let profileImage = currentProfile?.profileImage;
 
-    if (image) {
+    // Only process image if a new one was uploaded
+    const image = formData.get("image") as File | null;
+    const hasNewImage = formData.get("newImage") === "true";
+
+    if (hasNewImage && image && image.size > 0) {
       const validatedImage = validateWithZodSchema(imageSchema, { image });
       profileImage = await uploadImage(validatedImage.image);
     }
