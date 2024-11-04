@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-
 import FavoriteToggleButton from "@/components/card/FavoriteToggleButton";
 import EventRating from "@/components/card/EventRating";
 import BreadCrumbs from "@/components/events/BreadCrumbs";
@@ -41,6 +40,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CountryFlagAndName from "@/components/card/CountryFlagAndName";
+import FollowToggleButton from "@/components/card/FollowToggleButton";
 
 const DynamicMap = dynamic(() => import("@/components/events/EventMap"), {
   ssr: false,
@@ -108,7 +108,12 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
       {/* Host Information */}
       <Card>
         <CardContent className="p-4">
-          <h3 className="mb-4 text-lg font-semibold">Event Host</h3>
+          <div className="flex justify-between">
+            <h3 className="mb-4 text-lg font-semibold">Event Host</h3>
+            <div className="text-primary">
+              <FollowToggleButton profileId={event.profile.clerkId} />
+            </div>
+          </div>
           <UserInfo
             profile={{
               firstName: event.profile.firstName,
@@ -313,7 +318,10 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                 {/* Host Information */}
                 <Card>
                   <CardContent className="p-4">
-                    <h3 className="mb-4 text-lg font-semibold">Event Host</h3>
+                    <div>
+                      <h3 className="mb-4 text-lg font-semibold">Event Host</h3>
+                      <FollowToggleButton profileId={event.profile.clerkId} />
+                    </div>
                     <UserInfo
                       profile={{
                         firstName: event.profile.firstName,

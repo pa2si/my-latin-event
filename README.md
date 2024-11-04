@@ -1,6 +1,8 @@
 To do:
 
-- implement in the share button also just a copy link, also share fb, instagram, etc.
+- replan the db by referencing the profile id instead of the clerk id which is now the case.
+  - mostly all server actions need to be refactured.
+- user shall not be able to follow himself
 - continue with create event form
 - in profile module add a city section. this shall be used to display local events
 - put profile component from salsa calendar in the menu
@@ -9,6 +11,12 @@ To do:
 - implement a follow creator action and section where i can see all events from the followed creator
 
 WHATS DONE IN VERSIONS
+
+v 0.1.36
+
+- follow user functionality implemented.
+  - whats missing: user shall not be able to follow himself
+  -
 
 v 0.1.35
 

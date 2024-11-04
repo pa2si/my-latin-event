@@ -23,6 +23,8 @@ model Profile {
   favorites    Favorite[]
   reviews      Review[]
   bookings     Booking[]
+  followers    Follow[] @relation("followers")
+  following    Follow[] @relation("following")
 }
 
 model Event {
@@ -92,4 +94,18 @@ model Booking {
   paymentStatus Boolean @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model Follow {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  follower    Profile  @relation("followers", fields: [followerId], references: [clerkId], onDelete: Cascade)
+  followerId  String
+  
+  following   Profile  @relation("following", fields: [followingId], references: [clerkId], onDelete: Cascade)
+  followingId String
+
+  @@unique([followerId, followingId])
 }

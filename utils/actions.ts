@@ -779,3 +779,58 @@ export const fetchReservationStats = async () => {
     amount: totals._sum.orderTotal || 0,
   };
 };
+
+export async function fetchFollowId({ profileId }: { profileId: string }) {
+  try {
+    const user = await getAuthUser();
+    const follow = await db.follow.findFirst({
+      where: {
+        followingId: user.id,
+        followerId: profileId,
+      },
+      select: {
+        id: true,
+      },
+    });
+    return follow?.id || null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function toggleFollowAction({
+  profileId,
+  followId,
+  pathname,
+}: {
+  profileId: string;
+  followId: string | null;
+  pathname: string;
+}) {
+  try {
+    const user = await getAuthUser();
+
+    if (followId) {
+      await db.follow.delete({
+        where: {
+          id: followId,
+        },
+      });
+      revalidatePath(pathname);
+      return { message: "Unfollowed successfully" };
+    }
+
+    await db.follow.create({
+      data: {
+        followingId: user.id,
+        followerId: profileId,
+      },
+    });
+    revalidatePath(pathname);
+    return { message: "Followed successfully" };
+  } catch (error) {
+    console.log(error);
+    return { message: "Error toggling follow status" };
+  }
+}

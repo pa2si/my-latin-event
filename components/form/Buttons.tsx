@@ -6,6 +6,7 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { SignInButton } from "@clerk/nextjs";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { LuTrash2, LuPenSquare } from "react-icons/lu";
+import { UserPlus } from "lucide-react";
 
 type btnSize = "default" | "lg" | "sm";
 
@@ -51,6 +52,22 @@ export const CardSignInButton = () => {
         asChild
       >
         <FaRegHeart />
+      </Button>
+    </SignInButton>
+  );
+};
+
+export const FollowButton = () => {
+  return (
+    <SignInButton mode="modal">
+      <Button
+        type="button"
+        size="icon"
+        variant="outline"
+        className="cursor-pointer p-2"
+        asChild
+      >
+        <UserPlus />
       </Button>
     </SignInButton>
   );
@@ -138,6 +155,30 @@ export const SelectButton: React.FC<SelectButtonProps> = ({
       className={`transition-all duration-300 ${className}`}
     >
       {text}
+    </Button>
+  );
+};
+
+export const FollowSubmitButton = ({
+  isFollowing,
+}: {
+  isFollowing: boolean;
+}) => {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      type="submit"
+      variant={isFollowing ? "outline" : "default"}
+      size="sm"
+      className="mt-2"
+    >
+      {pending ? (
+        <ReloadIcon className="animate-spin" />
+      ) : isFollowing ? (
+        "Following"
+      ) : (
+        "Follow"
+      )}
     </Button>
   );
 };
