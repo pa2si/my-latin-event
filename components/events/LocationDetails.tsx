@@ -22,7 +22,9 @@ function LocationDetails({ details }: LocationDetailsProps) {
   if (items.length === 0) return null;
 
   return (
-    <p className="text-md mt-1 font-light">
+    // <p className="text-md mt-1 font-light">
+    // classes for new UI
+    <p className="text-sm text-muted-foreground">
       {items.map((item, index) => (
         <span key={index}>
           {item}

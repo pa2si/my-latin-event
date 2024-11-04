@@ -71,21 +71,6 @@ const DynamicMap = ({
 
   return (
     <div className="mt-4">
-      <div className="mb-4">
-        <Title text={`${name} is here`} />
-        <div className="mt-1 space-y-1 text-sm text-gray-600">
-          {/* {name && <p className="font-medium">{name}</p>} */}
-          <p>{street}</p>
-          <p>
-            {postalCode ? `${postalCode} ` : ""}
-            {city}
-            <div className="mt-1">
-              <CountryFlagAndName country={country} />
-            </div>
-          </p>
-        </div>
-      </div>
-
       {!isLoading && coordinates && (
         <MapContainer
           scrollWheelZoom={false}

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 function ImageContainer({
   mainImage,
@@ -8,13 +8,13 @@ function ImageContainer({
   name: string;
 }) {
   return (
-    <section className="h-[300px] md:h-[500px] relative mt-8">
+    <section className="relative h-[300px] md:h-[500px]">
       <Image
         src={mainImage}
         fill
         sizes="100vw"
         alt={name}
-        className="object-cover rounded-md"
+        className="rounded-md object-cover"
         priority
       />
     </section>

@@ -1,16 +1,24 @@
 To do:
 
-- in events slug the music note image shall be in front of Genre not infront of music style
-  - the music styles shall be like in my salsa calendar!
+- implement in the db a host slogan field
+- implement the possibility to click on the image to open it full size in a modal
+- implement in the share button also just a copy link
+
 - continue with create event form
 - in profile module add a city section. this shall be used to display local events
 - put profile component from salsa calendar in the menu
 - implement a feature where i can say "going".
   - create a page where i can see all my "goings" and include a calendar overview
 - implement a follow creator action and section where i can see all events from the followed creator
-- create a section where i can see all my purchased events.
 
 WHATS DONE IN VERSIONS
+
+v 0.1.32
+
+- New UI for event slug
+  - therefore adaptions as well in EventMap.tsx (mt)
+  - also in ImageContainer (mt)
+  - LocationDetails
 
 v 0.1.31
 
