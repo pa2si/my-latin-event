@@ -1,9 +1,6 @@
 To do:
 
-- implement in the db a host slogan field
-- implement the possibility to click on the image to open it full size in a modal
-- implement in the share button also just a copy link
-
+- implement in the share button also just a copy link, also share fb, instagram, etc.
 - continue with create event form
 - in profile module add a city section. this shall be used to display local events
 - put profile component from salsa calendar in the menu
@@ -12,6 +9,11 @@ To do:
 - implement a follow creator action and section where i can see all events from the followed creator
 
 WHATS DONE IN VERSIONS
+
+v 0.1.34
+
+- shadcn dialogue (modal) installed
+- copy to clipboard in share button on event slug
 
 v 0.1.33
 

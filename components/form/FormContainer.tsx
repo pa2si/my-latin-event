@@ -24,7 +24,7 @@ const FormContainer = ({
     if (message) {
       toast({
         description: message,
-        className: "bg-primary text-white",
+        className: "bg-primary/90 text-secondary",
       });
     }
   }, [state, toast]);
