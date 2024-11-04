@@ -52,7 +52,7 @@ interface StyleItem {
   selected: boolean;
 }
 
-const LocationDetailsPage = async ({ params }: { params: { id: string } }) => {
+const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const event = await fetchLocationDetails(params.id);
   if (!event) redirect("/");
   const { floors, bars, outdoorAreas, eventDateAndTime, eventEndDateAndTime } =
@@ -154,14 +154,14 @@ const LocationDetailsPage = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       {/* Header Section */}
-      <div className="mb-8">
+      <div className="mb-4 sm:mb-8">
         <BreadCrumbs name={event.name} />
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4 items-center justify-between sm:flex">
           <div>
-            <h1 className="mb-2 text-4xl font-bold">{event.name}</h1>
+            <h1 className="mb-1 text-4xl font-bold">{event.name}</h1>
             <p className="text-xl text-muted-foreground">{event.subtitle}</p>
           </div>
-          <div className="flex gap-4">
+          <div className="mt-4 flex gap-4 sm:mt-0">
             <ShareButton name={event.name} eventId={event.id} />
             <FavoriteToggleButton eventId={event.id} />
             {(isAdminUser || isOwner) && (
@@ -376,4 +376,4 @@ const LocationDetailsPage = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default LocationDetailsPage;
+export default EventDetailsPage;

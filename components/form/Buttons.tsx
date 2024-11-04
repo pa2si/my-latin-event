@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useFormStatus } from 'react-dom';
-import { Button } from '../ui/button';
-import { ReloadIcon } from '@radix-ui/react-icons';
-import { SignInButton } from '@clerk/nextjs';
-import { FaRegHeart, FaHeart } from 'react-icons/fa';
-import { LuTrash2, LuPenSquare } from 'react-icons/lu';
+import { useFormStatus } from "react-dom";
+import { Button } from "../ui/button";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { SignInButton } from "@clerk/nextjs";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { LuTrash2, LuPenSquare } from "react-icons/lu";
 
-type btnSize = 'default' | 'lg' | 'sm';
+type btnSize = "default" | "lg" | "sm";
 
 type SubmitButtonProps = {
   className?: string;
@@ -16,9 +16,9 @@ type SubmitButtonProps = {
 };
 
 export function SubmitButton({
-  className = '',
-  text = 'submit',
-  size = 'lg',
+  className = "",
+  text = "submit",
+  size = "lg",
 }: SubmitButtonProps) {
   const { pending } = useFormStatus();
   return (
@@ -47,7 +47,7 @@ export const CardSignInButton = () => {
         type="button"
         size="icon"
         variant="outline"
-        className="p-2 cursor-pointer"
+        className="cursor-pointer p-2"
         asChild
       >
         <FaRegHeart />
@@ -63,12 +63,12 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
       type="submit"
       size="icon"
       variant="outline"
-      className=" p-2 cursor-pointer"
+      className="cursor-pointer p-2"
     >
       {pending ? (
-        <ReloadIcon className=" animate-spin" />
+        <ReloadIcon className="animate-spin" />
       ) : isFavorite ? (
-        <FaHeart />
+        <FaHeart className="text-primary" />
       ) : (
         <FaRegHeart />
       )}
@@ -76,30 +76,30 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
   );
 };
 
-type actionType = 'edit' | 'delete';
+type actionType = "edit" | "delete";
 
 type IconButtonProps = {
   actionType: actionType;
   variant?:
-    | 'default'
-    | 'outline'
-    | 'ghost'
-    | 'link'
-    | 'destructive'
-    | 'secondary';
+    | "default"
+    | "outline"
+    | "ghost"
+    | "link"
+    | "destructive"
+    | "secondary";
 };
 
 export const IconButton = ({
   actionType,
-  variant = 'link',
+  variant = "link",
 }: IconButtonProps) => {
   const { pending } = useFormStatus();
 
   const renderIcon = () => {
     switch (actionType) {
-      case 'edit':
+      case "edit":
         return <LuPenSquare />;
-      case 'delete':
+      case "delete":
         return <LuTrash2 />;
       default:
         const never: never = actionType;
@@ -112,9 +112,9 @@ export const IconButton = ({
       type="submit"
       size="icon"
       variant={variant}
-      className="p-2 cursor-pointer"
+      className="cursor-pointer p-2"
     >
-      {pending ? <ReloadIcon className=" animate-spin" /> : renderIcon()}
+      {pending ? <ReloadIcon className="animate-spin" /> : renderIcon()}
     </Button>
   );
 };
@@ -128,14 +128,14 @@ interface SelectButtonProps {
 export const SelectButton: React.FC<SelectButtonProps> = ({
   text,
   onClick,
-  className = '',
+  className = "",
 }) => {
   return (
     <Button
       variant="outline"
       onClick={onClick}
       type="button"
-      className={` transition-all duration-300   ${className}`}
+      className={`transition-all duration-300 ${className}`}
     >
       {text}
     </Button>

@@ -10,10 +10,15 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.35
+
+- some margin adaption on mobile view for title and subitle in event slug
+- in event slug the favourite heart now is text-primary
+
 v 0.1.34
 
 - shadcn dialogue (modal) installed
-- copy to clipboard in share button on event slug
+- copy to clipboard and facebook in share button on event slug added
 
 v 0.1.33
 
