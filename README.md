@@ -11,6 +11,15 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.39
+
+- favorites is now called likes
+  - route renamed
+  - menu renamed
+  - all server actions also renamed
+- new route for followed creators events
+- new HeaderSection in liked events and followd creators events
+
 v 0.1.38
 
 - refactured event slug and implemented it in responsivity.

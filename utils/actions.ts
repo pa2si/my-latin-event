@@ -256,10 +256,10 @@ export const fetchEvents = async ({
   return events;
 };
 
-export const fetchFavoriteId = async ({ eventId }: { eventId: string }) => {
+export const fetchLikeId = async ({ eventId }: { eventId: string }) => {
   try {
     const profileId = await getCurrentUserProfileId();
-    const favorite = await db.favorite.findFirst({
+    const like = await db.like.findFirst({
       where: {
         eventId,
         profileId,
@@ -268,29 +268,29 @@ export const fetchFavoriteId = async ({ eventId }: { eventId: string }) => {
         id: true,
       },
     });
-    return favorite?.id || null;
+    return like?.id || null;
   } catch (error) {
     return null;
   }
 };
 
-export const toggleFavoriteAction = async (prevState: {
+export const toggleLikeAction = async (prevState: {
   eventId: string;
-  favoriteId: string | null;
+  likeId: string | null;
   pathname: string;
 }) => {
   try {
-    const { eventId, favoriteId, pathname } = prevState;
+    const { eventId, likeId, pathname } = prevState;
     const profileId = await getCurrentUserProfileId();
 
-    if (favoriteId) {
-      await db.favorite.delete({
+    if (likeId) {
+      await db.like.delete({
         where: {
-          id: favoriteId,
+          id: likeId,
         },
       });
     } else {
-      await db.favorite.create({
+      await db.like.create({
         data: {
           eventId,
           profileId,
@@ -298,17 +298,17 @@ export const toggleFavoriteAction = async (prevState: {
       });
     }
     revalidatePath(pathname);
-    return { message: favoriteId ? "Removed from Faves" : "Added to Faves" };
+    return { message: likeId ? "Removed from Likes" : "Added to Likes" };
   } catch (error: any) {
     return renderError(error);
   }
 };
 
-export const fetchFavorites = async () => {
+export const fetchLikes = async () => {
   try {
     const profileId = await getCurrentUserProfileId();
 
-    const favorites = await db.favorite.findMany({
+    const likes = await db.like.findMany({
       where: {
         profileId,
       },
@@ -325,9 +325,9 @@ export const fetchFavorites = async () => {
         },
       },
     });
-    return favorites.map((favorite) => favorite.event);
+    return likes.map((like) => like.event);
   } catch (error) {
-    console.log("Error fetching favorites:", error);
+    console.log("Error fetching Likes:", error);
     return [];
   }
 };
@@ -944,5 +944,48 @@ export const checkFollowAccess = async (profileId: string) => {
     return {
       canFollow: false,
     };
+  }
+};
+
+export const fetchFollowedCreatorsEvents = async () => {
+  try {
+    const currentUserProfileId = await getCurrentUserProfileId();
+
+    const events = await db.event.findMany({
+      where: {
+        profile: {
+          followers: {
+            some: {
+              followerId: currentUserProfileId,
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        subtitle: true,
+        location: true,
+        country: true,
+        image: true,
+        price: true,
+        eventDateAndTime: true,
+        profile: {
+          select: {
+            id: true,
+            firstName: true,
+            profileImage: true,
+          },
+        },
+      },
+      orderBy: {
+        eventDateAndTime: "asc",
+      },
+    });
+
+    return events;
+  } catch (error) {
+    console.log("Error fetching followed creators events:", error);
+    return [];
   }
 };

@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import FavoriteToggleButton from "@/components/card/FavoriteToggleButton";
+import LikeToggleButton from "@/components/card/LikeToggleButton";
 import EventRating from "@/components/card/EventRating";
 import BreadCrumbs from "@/components/events/BreadCrumbs";
 import ImageContainer from "@/components/events/ImageContainer";
@@ -71,7 +71,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           </div>
           <div className="mt-4 flex gap-4 sm:mt-0">
             <ShareButton name={event.name} eventId={event.id} />
-            <FavoriteToggleButton eventId={event.id} />
+            <LikeToggleButton eventId={event.id} />
             {canEdit && (
               <>
                 <EditMyEvent eventId={event.id} />

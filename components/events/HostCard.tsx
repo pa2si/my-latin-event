@@ -11,7 +11,7 @@ interface HostCardProps {
 }
 
 const HostCard = async ({
-  profileId, // Now we only need profileId
+  profileId,
   firstName,
   profileImage,
   slogan,
@@ -21,7 +21,14 @@ const HostCard = async ({
   return (
     <Card>
       <CardContent className="p-4">
-        <h3 className="mb-4 text-lg font-semibold">Event Host</h3>
+        <div className="flex justify-between">
+          <h3 className={`text-lg font-semibold ${canFollow ? "mb-4" : ""}`}>
+            Event Host
+          </h3>
+          <div className="-mt-2">
+            {canFollow && <FollowToggleButton profileId={profileId} />}
+          </div>
+        </div>
         <UserInfo
           profile={{
             firstName,
@@ -29,9 +36,6 @@ const HostCard = async ({
             slogan,
           }}
         />
-        <div className="mt-1 flex justify-center">
-          {canFollow && <FollowToggleButton profileId={profileId} />}
-        </div>
       </CardContent>
     </Card>
   );

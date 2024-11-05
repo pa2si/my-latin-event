@@ -73,7 +73,7 @@ export const FollowButton = () => {
   );
 };
 
-export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
+export const CardSubmitButton = ({ isLiked }: { isLiked: boolean }) => {
   const { pending } = useFormStatus();
   return (
     <Button
@@ -84,7 +84,7 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
     >
       {pending ? (
         <ReloadIcon className="animate-spin" />
-      ) : isFavorite ? (
+      ) : isLiked ? (
         <FaHeart className="text-primary" />
       ) : (
         <FaRegHeart />

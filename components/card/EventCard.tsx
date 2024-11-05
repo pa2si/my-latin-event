@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CountryFlagAndName from "./CountryFlagAndName";
 import EventRating from "./EventRating";
-import FavoriteToggleButton from "./FavoriteToggleButton";
+import LikeToggleButton from "./LikeToggleButton";
 import { EventCardProps } from "@/utils/types";
 import { formatCurrency } from "@/utils/format";
 import { findCountryByName } from "@/utils/countries";
@@ -40,12 +40,12 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
             night
           </p>
           {/* country flag */}
-         <CountryFlagAndName country={country} />
+          <CountryFlagAndName country={country} />
         </div>
       </Link>
       <div className="z-5 absolute right-5 top-5">
-        {/* favorite toggle button*/}
-        <FavoriteToggleButton eventId={eventId} />
+        {/* like toggle button*/}
+        <LikeToggleButton eventId={eventId} />
       </div>
     </article>
   );
