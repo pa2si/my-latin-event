@@ -38,6 +38,26 @@ const renderError = (error: unknown): { message: string } => {
   };
 };
 
+export const getCurrentUserProfileId = async () => {
+  const user = await getAuthUser();
+  const profile = await db.profile.findUnique({
+    where: { clerkId: user.id },
+    select: { id: true },
+  });
+  if (!profile) throw new Error("Profile not found");
+  return profile.id;
+};
+
+// export const getProfileIdFromClerkId = async (clerkId: string) => {
+//   const profile = await db.profile.findUnique({
+//     where: { clerkId },
+//     select: { id: true },
+//   });
+
+//   if (!profile) return null;
+//   return profile.id;
+// };
+
 /* Actions */
 export const createProfileAction = async (
   prevState: any,
@@ -91,6 +111,16 @@ export const fetchProfile = async () => {
     where: {
       clerkId: user.id,
     },
+    // Make sure to return id if you need it for relationships
+    include: {
+      // Add any related data you need
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+        },
+      },
+    },
   });
   if (!profile) return redirect("/profile/create");
   return profile;
@@ -104,37 +134,45 @@ export const updateProfileAction = async (
   try {
     const currentProfile = await db.profile.findUnique({
       where: { clerkId: user.id },
-      select: { profileImage: true },
+      select: { id: true, profileImage: true },
     });
 
+    if (!currentProfile) throw new Error("Profile not found");
+
     const rawData = Object.fromEntries(formData);
+    // console.log("Processed rawData:", rawData);
 
     const validatedFields = validateWithZodSchema(profileSchema, rawData);
 
-    let profileImage = currentProfile?.profileImage;
+    // Remove newImage from validatedFields before database update
+    const { newImage, ...fieldsToUpdate } = validatedFields;
 
-    // Only process image if a new one was uploaded
-    const image = formData.get("image") as File | null;
-    const hasNewImage = formData.get("newImage") === "true";
+    let profileImage = currentProfile.profileImage;
 
-    if (hasNewImage && image && image.size > 0) {
+    const image = formData.get("image") as File;
+    if (image && image.size > 0) {
       const validatedImage = validateWithZodSchema(imageSchema, { image });
       profileImage = await uploadImage(validatedImage.image);
     }
 
-    await db.profile.update({
+    const updateResult = await db.profile.update({
       where: {
         clerkId: user.id,
       },
       data: {
-        ...validatedFields,
-        profileImage: profileImage, // Update image only if it's uploaded
+        ...fieldsToUpdate, // Use fieldsToUpdate instead of validatedFields
+        profileImage,
       },
     });
 
     revalidatePath("/profile");
     return { message: "Profile updated successfully" };
-  } catch (error) {
+  } catch (error: any) {
+    console.log("Final Error:", {
+      name: error?.name,
+      message: error?.message,
+      stack: error?.stack,
+    });
     return renderError(error);
   }
 };
@@ -159,8 +197,9 @@ export const createEventAction = async (
   prevState: any,
   formData: FormData,
 ): Promise<{ message: string }> => {
-  const user = await getAuthUser();
   try {
+    const profileId = await getCurrentUserProfileId();
+
     const rawData = Object.fromEntries(formData);
     console.log("thats the raw data", rawData);
     const file = formData.get("image") as File;
@@ -171,11 +210,12 @@ export const createEventAction = async (
     const eventDateAndTime = validatedFields.eventDateAndTime as Date;
     const eventEndDateAndTime =
       validatedFields.eventEndDateAndTime as Date | null;
+
     await db.event.create({
       data: {
         ...validatedFields,
         image: fullPath,
-        profileId: user.id,
+        profileId, // Use the profile id
         eventDateAndTime,
         eventEndDateAndTime,
       },
@@ -217,17 +257,21 @@ export const fetchEvents = async ({
 };
 
 export const fetchFavoriteId = async ({ eventId }: { eventId: string }) => {
-  const user = await getAuthUser();
-  const favorite = await db.favorite.findFirst({
-    where: {
-      eventId,
-      profileId: user.id,
-    },
-    select: {
-      id: true,
-    },
-  });
-  return favorite?.id || null;
+  try {
+    const profileId = await getCurrentUserProfileId();
+    const favorite = await db.favorite.findFirst({
+      where: {
+        eventId,
+        profileId,
+      },
+      select: {
+        id: true,
+      },
+    });
+    return favorite?.id || null;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const toggleFavoriteAction = async (prevState: {
@@ -235,9 +279,10 @@ export const toggleFavoriteAction = async (prevState: {
   favoriteId: string | null;
   pathname: string;
 }) => {
-  const user = await getAuthUser();
-  const { eventId, favoriteId, pathname } = prevState;
   try {
+    const { eventId, favoriteId, pathname } = prevState;
+    const profileId = await getCurrentUserProfileId();
+
     if (favoriteId) {
       await db.favorite.delete({
         where: {
@@ -248,37 +293,43 @@ export const toggleFavoriteAction = async (prevState: {
       await db.favorite.create({
         data: {
           eventId,
-          profileId: user.id,
+          profileId,
         },
       });
     }
     revalidatePath(pathname);
     return { message: favoriteId ? "Removed from Faves" : "Added to Faves" };
-  } catch (error) {
+  } catch (error: any) {
     return renderError(error);
   }
 };
 
 export const fetchFavorites = async () => {
-  const user = await getAuthUser();
-  const favorites = await db.favorite.findMany({
-    where: {
-      profileId: user.id,
-    },
-    select: {
-      event: {
-        select: {
-          id: true,
-          name: true,
-          subtitle: true,
-          price: true,
-          country: true,
-          image: true,
+  try {
+    const profileId = await getCurrentUserProfileId();
+
+    const favorites = await db.favorite.findMany({
+      where: {
+        profileId,
+      },
+      select: {
+        event: {
+          select: {
+            id: true,
+            name: true,
+            subtitle: true,
+            price: true,
+            country: true,
+            image: true,
+          },
         },
       },
-    },
-  });
-  return favorites.map((favorite) => favorite.event);
+    });
+    return favorites.map((favorite) => favorite.event);
+  } catch (error) {
+    console.log("Error fetching favorites:", error);
+    return [];
+  }
 };
 
 export const fetchLocationDetails = (id: string) => {
@@ -287,7 +338,15 @@ export const fetchLocationDetails = (id: string) => {
       id,
     },
     include: {
-      profile: true,
+      profile: {
+        select: {
+          id: true,
+          firstName: true,
+          profileImage: true,
+          slogan: true,
+          clerkId: true,
+        },
+      },
       bookings: {
         select: {
           checkIn: true,
@@ -298,6 +357,7 @@ export const fetchLocationDetails = (id: string) => {
   });
 };
 
+//hasnt been updated to profile id reference
 export const createReviewAction = async (
   prevState: any,
   formData: FormData,
@@ -320,6 +380,7 @@ export const createReviewAction = async (
   }
 };
 
+//hasnt been updated to profile id reference
 export async function fetchEventReviews(eventId: string) {
   const reviews = await db.review.findMany({
     where: {
@@ -343,6 +404,7 @@ export async function fetchEventReviews(eventId: string) {
   return reviews;
 }
 
+//hasnt been updated to profile id reference
 export const fetchEventReviewsByUser = async () => {
   const user = await getAuthUser();
   const reviews = await db.review.findMany({
@@ -364,6 +426,7 @@ export const fetchEventReviewsByUser = async () => {
   return reviews;
 };
 
+//hasnt been updated to profile id reference
 export const deleteReviewAction = async (prevState: { reviewId: string }) => {
   const { reviewId } = prevState;
   const user = await getAuthUser();
@@ -383,6 +446,7 @@ export const deleteReviewAction = async (prevState: { reviewId: string }) => {
   }
 };
 
+//hasnt been updated to profile id reference
 export async function fetchEventRating(eventId: string) {
   const result = await db.review.groupBy({
     by: ["eventId"],
@@ -404,6 +468,7 @@ export async function fetchEventRating(eventId: string) {
   };
 }
 
+//hasnt been updated to profile id reference
 export const findExistingReview = async (userId: string, eventId: string) => {
   return db.review.findFirst({
     where: {
@@ -413,6 +478,7 @@ export const findExistingReview = async (userId: string, eventId: string) => {
   });
 };
 
+//hasnt been updated to profile id reference
 export const createBookingAction = async (prevState: {
   eventId: string;
   checkIn: Date;
@@ -459,6 +525,7 @@ export const createBookingAction = async (prevState: {
   redirect(`/checkout?bookingId=${bookingId}`);
 };
 
+//hasnt been updated to profile id reference
 export const fetchBookings = async () => {
   const user = await getAuthUser();
   const bookings = await db.booking.findMany({
@@ -482,6 +549,7 @@ export const fetchBookings = async () => {
   return bookings;
 };
 
+//hasnt been updated to profile id reference
 export const deleteBookingAction = async (prevState: { bookingId: string }) => {
   const { bookingId } = prevState;
   const user = await getAuthUser();
@@ -501,6 +569,7 @@ export const deleteBookingAction = async (prevState: { bookingId: string }) => {
   }
 };
 
+//hasnt been updated to profile id reference
 export const fetchMyEvents = async () => {
   const user = await getAuthUser();
   const myEvents = await db.event.findMany({
@@ -553,8 +622,16 @@ export const deleteMyEventAction = async (prevState: { eventId: string }) => {
   const user = await getAuthUser();
 
   try {
+    const profileId = await getCurrentUserProfileId();
     const event = await db.event.findUnique({
       where: { id: eventId },
+      include: {
+        profile: {
+          select: {
+            clerkId: true,
+          },
+        },
+      },
     });
 
     if (!event) {
@@ -562,12 +639,10 @@ export const deleteMyEventAction = async (prevState: { eventId: string }) => {
     }
 
     const isAdminUser = user.id === process.env.ADMIN_USER_ID;
-
-    if (event.profileId !== user.id && !isAdminUser) {
+    if (event.profile.clerkId !== user.id && !isAdminUser) {
       return { message: "Not authorized to delete this event" };
     }
-
-    // Delete the image from EdgeStore
+    //delete image
     if (event.image) {
       try {
         await backendClient.eventImages.deleteFile({
@@ -579,37 +654,40 @@ export const deleteMyEventAction = async (prevState: { eventId: string }) => {
     }
 
     await db.event.delete({
-      where: {
-        id: eventId,
-      },
+      where: { id: eventId },
     });
 
     revalidatePath("/my-events");
     return { message: "My Event deleted successfully" };
-  } catch (error) {
+  } catch (error: any) {
     return renderError(error);
   }
 };
 
 export const fetchMyLocationDetails = async (eventId: string) => {
-  const user = await getAuthUser();
-
-  return db.event.findUnique({
-    where: {
-      id: eventId,
-      profileId: user.id,
-    },
-  });
+  try {
+    const profileId = await getCurrentUserProfileId();
+    return db.event.findUnique({
+      where: {
+        id: eventId,
+        profileId,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching location details:", error);
+    return null;
+  }
 };
 
 export const updateEventAction = async (
   prevState: any,
   formData: FormData,
 ): Promise<{ message: string }> => {
-  const user = await getAuthUser();
   const eventId = formData.get("id") as string;
 
   try {
+    const profileId = await getCurrentUserProfileId();
+
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
     const eventDateAndTime = validatedFields.eventDateAndTime as
@@ -619,7 +697,7 @@ export const updateEventAction = async (
       validatedFields.eventEndDateAndTime as Date | null;
 
     const existingEvent = await db.event.findUnique({
-      where: { id: eventId, profileId: user.id },
+      where: { id: eventId, profileId },
       select: { image: true },
     });
 
@@ -630,31 +708,28 @@ export const updateEventAction = async (
     }
 
     let imagePath = existingEvent.image;
-
-    // Check if a new image is being uploaded
+    //check if there is a new image
     if (formData.get("newImage") === "true") {
       const file = formData.get("image") as File;
       if (file && file.size > 0) {
         const validatedFile = validateWithZodSchema(imageSchema, {
           image: file,
         });
-
-        // Delete the old image if it exists
+        //delete old image
         if (existingEvent.image) {
           await backendClient.eventImages.deleteFile({
             url: existingEvent.image,
           });
         }
-
-        // Upload the new image
+        //
         imagePath = await uploadImage(validatedFile.image);
       }
     }
-
+    //update event
     await db.event.update({
       where: {
         id: eventId,
-        profileId: user.id,
+        profileId,
       },
       data: {
         ...validatedFields,
@@ -666,11 +741,12 @@ export const updateEventAction = async (
 
     revalidatePath(`/my-events/${eventId}/edit`);
     return { message: "Update Successful" };
-  } catch (error) {
+  } catch (error: any) {
     return renderError(error);
   }
 };
 
+//hasnt been updated to profile id reference
 export const fetchReservations = async () => {
   const user = await getAuthUser();
 
@@ -700,6 +776,7 @@ export const fetchReservations = async () => {
   return reservations;
 };
 
+//hasnt been updated to profile id reference
 export const fetchStats = async () => {
   await getAdminUser();
 
@@ -782,11 +859,12 @@ export const fetchReservationStats = async () => {
 
 export async function fetchFollowId({ profileId }: { profileId: string }) {
   try {
-    const user = await getAuthUser();
+    const myProfileId = await getCurrentUserProfileId();
+
     const follow = await db.follow.findFirst({
       where: {
-        followingId: user.id,
-        followerId: profileId,
+        followerId: myProfileId, // I am the follower
+        followingId: profileId, // Looking for the profile I'm following
       },
       select: {
         id: true,
@@ -794,13 +872,13 @@ export async function fetchFollowId({ profileId }: { profileId: string }) {
     });
     return follow?.id || null;
   } catch (error) {
-    console.log(error);
+    console.log("Error fetching follow status:", error);
     return null;
   }
 }
 
 export async function toggleFollowAction({
-  profileId,
+  profileId, // This is the profile I want to follow
   followId,
   pathname,
 }: {
@@ -809,7 +887,7 @@ export async function toggleFollowAction({
   pathname: string;
 }) {
   try {
-    const user = await getAuthUser();
+    const myProfileId = await getCurrentUserProfileId();
 
     if (followId) {
       await db.follow.delete({
@@ -823,14 +901,14 @@ export async function toggleFollowAction({
 
     await db.follow.create({
       data: {
-        followingId: user.id,
-        followerId: profileId,
+        followerId: myProfileId, // c3089... should be the follower
+        followingId: profileId, // 5d299... should be the one being followed
       },
     });
     revalidatePath(pathname);
     return { message: "Followed successfully" };
   } catch (error) {
-    console.log(error);
+    console.log("Error toggling follow status:", error);
     return { message: "Error toggling follow status" };
   }
 }

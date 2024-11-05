@@ -71,22 +71,15 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const formattedTime = format(eventDateAndTime, "HH:mm");
 
   const hasEndDateTime = eventEndDateAndTime !== null;
-  const formattedEndDate = hasEndDateTime
-    ? format(eventEndDateAndTime, "dd.MM.yy")
-    : "";
+
   const formattedEndTime = hasEndDateTime
     ? format(eventEndDateAndTime, "HH:mm")
     : "";
 
-  const firstName = event.profile.firstName;
-  const profileImage = event.profile.profileImage;
-
   const { userId } = auth();
-  const isNotOwner = event.profile.clerkId !== userId;
+
   const isOwner = event.profile.clerkId === userId;
   const isAdminUser = userId === process.env.ADMIN_USER_ID;
-  const reviewDoesNotExist =
-    userId && isNotOwner && !(await findExistingReview(userId, event.id));
 
   const SidebarContent = () => (
     <>
@@ -111,7 +104,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           <div className="flex justify-between">
             <h3 className="mb-4 text-lg font-semibold">Event Host</h3>
             <div className="text-primary">
-              <FollowToggleButton profileId={event.profile.clerkId} />
+              <FollowToggleButton profileId={event.profile.id} />
             </div>
           </div>
           <UserInfo
@@ -320,7 +313,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                   <CardContent className="p-4">
                     <div>
                       <h3 className="mb-4 text-lg font-semibold">Event Host</h3>
-                      <FollowToggleButton profileId={event.profile.clerkId} />
+                      <FollowToggleButton profileId={event.profile.id} />
                     </div>
                     <UserInfo
                       profile={{

@@ -12,10 +12,7 @@ export const profileSchema = z.object({
   username: z
     .string()
     .min(2, { message: "username must be at least 2 characters." }),
-  slogan: z
-    .string()
-    .min(2, { message: "slogan must be at least 2 characters." })
-    .optional(),
+  slogan: z.string().optional(),
   newImage: z.string().optional(), // Flag to indicate if new image was uploaded
   profileImage: z.string().optional(), // Current profile image URL
 });

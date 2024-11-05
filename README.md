@@ -1,7 +1,6 @@
 To do:
 
-- replan the db by referencing the profile id instead of the clerk id which is now the case.
-  - mostly all server actions need to be refactured.
+- in event slug dont check for clerk id but make a sercer action, same for profile id
 - user shall not be able to follow himself
 - continue with create event form
 - in profile module add a city section. this shall be used to display local events
@@ -9,8 +8,16 @@ To do:
 - implement a feature where i can say "going".
   - create a page where i can see all my "goings" and include a calendar overview
 - implement a follow creator action and section where i can see all events from the followed creator
+- in my event the list shall have a select all button
 
 WHATS DONE IN VERSIONS
+
+v 0.1.37
+
+- refacture prisma schema model relations in order to make profileId the main reference in the db.
+  - refacture all necessary server actions to achieve that goal as well (except the ones that were not in use yet)
+  - refacture followToggleButton and FollowToggleForm
+- toast now displays only 4000ms
 
 v 0.1.36
 
