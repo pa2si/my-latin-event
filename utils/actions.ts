@@ -8,7 +8,7 @@ import {
   validateWithZodSchema,
 } from "./schemas";
 import db from "./db";
-import { clerkClient, currentUser } from "@clerk/nextjs/server";
+import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { calculateTotals } from "./calculateTotals";
@@ -332,29 +332,50 @@ export const fetchFavorites = async () => {
   }
 };
 
-export const fetchLocationDetails = (id: string) => {
+export const fetchEventDetails = async (id: string) => {
   return db.event.findUnique({
     where: {
       id,
     },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      subtitle: true,
+      location: true,
+      city: true,
+      street: true,
+      postalCode: true,
+      country: true,
+      googleMapsLink: true,
+      genre: true,
+      styles: true,
+      image: true,
+      description: true,
+      price: true,
+      floors: true,
+      bars: true,
+      outdoorAreas: true,
+      eventDateAndTime: true,
+      eventEndDateAndTime: true,
       profile: {
         select: {
           id: true,
           firstName: true,
           profileImage: true,
           slogan: true,
-          clerkId: true,
-        },
-      },
-      bookings: {
-        select: {
-          checkIn: true,
-          checkOut: true,
+          clerkId: true, // Only needed for ownership check
         },
       },
     },
   });
+};
+
+export const checkEventAccess = async (eventProfileClerkId: string) => {
+  const { userId } = auth();
+  return {
+    canEdit:
+      eventProfileClerkId === userId || userId === process.env.ADMIN_USER_ID,
+  };
 };
 
 //hasnt been updated to profile id reference
@@ -912,3 +933,16 @@ export async function toggleFollowAction({
     return { message: "Error toggling follow status" };
   }
 }
+
+export const checkFollowAccess = async (profileId: string) => {
+  try {
+    const currentUserProfileId = await getCurrentUserProfileId();
+    return {
+      canFollow: currentUserProfileId !== profileId,
+    };
+  } catch (error) {
+    return {
+      canFollow: false,
+    };
+  }
+};

@@ -1,7 +1,6 @@
 To do:
 
-- in event slug dont check for clerk id but make a sercer action, same for profile id
-- user shall not be able to follow himself
+- create a menu where i can see all my liked events
 - continue with create event form
 - in profile module add a city section. this shall be used to display local events
 - put profile component from salsa calendar in the menu
@@ -11,6 +10,13 @@ To do:
 - in my event the list shall have a select all button
 
 WHATS DONE IN VERSIONS
+
+v 0.1.38
+
+- refactured event slug and implemented it in responsivity.
+  - created components: EventDetailsCard, HostCard, LikesCard, QuickInfoCard, VenueFeaturesCard
+- refactured the admin and owner checks in event slug with server actions
+- a owner can not see the follow button anymore
 
 v 0.1.37
 
