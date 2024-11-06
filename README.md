@@ -11,6 +11,11 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.40
+
+- implemented a calendar in liked events and creators feed
+  - you can open the fyler in a model by clicking on the evnet dates in the calendar
+
 v 0.1.39
 
 - favorites is now called likes

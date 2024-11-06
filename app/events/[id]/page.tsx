@@ -128,7 +128,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
 
           {/* Mobile Layout (below sm) - Single column */}
           <div className="mt-8 space-y-6 sm:hidden">
-            <CalendarCard selectedDate={selectedDate} />
+            <CalendarCard mode="single" selectedDate={selectedDate} />
             <VenueFeaturesCard
               floors={floors}
               bars={bars}

@@ -22,3 +22,7 @@ export type Booking = {
   checkIn: Date;
   checkOut: Date;
 };
+
+export type EventWithDate = EventCardProps & {
+  eventDateAndTime: Date;
+};

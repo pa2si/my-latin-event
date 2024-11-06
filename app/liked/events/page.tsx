@@ -1,3 +1,4 @@
+import CalendarToggleBtn from "@/components/events/CalendarToggleBtn";
 import EmptyList from "@/components/home/EmptyList";
 import EventsList from "@/components/home/EventsList";
 import HeaderSection from "@/components/ui/HeaderSection";
@@ -17,11 +18,15 @@ const LikedEventsPage = async () => {
   }
 
   return (
-    <div>
-      <HeaderSection
-        title="Your Liked Events"
-        description="Events you've marked as favorites"
-      />
+    <div className="relative">
+      <div className="mb-6 flex items-center justify-between">
+        <HeaderSection
+          title="Your Liked Events"
+          description="Events you've marked as favorites"
+        />
+        <CalendarToggleBtn events={likes} />
+      </div>
+
       <EventsList events={likes} />
     </div>
   );

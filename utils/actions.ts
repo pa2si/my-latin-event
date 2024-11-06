@@ -321,13 +321,14 @@ export const fetchLikes = async () => {
             price: true,
             country: true,
             image: true,
+            eventDateAndTime: true,
           },
         },
       },
     });
     return likes.map((like) => like.event);
   } catch (error) {
-    console.log("Error fetching Likes:", error);
+    console.log("Error fetching likes:", error);
     return [];
   }
 };
