@@ -4,25 +4,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
-import { LuAlignLeft } from 'react-icons/lu';
-import Link from 'next/link';
-import { Button } from '../ui/button';
-import UserIcon from './UserIcon';
-import { links } from '@/utils/links';
-import SignOutLink from './SignOutLink';
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs';
-import { auth } from '@clerk/nextjs/server';
+} from "@/components/ui/dropdown-menu";
+import { LuAlignLeft } from "react-icons/lu";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import UserIcon from "./UserIcon";
+import { links } from "@/utils/links";
+import SignOutLink from "./SignOutLink";
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 
-const LinksDropdown = () => {
-  const { userId } = auth();
-  const isAdminUser = userId === process.env.ADMIN_USER_ID;
+import { checkUserRole } from "@/utils/actions";
+
+const LinksDropdown = async () => {
+  const { isAdminUser } = await checkUserRole();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex gap-4 max-w-[100px]">
-          <LuAlignLeft className="w-6 h-6" />
+        <Button variant="outline" className="flex max-w-[100px] gap-4">
+          <LuAlignLeft className="h-6 w-6" />
           <UserIcon />
         </Button>
       </DropdownMenuTrigger>
@@ -42,10 +42,10 @@ const LinksDropdown = () => {
         </SignedOut>
         <SignedIn>
           {links.map((link) => {
-            if (link.label === 'admin' && !isAdminUser) return null;
+            if (link.label === "admin" && !isAdminUser) return null;
             return (
               <DropdownMenuItem key={link.href}>
-                <Link href={link.href} className="capitalize w-full">
+                <Link href={link.href} className="w-full capitalize">
                   {link.label}
                 </Link>
               </DropdownMenuItem>

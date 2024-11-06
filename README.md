@@ -11,6 +11,11 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.42
+
+- new server function to check amdin: checkUserRole
+- implemented in menu bar to display admin route
+
 v 0.1.41
 
 - MyEvents now displays : date, location, price and likes

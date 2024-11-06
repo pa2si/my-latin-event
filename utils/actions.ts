@@ -375,6 +375,14 @@ export const checkEventAccess = async (eventProfileClerkId: string) => {
   };
 };
 
+export const checkUserRole = async () => {
+  const { userId } = auth();
+  return {
+    isAdminUser: userId === process.env.ADMIN_USER_ID,
+    isAuthenticated: !!userId,
+  };
+};
+
 //hasnt been updated to profile id reference
 export const createReviewAction = async (
   prevState: any,
