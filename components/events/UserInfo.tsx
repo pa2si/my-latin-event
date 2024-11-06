@@ -5,27 +5,26 @@ import { RiDoubleQuotesR } from "react-icons/ri";
 type UserInfoProps = {
   profile: {
     profileImage: string;
-    firstName: string;
+    username: string;
     slogan?: string | null;
   };
 };
 
 const UserInfo = ({
-  profile: { profileImage, firstName, slogan },
+  profile: { profileImage, username, slogan },
 }: UserInfoProps) => {
   return (
     <article className="mt-4 grid grid-cols-[auto,1fr] gap-4">
       <Image
         src={profileImage}
-        alt={firstName}
+        alt={username}
         width={50}
         height={50}
         className="h-12 w-12 rounded-md object-cover"
       />
       <div>
         <p>
-          Hosted by
-          <span className="font-bold"> {firstName}</span>
+          <span className="font-bold"> {username}</span>
         </p>
         <div className="flex gap-1">
           {slogan && (

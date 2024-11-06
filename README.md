@@ -11,6 +11,16 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.41
+
+- MyEvents now displays : date, location, price and likes
+- likes are now fetched and not hardcoded
+- host is now called organizer
+- in organizerCard now the name that gets displayed is the username not the FirstName
+- HeaderSection contains now BreadCrumbs
+- Profile now has description option for in FormInputs
+- new route: FollowedOrganizerEventsPage
+
 v 0.1.40
 
 - implemented a calendar in liked events and creators feed

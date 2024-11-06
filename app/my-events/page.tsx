@@ -1,8 +1,8 @@
-import EmptyList from '@/components/home/EmptyList';
-import { fetchMyEvents } from '@/utils/actions';
-import Link from 'next/link';
+import EmptyList from "@/components/home/EmptyList";
+import { fetchMyEvents } from "@/utils/actions";
+import Link from "next/link";
 
-import { formatCurrency } from '@/utils/format';
+import { formatCurrency } from "@/utils/format";
 import {
   Table,
   TableBody,
@@ -11,10 +11,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
-import { IconButton } from '@/components/form/Buttons';
-import DeleteMyEvent from '@/components/events/DeleteMyEvent';
+import { IconButton } from "@/components/form/Buttons";
+import DeleteMyEvent from "@/components/events/DeleteMyEvent";
+import { format } from "date-fns";
 
 async function MyEventsPage() {
   const myEvents = await fetchMyEvents();
@@ -36,35 +37,38 @@ async function MyEventsPage() {
         <TableHeader>
           <TableRow>
             <TableHead>Event Name</TableHead>
-            <TableHead>Nightly Rate </TableHead>
-            <TableHead>Nights Booked</TableHead>
-            <TableHead>Total Income</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Likes</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {myEvents.map((myEvent) => {
-            const { id: eventId, name, price } = myEvent;
-            const { totalNightsSum, orderTotalSum } = myEvent;
+          {myEvents.map((event) => {
+            const formattedDate = format(
+              new Date(event.eventDateAndTime),
+              "dd.MM.yy",
+            );
             return (
-              <TableRow key={eventId}>
+              <TableRow key={event.id}>
                 <TableCell>
                   <Link
-                    href={`/events/${eventId}`}
-                    className="underline text-muted-foreground tracking-wide"
+                    href={`/events/${event.id}`}
+                    className="tracking-wide text-muted-foreground underline"
                   >
-                    {name}
+                    {event.name}
                   </Link>
                 </TableCell>
-                <TableCell>{formatCurrency(price)}</TableCell>
-                <TableCell>{totalNightsSum || 0}</TableCell>
-                <TableCell>{formatCurrency(orderTotalSum)}</TableCell>
-
+                <TableCell>{formattedDate}</TableCell>
+                <TableCell>{event.location}</TableCell>
+                <TableCell>{formatCurrency(event.price)}</TableCell>
+                <TableCell>{event._count.likes}</TableCell>
                 <TableCell className="flex items-center gap-x-2">
-                  <Link href={`/my-events/${eventId}/edit`}>
-                    <IconButton actionType="edit"></IconButton>
+                  <Link href={`/my-events/${event.id}/edit`}>
+                    <IconButton actionType="edit" />
                   </Link>
-                  <DeleteMyEvent eventId={eventId} />
+                  <DeleteMyEvent eventId={event.id} />
                 </TableCell>
               </TableRow>
             );

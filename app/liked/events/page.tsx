@@ -21,8 +21,13 @@ const LikedEventsPage = async () => {
     <div className="relative">
       <div className="mb-6 flex items-center justify-between">
         <HeaderSection
-          title="Your Liked Events"
-          description="Events you've marked as favorites"
+          title="Liked Events"
+          description="See all Events you have liked"
+          breadcrumb={{
+            name: "Liked Events",
+            parentPath: "/",
+            parentName: "Home",
+          }}
         />
         <CalendarToggleBtn events={likes} />
       </div>

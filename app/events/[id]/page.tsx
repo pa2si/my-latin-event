@@ -22,7 +22,7 @@ import DeleteMyEvent from "@/components/events/DeleteMyEvent";
 import EditMyEvent from "@/components/events/EditMyEvent";
 
 import CalendarCard from "@/components/events/CalendarCard";
-import HostCard from "@/components/events/HostCard";
+import OrganizerCard from "@/components/events/OrganizerCard";
 import VenueFeaturesCard from "@/components/events/VenueFeaturesCard";
 import LikesCard from "@/components/events/LikesCard";
 import { QuickInfoCard } from "@/components/events/QuickInfoCard";
@@ -134,13 +134,13 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               bars={bars}
               outdoorAreas={outdoorAreas}
             />
-            <HostCard
+            <OrganizerCard
               profileId={event.profile.id}
-              firstName={event.profile.firstName}
+              username={event.profile.username}
               profileImage={event.profile.profileImage}
               slogan={event.profile.slogan || undefined}
             />
-            <LikesCard likes={2} />
+            <LikesCard likes={event._count.likes} />
           </div>
 
           {/* Tablet Layout (sm to lg) - Two columns */}
@@ -150,9 +150,9 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                 <CalendarCard selectedDate={selectedDate} />
               </div>
               <div className="space-y-6">
-                <HostCard
+                <OrganizerCard
                   profileId={event.profile.id}
-                  firstName={event.profile.firstName}
+                  username={event.profile.username}
                   profileImage={event.profile.profileImage}
                   slogan={event.profile.slogan || undefined}
                 />
@@ -161,7 +161,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                   bars={bars}
                   outdoorAreas={outdoorAreas}
                 />
-                <LikesCard likes={2} />
+                <LikesCard likes={event._count.likes} />
               </div>
             </div>
           </div>
@@ -180,13 +180,13 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                 />
               </div>
               <div className="space-y-6">
-                <HostCard
+                <OrganizerCard
                   profileId={event.profile.id}
-                  firstName={event.profile.firstName}
+                  username={event.profile.username}
                   profileImage={event.profile.profileImage}
                   slogan={event.profile.slogan || undefined}
                 />
-                <LikesCard likes={2} />
+                <LikesCard likes={event._count.likes} />
               </div>
             </div>
           </div>
@@ -196,9 +196,9 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
         <aside className="hidden xl:col-span-3 xl:block">
           <div className="sticky top-8 space-y-6">
             <CalendarCard selectedDate={selectedDate} />
-            <HostCard
+            <OrganizerCard
               profileId={event.profile.id}
-              firstName={event.profile.firstName}
+              username={event.profile.username}
               profileImage={event.profile.profileImage}
               slogan={event.profile.slogan || undefined}
             />
@@ -207,7 +207,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               bars={bars}
               outdoorAreas={outdoorAreas}
             />
-            <LikesCard likes={2} />
+            <LikesCard likes={event._count.likes} />
           </div>
         </aside>
       </div>

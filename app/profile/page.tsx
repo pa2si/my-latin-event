@@ -33,13 +33,15 @@ const ProfilePage = async () => {
             <FormInput
               type="text"
               name="username"
-              label="Username"
+              label="Username "
+              description="Used as Organizer Name"
               defaultValue={profile.username}
             />
             <FormInput
               type="text"
               name="slogan"
-              label="Slogan (optional)"
+              label="Slogan"
+              description="A catchy tagline"
               defaultValue={profile.slogan || undefined}
             />
           </div>

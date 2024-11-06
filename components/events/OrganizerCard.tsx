@@ -3,19 +3,19 @@ import UserInfo from "@/components/events/UserInfo";
 import FollowToggleButton from "@/components/card/FollowToggleButton";
 import { checkFollowAccess } from "@/utils/actions";
 
-interface HostCardProps {
+interface OrganizerCardProps {
   profileId: string;
-  firstName: string;
+  username: string;
   profileImage: string;
   slogan?: string;
 }
 
-const HostCard = async ({
+const OrganizerCard = async ({
   profileId,
-  firstName,
+  username,
   profileImage,
   slogan,
-}: HostCardProps) => {
+}: OrganizerCardProps) => {
   const { canFollow } = await checkFollowAccess(profileId);
 
   return (
@@ -23,7 +23,7 @@ const HostCard = async ({
       <CardContent className="p-4">
         <div className="flex justify-between">
           <h3 className={`text-lg font-semibold ${canFollow ? "mb-4" : ""}`}>
-            Event Host
+            Event Organizer
           </h3>
           <div className="-mt-2">
             {canFollow && <FollowToggleButton profileId={profileId} />}
@@ -31,7 +31,7 @@ const HostCard = async ({
         </div>
         <UserInfo
           profile={{
-            firstName,
+            username,
             profileImage,
             slogan,
           }}
@@ -41,4 +41,4 @@ const HostCard = async ({
   );
 };
 
-export default HostCard;
+export default OrganizerCard;

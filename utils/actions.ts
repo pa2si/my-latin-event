@@ -48,16 +48,6 @@ export const getCurrentUserProfileId = async () => {
   return profile.id;
 };
 
-// export const getProfileIdFromClerkId = async (clerkId: string) => {
-//   const profile = await db.profile.findUnique({
-//     where: { clerkId },
-//     select: { id: true },
-//   });
-
-//   if (!profile) return null;
-//   return profile.id;
-// };
-
 /* Actions */
 export const createProfileAction = async (
   prevState: any,
@@ -365,6 +355,12 @@ export const fetchEventDetails = async (id: string) => {
           profileImage: true,
           slogan: true,
           clerkId: true, // Only needed for ownership check
+          username: true,
+        },
+      },
+      _count: {
+        select: {
+          likes: true,
         },
       },
     },
@@ -591,52 +587,36 @@ export const deleteBookingAction = async (prevState: { bookingId: string }) => {
   }
 };
 
-//hasnt been updated to profile id reference
 export const fetchMyEvents = async () => {
-  const user = await getAuthUser();
-  const myEvents = await db.event.findMany({
-    where: {
-      profileId: user.id,
-    },
-    select: {
-      id: true,
-      name: true,
-      price: true,
-      image: true,
-    },
-  });
+  try {
+    const currentUserProfileId = await getCurrentUserProfileId();
 
-  const myEventsWithBookingSums = await Promise.all(
-    myEvents.map(async (myEvent) => {
-      const totalNightsSum = await db.booking.aggregate({
-        where: {
-          eventId: myEvent.id,
-          paymentStatus: true,
+    const myEvents = await db.event.findMany({
+      where: {
+        profileId: currentUserProfileId,
+      },
+      select: {
+        id: true,
+        name: true,
+        location: true,
+        price: true,
+        eventDateAndTime: true,
+        _count: {
+          select: {
+            likes: true,
+          },
         },
-        _sum: {
-          totalNights: true,
-        },
-      });
+      },
+      orderBy: {
+        eventDateAndTime: "asc",
+      },
+    });
 
-      const orderTotalSum = await db.booking.aggregate({
-        where: {
-          eventId: myEvent.id,
-          paymentStatus: true,
-        },
-        _sum: {
-          orderTotal: true,
-        },
-      });
-
-      return {
-        ...myEvent,
-        totalNightsSum: totalNightsSum._sum.totalNights,
-        orderTotalSum: orderTotalSum._sum.orderTotal,
-      };
-    }),
-  );
-
-  return myEventsWithBookingSums;
+    return myEvents;
+  } catch (error) {
+    console.log("Error fetching my events:", error);
+    return [];
+  }
 };
 
 export const deleteMyEventAction = async (prevState: { eventId: string }) => {
@@ -948,7 +928,7 @@ export const checkFollowAccess = async (profileId: string) => {
   }
 };
 
-export const fetchFollowedCreatorsEvents = async () => {
+export const fetchFollowedOrganizersEvents = async () => {
   try {
     const currentUserProfileId = await getCurrentUserProfileId();
 
@@ -986,7 +966,20 @@ export const fetchFollowedCreatorsEvents = async () => {
 
     return events;
   } catch (error) {
-    console.log("Error fetching followed creators events:", error);
+    console.log("Error fetching followed organizers events:", error);
     return [];
+  }
+};
+
+export const fetchBreadcrumbInfo = async () => {
+  try {
+    return {
+      pageName: "Followed Organizers Events", // Static name for this page
+    };
+  } catch (error) {
+    console.log("Error fetching breadcrumb info:", error);
+    return {
+      pageName: "Events",
+    };
   }
 };

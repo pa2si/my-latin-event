@@ -5,14 +5,24 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 
-function BreadCrumbs({ name }: { name: string }) {
+interface BreadCrumbsProps {
+  name: string;
+  parentPath?: string;
+  parentName?: string;
+}
+
+function BreadCrumbs({
+  name,
+  parentPath = "/",
+  parentName = "Home",
+}: BreadCrumbsProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          <BreadcrumbLink href={parentPath}>{parentName}</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
@@ -22,4 +32,5 @@ function BreadCrumbs({ name }: { name: string }) {
     </Breadcrumb>
   );
 }
+
 export default BreadCrumbs;

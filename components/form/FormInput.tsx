@@ -8,6 +8,7 @@ type FormInputProps = {
   label?: string;
   defaultValue?: string;
   placeholder?: string;
+  description?: string;
   required?: boolean;
   value?: number | string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -24,6 +25,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       type,
       defaultValue,
       placeholder,
+      description,
       required,
       value,
       className,
@@ -37,6 +39,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         <Label htmlFor={name} className="capitalize">
           {label || name}
         </Label>
+        {description && <p className="text-sm text-gray-500">{description}</p>}
         <Input
           id={name}
           name={name}
