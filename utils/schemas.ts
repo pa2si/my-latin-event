@@ -31,6 +31,17 @@ export const validateWithZodSchema = <T>(
   return result.data;
 };
 
+export const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    password: z.string().min(8, "New password must be at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "New passwords don't match",
+    path: ["confirmPassword"],
+  });
+
 /* Image Schema */
 export const imageSchema = z.object({
   image: validateFile(),

@@ -6,6 +6,7 @@ import {
   profileSchema,
   eventSchema,
   validateWithZodSchema,
+  passwordSchema,
 } from "./schemas";
 import db from "./db";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
@@ -48,6 +49,22 @@ export const getCurrentUserProfileId = async () => {
   return profile.id;
 };
 
+export const checkEventAccess = async (eventProfileClerkId: string) => {
+  const { userId } = auth();
+  return {
+    canEdit:
+      eventProfileClerkId === userId || userId === process.env.ADMIN_USER_ID,
+  };
+};
+
+export const checkUserRole = async () => {
+  const { userId } = auth();
+  return {
+    isAdminUser: userId === process.env.ADMIN_USER_ID,
+    isAuthenticated: !!userId,
+  };
+};
+
 /* Actions */
 export const createProfileAction = async (
   prevState: any,
@@ -59,6 +76,13 @@ export const createProfileAction = async (
 
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZodSchema(profileSchema, rawData);
+
+    // Update Clerk user first with core user data
+    await clerkClient.users.updateUser(user.id, {
+      firstName: validatedFields.firstName,
+      lastName: validatedFields.lastName,
+      username: validatedFields.username,
+    });
 
     await db.profile.create({
       data: {
@@ -77,21 +101,6 @@ export const createProfileAction = async (
     return renderError(error);
   }
   redirect("/");
-};
-
-export const fetchProfileImage = async () => {
-  const user = await currentUser();
-  if (!user) return null;
-
-  const profile = await db.profile.findUnique({
-    where: {
-      clerkId: user.id,
-    },
-    select: {
-      profileImage: true,
-    },
-  });
-  return profile?.profileImage;
 };
 
 export const fetchProfile = async () => {
@@ -115,6 +124,30 @@ export const fetchProfile = async () => {
   if (!profile) return redirect("/profile/create");
   return profile;
 };
+
+export const fetchProfileImage = async () => {
+  const user = await currentUser();
+  if (!user) return null;
+
+  return user.imageUrl;
+};
+
+export async function updateProfileImage(formData: FormData) {
+  try {
+    const user = await getAuthUser();
+    const file = formData.get("image") as File;
+
+    // Only validate the file
+    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+
+    return { success: true };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Failed to validate image",
+    };
+  }
+}
 
 export const updateProfileAction = async (
   prevState: any,
@@ -365,22 +398,6 @@ export const fetchEventDetails = async (id: string) => {
       },
     },
   });
-};
-
-export const checkEventAccess = async (eventProfileClerkId: string) => {
-  const { userId } = auth();
-  return {
-    canEdit:
-      eventProfileClerkId === userId || userId === process.env.ADMIN_USER_ID,
-  };
-};
-
-export const checkUserRole = async () => {
-  const { userId } = auth();
-  return {
-    isAdminUser: userId === process.env.ADMIN_USER_ID,
-    isAuthenticated: !!userId,
-  };
 };
 
 //hasnt been updated to profile id reference
@@ -911,8 +928,8 @@ export async function toggleFollowAction({
 
     await db.follow.create({
       data: {
-        followerId: myProfileId, // c3089... should be the follower
-        followingId: profileId, // 5d299... should be the one being followed
+        followerId: myProfileId,
+        followingId: profileId,
       },
     });
     revalidatePath(pathname);
@@ -988,6 +1005,247 @@ export const fetchBreadcrumbInfo = async () => {
     console.log("Error fetching breadcrumb info:", error);
     return {
       pageName: "Events",
+    };
+  }
+};
+
+export async function changePasswordAction(prevState: any, formData: FormData) {
+  try {
+    // Convert FormData to an object
+    const formValues = Object.fromEntries(formData.entries());
+    const { currentPassword, password, confirmPassword } = formValues;
+
+    // Validate the input
+    const validatedFields = passwordSchema.safeParse({
+      currentPassword,
+      password,
+      confirmPassword,
+    });
+
+    if (!validatedFields.success) {
+      return {
+        message: validatedFields.error.errors[0].message,
+      };
+    }
+
+    const user = await getAuthUser();
+    const { sessionId } = await auth();
+
+    if (!sessionId) {
+      return {
+        message: "No active session found",
+      };
+    }
+
+    try {
+      await (
+        await clerkClient()
+      ).users.verifyPassword({
+        userId: user.id,
+        password: currentPassword as string,
+      });
+    } catch (error) {
+      return {
+        message: "Current password is incorrect",
+      };
+    }
+
+    await (
+      await clerkClient()
+    ).users.updateUser(user.id, {
+      password: password as string,
+      signOutOfOtherSessions: true,
+    });
+
+    await (await clerkClient()).sessions.revokeSession(sessionId);
+
+    revalidatePath("/profile");
+
+    return {
+      message: "Password updated successfully! Redirecting...",
+    };
+  } catch (error) {
+    return {
+      message:
+        error instanceof Error ? error.message : "Failed to update password",
+    };
+  }
+}
+
+export const getEmailDetails = async () => {
+  const user = await getAuthUser();
+
+  if (!user.primaryEmailAddressId) {
+    return null;
+  }
+
+  const emailAddress = await (
+    await clerkClient()
+  ).emailAddresses.getEmailAddress(user.primaryEmailAddressId);
+
+  // Return a plain object with only the data we need
+  return {
+    id: emailAddress.id,
+    emailAddress: emailAddress.emailAddress,
+    verification: emailAddress.verification
+      ? {
+          status: emailAddress.verification.status,
+        }
+      : null,
+  };
+};
+
+export const getAllEmailAddresses = async () => {
+  const user = await getAuthUser();
+
+  // Get all email addresses for the user
+  const allEmails = await (await clerkClient()).users.getUser(user.id);
+
+  // Return formatted email data with status possibly being undefined
+  return allEmails.emailAddresses.map((email) => ({
+    id: email.id,
+    emailAddress: email.emailAddress,
+    verification: {
+      status: email.verification?.status || "unverified", // Provide default value
+    },
+    isPrimary: email.id === allEmails.primaryEmailAddressId,
+  }));
+};
+
+export const updateEmailAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  try {
+    const user = await getAuthUser();
+    const newEmail = formData.get("newEmail") as string;
+
+    // Create new email address with verified: false to trigger verification
+    const emailAddress = await (
+      await clerkClient()
+    ).emailAddresses.createEmailAddress({
+      userId: user.id,
+      emailAddress: newEmail,
+      verified: false, // This ensures verification is required
+    });
+
+    revalidatePath("/profile");
+    return {
+      message: "Email added. Check your inbox for verification.",
+    };
+  } catch (error: any) {
+    console.error("Email update error:", error);
+    return {
+      message:
+        error instanceof Error
+          ? error.message
+          : "Failed to add email. Please try again.",
+    };
+  }
+};
+
+export const setPrimaryEmailAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  try {
+    const user = await getAuthUser();
+    const selectedEmailId = formData.get("value") as string;
+
+    if (!selectedEmailId) {
+      throw new Error("No email address selected");
+    }
+
+    const clerk = await clerkClient();
+
+    // First update the primary email in Clerk
+    await clerk.users.updateUser(user.id, {
+      primaryEmailAddressID: selectedEmailId,
+    });
+
+    // Get the updated user data from Clerk to ensure we have the latest state
+    const updatedUser = await clerk.users.getUser(user.id);
+
+    // Find the new primary email from Clerk's data
+    const primaryEmail = updatedUser.emailAddresses.find(
+      (email) => email.id === updatedUser.primaryEmailAddressId,
+    );
+
+    if (!primaryEmail) {
+      throw new Error("Failed to get primary email after update");
+    }
+
+    // Update database with the email from Clerk
+    await db.profile.update({
+      where: { clerkId: user.id },
+      data: {
+        email: primaryEmail.emailAddress,
+      },
+    });
+
+    revalidatePath("/profile");
+    return {
+      message: "Primary email updated successfully",
+    };
+  } catch (error: any) {
+    console.error("Set primary email error:", {
+      name: error?.name,
+      message: error?.message,
+      stack: error?.stack,
+    });
+    return {
+      message:
+        error instanceof Error
+          ? error.message
+          : "Failed to update primary email",
+    };
+  }
+};
+
+export const deleteEmailAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  try {
+    const emailId = formData.get("emailId") as string;
+
+    await (await clerkClient()).emailAddresses.deleteEmailAddress(emailId);
+
+    revalidatePath("/profile");
+    return {
+      message: "Email address deleted successfully",
+    };
+  } catch (error: any) {
+    return {
+      message:
+        error instanceof Error ? error.message : "Failed to delete email",
+    };
+  }
+};
+
+export const resendVerificationAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  try {
+    const emailId = formData.get("emailId") as string;
+
+    await (
+      await clerkClient()
+    ).emailAddresses.updateEmailAddress(emailId, {
+      verified: false,
+    });
+
+    revalidatePath("/profile");
+    return {
+      message: "A new verification email has been sent.",
+    };
+  } catch (error: any) {
+    return {
+      message:
+        error instanceof Error
+          ? error.message
+          : "Failed to resend verification email",
     };
   }
 };

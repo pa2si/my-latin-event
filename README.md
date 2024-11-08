@@ -11,6 +11,20 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.43
+
+- profile in db is now synced to clerk. clerk is the source of truth username, first name, last name & email
+  - image is now being stored in clerk and fetched from clerk.
+- added to profile page:
+- new profileImageUpload
+- add new email
+- change password
+- new shadcn components installed:
+  - radio-group
+  - alert
+  - alert-dialog
+  - tabs
+
 v 0.1.42
 
 - new server function to check amdin: checkUserRole
