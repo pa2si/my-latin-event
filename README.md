@@ -1,15 +1,15 @@
 To do:
 
-- create a menu where i can see all my liked events
-- continue with create event form
+- check if create profile works fine
+  - add organization field and use arganization name in event slug
 - in profile module add a city section. this shall be used to display local events
-- put profile component from salsa calendar in the menu
-- implement a feature where i can say "going".
-  - create a page where i can see all my "goings" and include a calendar overview
-- implement a follow creator action and section where i can see all events from the followed creator
 - in my event the list shall have a select all button
 
 WHATS DONE IN VERSIONS
+
+v 0.1.44
+
+- ProfileUmageUpload now also stores the clerk url in the db.
 
 v 0.1.43
 

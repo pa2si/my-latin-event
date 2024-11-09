@@ -30,8 +30,13 @@ const ProfileImageUpload = () => {
         return;
       }
 
-      // If validation passes, update UI immediately
+      // Update Clerk first
       await user.setProfileImage({ file });
+
+      // Then sync with our DB
+      const syncFormData = new FormData();
+      syncFormData.append("sync", "true");
+      await updateProfileImage(syncFormData);
     } catch (error: any) {
       setError(error.message || "Error uploading image");
     } finally {
@@ -66,7 +71,7 @@ const ProfileImageUpload = () => {
           )}
 
           {!isUploading && (
-            <label className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+            <label className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
               <input
                 type="file"
                 accept="image/*"

@@ -125,26 +125,61 @@ export const fetchProfile = async () => {
   return profile;
 };
 
-export const fetchProfileImage = async () => {
-  const user = await currentUser();
-  if (!user) return null;
+export async function fetchProfileImage() {
+  const user = await getAuthUser();
 
-  return user.imageUrl;
-};
+  // Always get the latest from Clerk
+  const clerk = await clerkClient();
+  const clerkUser = await clerk.users.getUser(user.id);
+
+  // Check if our DB is out of sync with Clerk
+  const profile = await db.profile.findUnique({
+    where: { clerkId: user.id },
+    select: { profileImage: true },
+  });
+
+  // If DB has different URL than Clerk, update it
+  if (profile && profile.profileImage !== clerkUser.imageUrl) {
+    await db.profile.update({
+      where: { clerkId: user.id },
+      data: { profileImage: clerkUser.imageUrl ?? "" },
+    });
+  }
+
+  // Return Clerk's image URL as it's always the most up-to-date
+  return clerkUser.imageUrl;
+}
 
 export async function updateProfileImage(formData: FormData) {
   try {
     const user = await getAuthUser();
-    const file = formData.get("image") as File;
 
-    // Only validate the file
+    // Check if this is a sync request after Clerk upload
+    if (formData.get("sync")) {
+      const clerk = await clerkClient();
+      const clerkUser = await clerk.users.getUser(user.id);
+
+      // Sync the new image URL to our DB
+      await db.profile.update({
+        where: { clerkId: user.id },
+        data: {
+          profileImage: clerkUser.imageUrl ?? "",
+        },
+      });
+
+      revalidatePath("/"); // Revalidate to update UserIcon
+      return { success: true };
+    }
+
+    // If not a sync request, just validate the file
+    const file = formData.get("image") as File;
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
 
     return { success: true };
   } catch (error: any) {
     return {
       success: false,
-      error: error.message || "Failed to validate image",
+      error: error.message || "Failed to update image",
     };
   }
 }
