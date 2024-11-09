@@ -25,7 +25,7 @@ const FollowedOrganizerEventsPage = async () => {
   return (
     <div className="relative">
       <HeaderSection
-        title="Events From Organizers You Follow"
+        title="Upcoming Events From Organizers You Follow"
         description="Stay updated with events from your favorite organizers"
         breadcrumb={{
           name: "Organizers Events Feed",

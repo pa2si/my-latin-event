@@ -7,6 +7,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.45
+
+- followed organizers events only display upcoming events
+
 v 0.1.44
 
 - ProfileUmageUpload now also stores the clerk url in the db.

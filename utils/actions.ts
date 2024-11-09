@@ -992,15 +992,28 @@ export const fetchFollowedOrganizersEvents = async () => {
   try {
     const currentUserProfileId = await getCurrentUserProfileId();
 
+    // Get current date at start of day
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const events = await db.event.findMany({
       where: {
-        profile: {
-          followers: {
-            some: {
-              followerId: currentUserProfileId,
+        AND: [
+          {
+            profile: {
+              followers: {
+                some: {
+                  followerId: currentUserProfileId,
+                },
+              },
             },
           },
-        },
+          {
+            eventDateAndTime: {
+              gte: today,
+            },
+          },
+        ],
       },
       select: {
         id: true,
