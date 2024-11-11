@@ -176,191 +176,196 @@ const EmailSettings = ({ emails }: EmailSettingsProps) => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Email Settings</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Verification Form */}
-        {verifyingEmailId && (
-          <div className="space-y-4">
-            <Alert variant="default" className="border-green-200 bg-green-50">
-              <AlertDescription className="text-green-800">
-                A verification code has been sent to your email address. Please
-                enter it below to complete the verification process.
-              </AlertDescription>
-            </Alert>
-            <FormContainer
-              action={async (prevState: any, formData: FormData) => {
-                const result = await handleVerifyCode(formData);
-                if (result.includes("successfully")) {
-                  // Wait a brief moment to show the success message
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 1000);
-                }
-                return { message: result };
-              }}
-            >
-              <FormInput
-                type="text"
-                name="code"
-                label="Verification Code"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-                required
-                description="Enter the 6-digit code sent to your email"
-              />
-              <div className="flex gap-2">
-                <SubmitButton text="Verify" />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => handleResendCode(verifyingEmailId)}
-                >
-                  Resend Code
-                </Button>
-              </div>
-            </FormContainer>
-          </div>
-        )}
-
-        {/* Current Emails List */}
-        <div className="space-y-4">
-          <h3 className="text-sm font-medium">Your Email Addresses</h3>
-
-          {emails.length > 0 && (
-            <FormContainer action={setPrimaryEmailAction}>
-              <RadioGroup
-                name="value"
-                defaultValue={emails.find((e) => e.isPrimary)?.id}
-                className="space-y-3"
+    <section>
+      <Card className="-m-8 border-0 shadow-none">
+        <CardHeader>
+          <CardTitle>Email Settings</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Verification Form */}
+          {verifyingEmailId && (
+            <div className="space-y-4">
+              <Alert variant="default" className="border-green-200 bg-green-50">
+                <AlertDescription className="text-green-800">
+                  A verification code has been sent to your email address.
+                  Please enter it below to complete the verification process.
+                </AlertDescription>
+              </Alert>
+              <FormContainer
+                action={async (prevState: any, formData: FormData) => {
+                  const result = await handleVerifyCode(formData);
+                  if (result.includes("successfully")) {
+                    // Wait a brief moment to show the success message
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 1000);
+                  }
+                  return { message: result };
+                }}
               >
-                {emails.map((email) => (
-                  <div
-                    key={email.id}
-                    className="flex items-center justify-between space-x-2 rounded-lg border p-3"
+                <FormInput
+                  type="text"
+                  name="code"
+                  label="Verification Code"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  required
+                  description="Enter the 6-digit code sent to your email"
+                />
+                <div className="flex gap-2">
+                  <SubmitButton text="Verify" />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => handleResendCode(verifyingEmailId)}
                   >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value={email.id}
-                        disabled={
-                          !email.verification?.status || email.isPrimary
-                        }
-                        id={email.id}
-                      />
-                      <div className="grid gap-1">
-                        <Label htmlFor={email.id} className="font-normal">
-                          {email.emailAddress}
-                        </Label>
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`text-xs ${
-                              email.verification?.status === "verified"
-                                ? "text-green-600"
-                                : "text-yellow-600"
-                            }`}
-                          >
-                            {email.verification?.status === "verified"
-                              ? "Verified"
-                              : "Unverified"}
-                          </span>
-                          {email.isPrimary && (
-                            <span className="rounded bg-primary/10 px-2 py-0.5 text-xs text-primary">
-                              Primary
+                    Resend Code
+                  </Button>
+                </div>
+              </FormContainer>
+            </div>
+          )}
+
+          {/* Current Emails List */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium">Your Email Addresses</h3>
+
+            {emails.length > 0 && (
+              <FormContainer action={setPrimaryEmailAction}>
+                <RadioGroup
+                  name="value"
+                  defaultValue={emails.find((e) => e.isPrimary)?.id}
+                  className="space-y-3"
+                >
+                  {emails.map((email) => (
+                    <div
+                      key={email.id}
+                      className="flex items-center justify-between space-x-2 rounded-lg border p-3"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value={email.id}
+                          disabled={
+                            !email.verification?.status || email.isPrimary
+                          }
+                          id={email.id}
+                        />
+                        <div className="grid gap-1">
+                          <Label htmlFor={email.id} className="font-normal">
+                            {email.emailAddress}
+                          </Label>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`text-xs ${
+                                email.verification?.status === "verified"
+                                  ? "text-green-600"
+                                  : "text-yellow-600"
+                              }`}
+                            >
+                              {email.verification?.status === "verified"
+                                ? "Verified"
+                                : "Unverified"}
                             </span>
-                          )}
+                            {email.isPrimary && (
+                              <span className="rounded bg-primary/10 px-2 py-0.5 text-xs text-primary">
+                                Primary
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {!email.verification?.status && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleResendCode(email.id)}
-                        type="button"
-                      >
-                        Resend verification
-                      </Button>
-                    )}
+                      {!email.verification?.status && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleResendCode(email.id)}
+                          type="button"
+                        >
+                          Resend verification
+                        </Button>
+                      )}
 
-                    {!email.isPrimary &&
-                      email.verification?.status === "verified" && (
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-destructive hover:text-destructive/90"
-                              type="button"
-                            >
-                              Remove
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This will remove the email address{" "}
-                                <span className="text-destructive">
-                                  {email.emailAddress}
-                                </span>{" "}
-                                from your account. This action cannot be undone.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(email.id)}
-                                className="bg-destructive hover:bg-destructive/90"
+                      {!email.isPrimary &&
+                        email.verification?.status === "verified" && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-destructive hover:text-destructive/90"
+                                type="button"
                               >
                                 Remove
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      )}
-                  </div>
-                ))}
-              </RadioGroup>
-              <SubmitButton
-                text="Set as Primary"
-                className="mt-3"
-                disabled={
-                  !emails.some(
-                    (e) =>
-                      e.verification?.status === "verified" && !e.isPrimary,
-                  )
-                }
-              />
-            </FormContainer>
-          )}
-        </div>
-
-        {/* Add New Email Form */}
-        {!verifyingEmailId && (
-          <div className="border-t pt-6">
-            <h3 className="mb-4 text-sm font-medium">Add New Email</h3>
-            <FormContainer
-              action={async (prevState: any, formData: FormData) => {
-                const result = await handleAddEmail(formData);
-                return { message: result };
-              }}
-            >
-              <FormInput
-                type="email"
-                name="newEmail"
-                label="New Email Address"
-                required
-                description="A verification code will be sent to this address"
-              />
-              <SubmitButton text="Add Email" className="mt-4" />
-            </FormContainer>
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This will remove the email address{" "}
+                                  <span className="text-destructive">
+                                    {email.emailAddress}
+                                  </span>{" "}
+                                  from your account. This action cannot be
+                                  undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDelete(email.id)}
+                                  className="bg-destructive hover:bg-destructive/90"
+                                >
+                                  Remove
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
+                    </div>
+                  ))}
+                </RadioGroup>
+                <SubmitButton
+                  text="Set as Primary"
+                  className="mt-3"
+                  disabled={
+                    !emails.some(
+                      (e) =>
+                        e.verification?.status === "verified" && !e.isPrimary,
+                    )
+                  }
+                />
+              </FormContainer>
+            )}
           </div>
-        )}
-      </CardContent>
-    </Card>
+
+          {/* Add New Email Form */}
+          {!verifyingEmailId && (
+            <div className="border-t pt-6">
+              <h3 className="mb-4 text-sm font-medium">Add New Email</h3>
+              <FormContainer
+                action={async (prevState: any, formData: FormData) => {
+                  const result = await handleAddEmail(formData);
+                  return { message: result };
+                }}
+              >
+                <FormInput
+                  type="email"
+                  name="newEmail"
+                  label="New Email Address"
+                  required
+                  description="A verification code will be sent to this address"
+                />
+                <SubmitButton text="Add Email" className="mt-4" />
+              </FormContainer>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </section>
   );
 };
 

@@ -16,6 +16,18 @@ PLAN:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.47
+
+NEW BRANCH: Organizer
+
+- Organizer tab with all its components created
+  - When there is no organizer yet you can add a new one with form lodad in a Dialog
+  - then a list of OrganizerProfile is mapped with crud functions.
+- ProfileImageUplaod got refacured and split into two pars
+  - first is the baseImageUpload and ProfileImageUpload is the specific code
+  - OrganizerImageUpload got created as second component using the baseImageUpload
+- ServerActions for organizer have names but no logic yet.
+
 v 0.1.46
 
 - in updateProfileAction firstName, lastName and userName and now first send to clerk and then updated in the db fetching from clerk (source of truth)

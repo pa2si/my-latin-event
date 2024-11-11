@@ -7,35 +7,44 @@ import {
 import ChangePassword from "@/components/profile/ChangePassword";
 import EmailSettings from "@/components/profile/EmailSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import UserProfileSettings from "@/components/profile/UserProfileSettings";
+import ProfileSettings from "@/components/profile/ProfileSettings";
+import OrganizersTab from "@/components/profile/OrganizersTab";
+import HeaderSection from "@/components/ui/HeaderSection";
 
 const ProfilePage = async () => {
   const user = await getAuthUser();
-  const profile = await fetchProfile();
   const emails = await getAllEmailAddresses();
 
   return (
-    <section>
-      <h1 className="mb-8 text-2xl font-semibold capitalize">
-        Profile Settings
-      </h1>
+    <>
+      <HeaderSection
+        title="Account Settings"
+        breadcrumb={{
+          name: "Account Settings",
+          parentPath: "/",
+          parentName: "Home",
+        }}
+      />
       <div className="rounded-md border">
-        <Tabs defaultValue="Profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="Profile">Profile</TabsTrigger>
+        <Tabs defaultValue="profile" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="organizers">Organizers</TabsTrigger>
             <TabsTrigger value="email">Email</TabsTrigger>
             <TabsTrigger value="password">Password</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="Profile" className="p-8">
-            <UserProfileSettings
+          <TabsContent value="profile" className="p-8">
+            <ProfileSettings
               user={{
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName,
               }}
-              slogan={profile.slogan}
             />
+          </TabsContent>
+          <TabsContent value="organizers" className="p-8">
+            <OrganizersTab />
           </TabsContent>
           <TabsContent value="email" className="p-8">
             <EmailSettings emails={emails} />
@@ -46,7 +55,7 @@ const ProfilePage = async () => {
           </TabsContent>
         </Tabs>
       </div>
-    </section>
+    </>
   );
 };
 

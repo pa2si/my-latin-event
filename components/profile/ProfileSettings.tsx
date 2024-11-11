@@ -4,6 +4,7 @@ import FormContainer from "../form/FormContainer";
 import FormInput from "../form/FormInput";
 import { updateProfileAction } from "@/utils/actions";
 import { SubmitButton } from "../form/Buttons";
+import TabDescription from "./TabDescription";
 
 interface UserProfileSettingsProps {
   user: {
@@ -11,12 +12,12 @@ interface UserProfileSettingsProps {
     firstName?: string | null;
     lastName?: string | null;
   };
-  slogan: string | null;
 }
 
-const UserProfileSettings = ({ user, slogan }: UserProfileSettingsProps) => {
+const UserProfileSettings = ({ user }: UserProfileSettingsProps) => {
   return (
     <section>
+      <TabDescription description="Make your Profile Settings..." />
       <ProfileImageUpload />
       <FormContainer action={updateProfileAction}>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
@@ -41,13 +42,6 @@ const UserProfileSettings = ({ user, slogan }: UserProfileSettingsProps) => {
             required
           />
         </div>
-        <FormInput
-          type="text"
-          name="slogan"
-          label="Slogan"
-          defaultValue={slogan ?? ""}
-          description="A catchy tagline"
-        />
 
         <SubmitButton text="Update Profile" className="mt-8" />
       </FormContainer>

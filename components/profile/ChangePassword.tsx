@@ -31,43 +31,48 @@ const ChangePassword = () => {
   };
 
   return (
-    <Card className="mt-8">
-      <CardHeader>
-        <CardTitle>Change Password</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <FormContainer action={handleAction}>
-          <div className="space-y-4">
-            <FormInput
-              type="password"
-              name="currentPassword"
-              label="Current Password"
-              required
-              description="Enter your current password for verification"
+    <section>
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>Change Password</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <FormContainer action={handleAction}>
+            <div className="space-y-4">
+              <FormInput
+                type="password"
+                name="currentPassword"
+                label="Current Password"
+                required
+                description="Enter your current password for verification"
+              />
+
+              <div className="my-6 h-px bg-border" />
+
+              <FormInput
+                type="password"
+                name="password"
+                label="New Password"
+                required
+                description="Must be at least 8 characters"
+              />
+
+              <FormInput
+                type="password"
+                name="confirmPassword"
+                label="Confirm New Password"
+                required
+              />
+            </div>
+
+            <SubmitButton
+              text="Update Password"
+              className="mt-4 md:max-w-fit"
             />
-
-            <div className="my-6 h-px bg-border" />
-
-            <FormInput
-              type="password"
-              name="password"
-              label="New Password"
-              required
-              description="Must be at least 8 characters"
-            />
-
-            <FormInput
-              type="password"
-              name="confirmPassword"
-              label="Confirm New Password"
-              required
-            />
-          </div>
-
-          <SubmitButton text="Update Password" className="mt-4 md:max-w-fit" />
-        </FormContainer>
-      </CardContent>
-    </Card>
+          </FormContainer>
+        </CardContent>
+      </Card>
+    </section>
   );
 };
 

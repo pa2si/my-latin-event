@@ -228,7 +228,6 @@ export const updateProfileAction = async (
         firstName: updatedClerkUser.firstName ?? "",
         lastName: updatedClerkUser.lastName ?? "",
         username: updatedClerkUser.username ?? "",
-        slogan: validatedFields.slogan ?? "",
       },
     });
 
@@ -259,6 +258,76 @@ export const uploadImage = async (file: File): Promise<string> => {
     throw new Error("Failed to upload image");
   }
 };
+
+// Create a new organizer
+export async function createOrganizerAction(formData: FormData) {
+  try {
+    // Will need:
+    // - organizerName from formData
+    // - organizerImage from formData
+    // - slogan from formData
+    // - profileId from auth session
+    return { success: true, message: "Organizer created successfully" };
+  } catch (error) {
+    return { success: false, message: "Failed to create organizer" };
+  }
+}
+
+export async function updateOrganizerImage(formData: FormData) {
+  try {
+    const image = formData.get("image") as File;
+    const organizerId = formData.get("organizerId") as string;
+
+    if (!image || !organizerId) {
+      return { success: false, error: "No image or organizer ID provided" };
+    }
+
+    // Validate file size
+    if (image.size > 5 * 1024 * 1024) {
+      return { success: false, error: "Image must be less than 5MB" };
+    }
+
+    // Validate file type
+    if (!image.type.startsWith("image/")) {
+      return { success: false, error: "File must be an image" };
+    }
+
+    // Your image upload logic here
+    // const uploadedUrl = await uploadToStorage(image);
+    // await updateOrganizerImageInDb(organizerId, uploadedUrl);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Failed to update image" };
+  }
+}
+
+// Update an existing organizer
+export async function updateOrganizerAction(formData: FormData) {
+  try {
+    // Will need:
+    // - id from formData
+    // - organizerName from formData
+    // - organizerImage from formData
+    // - slogan from formData
+    // - profileId from auth session for verification
+    return { success: true, message: "Organizer updated successfully" };
+  } catch (error) {
+    return { success: false, message: "Failed to update organizer" };
+  }
+}
+
+// Delete an organizer
+export async function deleteOrganizerAction(organizerId: string) {
+  try {
+    // Will need:
+    // - organizerId
+    // - profileId from auth session for verification
+    return { success: true, message: "Organizer deleted successfully" };
+  } catch (error) {
+    return { success: false, message: "Failed to delete organizer" };
+  }
+}
 
 export const createEventAction = async (
   prevState: any,

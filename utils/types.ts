@@ -27,19 +27,17 @@ export type EventWithDate = EventCardProps & {
   eventDateAndTime: Date;
 };
 
-export type UserProfile = {
-  _count: {
-    following: number;
-    followers: number;
-  };
-  firstName: string;
-  lastName: string;
-  username: string;
-  slogan: string | null;
+// types/organizer.ts
+export type Organizer = {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  clerkId: string;
-  email: string;
-  profileImage: string;
+  organizerName: string;
+  organizerImage: string;
+  slogan?: string | null;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  profileId: string;
+};
+
+export type OrganizersTabProps = {
+  organizers: Organizer[];
 };
