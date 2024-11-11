@@ -4,8 +4,23 @@ To do:
   - add organization field and use arganization name in event slug
 - in profile module add a city section. this shall be used to display local events
 - in my event the list shall have a select all button
+- implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
+
+CURERNT STATUS:
+
+- a profile can create an event. right now there is no organizer in db.
+
+PLAN:
+
+- plan: update prisma schema: a profile can create several organizers with each a unique id. these organzers a stored in profile. when creating am event i can choose a organizer to create an event with. a profile can follow an organzier and all its events..
 
 WHATS DONE IN VERSIONS
+
+v 0.1.46
+
+- in updateProfileAction firstName, lastName and userName and now first send to clerk and then updated in the db fetching from clerk (source of truth)
+- last modification before implementing ORGANIZER model
+- added a try catch block in UserIcon as it broke the app when user was not logged in!
 
 v 0.1.45
 

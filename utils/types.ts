@@ -26,3 +26,20 @@ export type Booking = {
 export type EventWithDate = EventCardProps & {
   eventDateAndTime: Date;
 };
+
+export type UserProfile = {
+  _count: {
+    following: number;
+    followers: number;
+  };
+  firstName: string;
+  lastName: string;
+  username: string;
+  slogan: string | null;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  clerkId: string;
+  email: string;
+  profileImage: string;
+};

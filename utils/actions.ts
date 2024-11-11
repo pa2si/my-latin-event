@@ -126,28 +126,36 @@ export const fetchProfile = async () => {
 };
 
 export async function fetchProfileImage() {
-  const user = await getAuthUser();
+  try {
+    const user = await getAuthUser();
 
-  // Always get the latest from Clerk
-  const clerk = await clerkClient();
-  const clerkUser = await clerk.users.getUser(user.id);
+    if (!user) {
+      return null;
+    }
 
-  // Check if our DB is out of sync with Clerk
-  const profile = await db.profile.findUnique({
-    where: { clerkId: user.id },
-    select: { profileImage: true },
-  });
+    // Always get the latest from Clerk
+    const clerk = await clerkClient();
+    const clerkUser = await clerk.users.getUser(user.id);
 
-  // If DB has different URL than Clerk, update it
-  if (profile && profile.profileImage !== clerkUser.imageUrl) {
-    await db.profile.update({
+    // Check if our DB is out of sync with Clerk
+    const profile = await db.profile.findUnique({
       where: { clerkId: user.id },
-      data: { profileImage: clerkUser.imageUrl ?? "" },
+      select: { profileImage: true },
     });
-  }
 
-  // Return Clerk's image URL as it's always the most up-to-date
-  return clerkUser.imageUrl;
+    // If DB has different URL than Clerk, update it
+    if (profile && profile.profileImage !== clerkUser.imageUrl) {
+      await db.profile.update({
+        where: { clerkId: user.id },
+        data: { profileImage: clerkUser.imageUrl ?? "" },
+      });
+    }
+
+    // Return Clerk's image URL as it's always the most up-to-date
+    return clerkUser.imageUrl;
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function updateProfileImage(formData: FormData) {
@@ -192,34 +200,35 @@ export const updateProfileAction = async (
   try {
     const currentProfile = await db.profile.findUnique({
       where: { clerkId: user.id },
-      select: { id: true, profileImage: true },
+      select: { id: true },
     });
 
     if (!currentProfile) throw new Error("Profile not found");
 
     const rawData = Object.fromEntries(formData);
-    // console.log("Processed rawData:", rawData);
-
     const validatedFields = validateWithZodSchema(profileSchema, rawData);
 
-    // Remove newImage from validatedFields before database update
-    const { newImage, ...fieldsToUpdate } = validatedFields;
+    // First update Clerk with the new user data
+    const clerk = await clerkClient();
+    await clerk.users.updateUser(user.id, {
+      firstName: validatedFields.firstName,
+      lastName: validatedFields.lastName,
+      username: validatedFields.username,
+    });
 
-    let profileImage = currentProfile.profileImage;
+    // Get the updated user data from Clerk
+    const updatedClerkUser = await clerk.users.getUser(user.id);
 
-    const image = formData.get("image") as File;
-    if (image && image.size > 0) {
-      const validatedImage = validateWithZodSchema(imageSchema, { image });
-      profileImage = await uploadImage(validatedImage.image);
-    }
-
+    // Update database with the data from Clerk
     const updateResult = await db.profile.update({
       where: {
         clerkId: user.id,
       },
       data: {
-        ...fieldsToUpdate, // Use fieldsToUpdate instead of validatedFields
-        profileImage,
+        firstName: updatedClerkUser.firstName ?? "",
+        lastName: updatedClerkUser.lastName ?? "",
+        username: updatedClerkUser.username ?? "",
+        slogan: validatedFields.slogan ?? "",
       },
     });
 

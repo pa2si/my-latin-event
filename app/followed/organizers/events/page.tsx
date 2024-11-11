@@ -1,16 +1,11 @@
 import HeaderSection from "@/components/ui/HeaderSection";
 import EventsList from "@/components/home/EventsList";
 import EmptyList from "@/components/home/EmptyList";
-import {
-  fetchBreadcrumbInfo,
-  fetchFollowedOrganizersEvents,
-} from "@/utils/actions";
+import { fetchFollowedOrganizersEvents } from "@/utils/actions";
 import CalendarToggleBtn from "@/components/events/CalendarToggleBtn";
-import BreadCrumbs from "@/components/events/BreadCrumbs";
 
 const FollowedOrganizerEventsPage = async () => {
   const events = await fetchFollowedOrganizersEvents();
-  const breadcrumbInfo = await fetchBreadcrumbInfo();
 
   if (events.length === 0) {
     return (
