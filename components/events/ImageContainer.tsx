@@ -23,10 +23,11 @@ function ImageContainer({
         <Image
           src={mainImage}
           fill
-          sizes="100vw"
+          // sizes="100vw"
           alt={name}
           className="rounded-md object-cover transition-opacity duration-300"
           priority
+          unoptimized
         />
         {/* Hover overlay */}
         <div className="absolute inset-0 flex items-center justify-center rounded-md bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -46,10 +47,11 @@ function ImageContainer({
             <Image
               src={mainImage}
               fill
-              sizes="90vw"
+              // sizes="90vw"
               alt={name}
               className="rounded-md object-contain"
               priority
+              unoptimized
             />
           </div>
         </DialogContent>

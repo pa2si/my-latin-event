@@ -53,7 +53,9 @@ const ProfileImageUpload = ({ isCreate = false }: ProfileImageUploadProps) => {
   };
 
   if (!isLoaded) {
-    return <div className="h-32 w-32 animate-pulse rounded-full bg-gray-100" />;
+    return (
+      <div className="h-32 w-32 animate-pulse rounded-full bg-primary/30" />
+    );
   }
 
   return (

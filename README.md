@@ -7,6 +7,12 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.49
+
+- added property unoptimized to all nextjs Image components
+- installed sharp for image optimizazion before storing in edgestore.
+  - flag avatar and flyer
+
 v 0.1.48
 
 - implemented the new Schema with Organizer in prisma

@@ -3,7 +3,6 @@ import { createEventAction } from "@/utils/actions";
 import { SubmitButton } from "@/components/form/Buttons";
 import PriceInput from "@/components/form/PriceInput";
 import TextAreaInput from "@/components/form/TextAreaInput";
-import CountriesInput from "@/components/form/CountriesInput";
 import ImageInput from "@/components/form/ImageInput";
 import CounterInput from "@/components/form/CounterInput";
 import DateAndTimePickerContainer from "@/components/form/DateAndTimePickerContainer";
@@ -11,7 +10,6 @@ import { Style } from "@/utils/styles";
 import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer";
 import GenresInput from "@/components/form/GenresInput";
 import StylesInput from "@/components/form/StylesInput";
-import FormInput from "@/components/form/FormInput";
 import AddressInputContainer from "@/components/form/AddressInputContainer";
 
 const defaultGenre = "Latin";

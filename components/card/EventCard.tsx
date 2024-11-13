@@ -5,7 +5,6 @@ import EventRating from "./EventRating";
 import LikeToggleButton from "./LikeToggleButton";
 import { EventCardProps } from "@/utils/types";
 import { formatCurrency } from "@/utils/format";
-import { findCountryByName } from "@/utils/countries";
 
 const EventCard = ({ event }: { event: EventCardProps }) => {
   const { name, image, price, country, id: eventId, subtitle } = event;
@@ -20,6 +19,7 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw"
             alt={name}
             className="transform rounded-md object-cover transition-transform duration-500 group-hover:scale-110"
+            unoptimized
           />
         </div>
         <div className="flex items-center justify-between">

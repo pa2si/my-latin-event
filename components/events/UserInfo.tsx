@@ -21,6 +21,7 @@ const UserInfo = ({
         width={50}
         height={50}
         className="h-12 w-12 rounded-md object-cover"
+        unoptimized
       />
       <div>
         <p>

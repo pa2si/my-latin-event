@@ -77,7 +77,8 @@ const ImageInput: React.FC<ImageInputProps> = ({
             alt="Preview"
             className="h-full w-full rounded-lg object-cover"
             fill
-            sizes="(max-width: 768px) 30vw, 20vw"
+            // sizes="(max-width: 768px) 30vw, 20vw"
+            unoptimized
           />
           <button
             onClick={handleClearImage}

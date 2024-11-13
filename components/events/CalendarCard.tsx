@@ -93,6 +93,7 @@ const CalendarCard = ({
                       alt={event.name}
                       className="rounded-md object-contain"
                       priority
+                      unoptimized
                     />
                   </div>
                 </CarouselItem>

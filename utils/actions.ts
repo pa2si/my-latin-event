@@ -16,7 +16,7 @@ import { redirect } from "next/navigation";
 import { calculateTotals } from "./calculateTotals";
 import { formatDate } from "./format";
 import { backendClient } from "@/lib/edgestore-server";
-import { EmailData } from "@//utils/types";
+import { optimizeImage } from "@/utils/imageOptimizer";
 
 /* Helper Functions */
 export const getAuthUser = async () => {
@@ -242,10 +242,13 @@ export const updateProfileAction = async (
 
 export const uploadEventImage = async (file: File): Promise<string> => {
   try {
+    // Optimize image as flyer
+    const optimized = await optimizeImage(file, "flyer");
+
     const res = await backendClient.eventImages.upload({
       content: {
-        blob: new Blob([file], { type: file.type }), // Use file type for proper content-type
-        extension: file.name.split(".").pop() || "", // Extract file extension from filename
+        blob: optimized.blob,
+        extension: optimized.extension,
       },
     });
 
@@ -258,10 +261,13 @@ export const uploadEventImage = async (file: File): Promise<string> => {
 
 export const uploadOrganizerImage = async (file: File): Promise<string> => {
   try {
+    // Optimize image as avatar
+    const optimized = await optimizeImage(file, "avatar");
+
     const res = await backendClient.organizerImages.upload({
       content: {
-        blob: new Blob([file], { type: file.type }), // Use file type for proper content-type
-        extension: file.name.split(".").pop() || "", // Extract file extension from filename
+        blob: optimized.blob,
+        extension: optimized.extension,
       },
     });
 

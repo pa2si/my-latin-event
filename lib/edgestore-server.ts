@@ -7,11 +7,11 @@ const es = initEdgeStore.create();
 const edgeStoreRouter = es.router({
   eventImages: es.imageBucket({
     maxSize: 1024 * 1024 * 5, // 5MB
-    accept: ["image/jpeg", "image/png", "image/webp"],
+    accept: ["image/webp"],
   }),
   organizerImages: es.imageBucket({
     maxSize: 1024 * 1024 * 5, // 5MB
-    accept: ["image/jpeg", "image/png", "image/webp"],
+    accept: ["image/webp"],
   }),
 });
 
