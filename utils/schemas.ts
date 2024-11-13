@@ -2,19 +2,31 @@ import * as z from "zod";
 import { ZodSchema } from "zod";
 
 /* Profile Schema */
+export const organizerSchema = z.object({
+  organizerName: z
+    .string()
+    .trim()
+    .min(2, { message: "Organizer name must be at least 2 characters." })
+    .max(50, { message: "Organizer name cannot exceed 50 characters." }),
+  slogan: z.string().optional(),
+});
+
 export const profileSchema = z.object({
   firstName: z
     .string()
-    .min(2, { message: "first name must be at least 2 characters." }),
+    .trim()
+    .max(50, { message: "First name cannot exceed 50 characters." })
+    .optional(),
   lastName: z
     .string()
-    .min(2, { message: "last name must be at least 2 characters." }),
+    .trim()
+    .max(50, { message: "Last name cannot exceed 50 characters." })
+    .optional(),
   username: z
     .string()
-    .min(2, { message: "username must be at least 2 characters." }),
-  slogan: z.string().optional(),
-  newImage: z.string().optional(), // Flag to indicate if new image was uploaded
-  profileImage: z.string().optional(), // Current profile image URL
+    .trim()
+    .min(2, { message: "Username must be at least 2 characters." })
+    .max(30, { message: "Username cannot exceed 30 characters." }),
 });
 
 /*  validate With ZodSchema */

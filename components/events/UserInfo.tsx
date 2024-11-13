@@ -3,28 +3,28 @@ import { RiDoubleQuotesL } from "react-icons/ri";
 import { RiDoubleQuotesR } from "react-icons/ri";
 
 type UserInfoProps = {
-  profile: {
-    profileImage: string;
-    username: string;
+  organizer: {
+    organizerImage: string;
+    organizerName: string;
     slogan?: string | null;
   };
 };
 
 const UserInfo = ({
-  profile: { profileImage, username, slogan },
+  organizer: { organizerImage, organizerName, slogan },
 }: UserInfoProps) => {
   return (
     <article className="mt-4 grid grid-cols-[auto,1fr] gap-4">
       <Image
-        src={profileImage}
-        alt={username}
+        src={organizerImage}
+        alt={organizerName}
         width={50}
         height={50}
         className="h-12 w-12 rounded-md object-cover"
       />
       <div>
         <p>
-          <span className="font-bold"> {username}</span>
+          <span className="font-bold"> {organizerName}</span>
         </p>
         <div className="flex gap-1">
           {slogan && (
@@ -39,4 +39,5 @@ const UserInfo = ({
     </article>
   );
 };
+
 export default UserInfo;

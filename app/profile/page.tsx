@@ -1,19 +1,24 @@
-import {
-  fetchProfile,
-  getAllEmailAddresses,
-  getAuthUser,
-} from "@/utils/actions";
-
+import { fetchOrganizers, getAllEmailAddresses } from "@/utils/actions";
 import ChangePassword from "@/components/profile/ChangePassword";
 import EmailSettings from "@/components/profile/EmailSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProfileSettings from "@/components/profile/ProfileSettings";
+import ProfileSettings from "@/components/form/ProfileSettings";
 import OrganizersTab from "@/components/profile/OrganizersTab";
 import HeaderSection from "@/components/ui/HeaderSection";
+import { currentUser } from "@clerk/nextjs/server";
 
 const ProfilePage = async () => {
-  const user = await getAuthUser();
   const emails = await getAllEmailAddresses();
+  const organizers = await fetchOrganizers();
+  const user = await currentUser();
+
+  const profileData = user
+    ? {
+        firstName: user.firstName ?? undefined,
+        lastName: user.lastName ?? undefined,
+        username: user.username ?? undefined,
+      }
+    : null;
 
   return (
     <>
@@ -35,16 +40,10 @@ const ProfilePage = async () => {
           </TabsList>
 
           <TabsContent value="profile" className="p-8">
-            <ProfileSettings
-              user={{
-                username: user.username,
-                firstName: user.firstName,
-                lastName: user.lastName,
-              }}
-            />
+            <ProfileSettings user={profileData} />
           </TabsContent>
           <TabsContent value="organizers" className="p-8">
-            <OrganizersTab />
+            <OrganizersTab organizers={organizers} />
           </TabsContent>
           <TabsContent value="email" className="p-8">
             <EmailSettings emails={emails} />

@@ -3,30 +3,45 @@ datasource db {
   url               = env("DATABASE_URL")
   directUrl         = env("DIRECT_URL")
 }
-
 generator client {
   provider = "prisma-client-js"
 }
-
 model Profile {
   id           String     @id @default(uuid())
   clerkId      String     @unique
-  firstName    String
-  lastName     String
+  firstName    String?
+  lastName     String?
   username     String
   email        String
-  slogan       String?
   profileImage String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
-  events       Event[]
-  likes        Like[]  
+
+  // One profile can have multiple organizer profiles
+  organizers   Organizer[]
+  // User activities
+  likes        Like[]    
   reviews      Review[]
   bookings     Booking[]
-  following    Follow[] @relation("followers") 
-  followers    Follow[] @relation("following") 
+  following    Follow[]
 }
+model Organizer {
+  id             String   @id @default(uuid())
+  organizerName  String
+  organizerImage String
+  slogan         String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  // Relation to profile
+  profile        Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId      String
+  // Organizer content
+  events         Event[]
 
+  // Followers
+  followers      Follow[]
+  @@unique([profileId, organizerName]) // Prevents duplicate organizer names per profile
+}
 model Event {
   id                  String     @id @default(uuid())
   name                String
@@ -49,13 +64,14 @@ model Event {
   eventEndDateAndTime DateTime?
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
-  profile             Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId           String
-  likes               Like[]  
+
+  organizer           Organizer  @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  organizerId         String
+
+  likes               Like[]    
   reviews             Review[]
   bookings            Booking[]
 }
-
 model Like {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
@@ -67,44 +83,45 @@ model Like {
   event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId   String
 }
-
 model Review {
   id        String   @id @default(uuid())
   profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String
-  event     Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId   String
+
   rating    Int
   comment   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 model Booking {
   id            String   @id @default(uuid())
   profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId     String
-  event         Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  event         Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId       String
+
   orderTotal    Int
   totalNights   Int
   checkIn       DateTime
   checkOut      DateTime
-  paymentStatus Boolean @default(false)
+  paymentStatus Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
-
 model Follow {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
-  follower    Profile  @relation("followers", fields: [followerId], references: [id], onDelete: Cascade)
-  followerId  String
-  
-  following   Profile  @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
-  followingId String
 
-  @@unique([followerId, followingId])
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId   String
+
+  organizer   Organizer @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  organizerId String
+
+  @@unique([profileId, organizerId])
 }

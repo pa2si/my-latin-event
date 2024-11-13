@@ -13,8 +13,8 @@ type FormInputProps = {
   value?: number | string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
-
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 };
 
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
@@ -31,6 +31,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       className,
       onChange,
       onFocus,
+      disabled,
     },
     ref,
   ) => {
@@ -52,6 +53,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
           className={className}
           ref={ref}
           onFocus={onFocus}
+          disabled={disabled}
         />
       </div>
     );

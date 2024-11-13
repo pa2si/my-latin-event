@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 
 import { IconButton } from "@/components/form/Buttons";
-import DeleteMyEvent from "@/components/events/DeleteMyEvent";
+import DeleteEvent from "@/components/events/DeleteEvent";
 import { format } from "date-fns";
 
 async function MyEventsPage() {
@@ -68,7 +68,7 @@ async function MyEventsPage() {
                   <Link href={`/my-events/${event.id}/edit`}>
                     <IconButton actionType="edit" />
                   </Link>
-                  <DeleteMyEvent eventId={event.id} />
+                  <DeleteEvent eventId={event.id} />
                 </TableCell>
               </TableRow>
             );

@@ -15,6 +15,7 @@ type SubmitButtonProps = {
   text?: string;
   size?: btnSize;
   disabled?: boolean;
+  closeDialog?: boolean;
 };
 
 export function SubmitButton({
@@ -22,14 +23,35 @@ export function SubmitButton({
   text = "submit",
   size = "lg",
   disabled = false,
+  closeDialog = false,
 }: SubmitButtonProps) {
   const { pending } = useFormStatus();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!closeDialog) return;
+
+    const form = e.currentTarget.form;
+    if (!form?.checkValidity()) return;
+
+    // Let the form submission complete before closing
+    setTimeout(() => {
+      const formState = (form as any)._formState;
+      if (formState && !formState.error) {
+        const closeButton = document.querySelector("[data-dialog-close]");
+        if (closeButton instanceof HTMLElement) {
+          closeButton.click();
+        }
+      }
+    }, 300);
+  };
+
   return (
     <Button
       type="submit"
       disabled={pending || disabled}
       className={`capitalize ${className}`}
       size={size}
+      onClick={handleClick}
     >
       {pending ? (
         <>

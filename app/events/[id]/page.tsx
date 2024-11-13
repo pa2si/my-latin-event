@@ -18,7 +18,7 @@ import dynamic from "next/dynamic";
 import SubmitReview from "@/components/reviews/SubmitReview";
 import EventReviews from "@/components/reviews/EventReviews";
 import { auth } from "@clerk/nextjs/server";
-import DeleteMyEvent from "@/components/events/DeleteMyEvent";
+import DeleteEvent from "@/components/events/DeleteEvent";
 import EditMyEvent from "@/components/events/EditMyEvent";
 
 import CalendarCard from "@/components/events/CalendarCard";
@@ -42,7 +42,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const event = await fetchEventDetails(params.id);
   if (!event) redirect("/");
 
-  const { canEdit } = await checkEventAccess(event.profile.clerkId);
+  const { canEdit } = await checkEventAccess(event.organizer.profile.clerkId);
 
   const { floors, bars, outdoorAreas, eventDateAndTime, eventEndDateAndTime } =
     event;
@@ -75,7 +75,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             {canEdit && (
               <>
                 <EditMyEvent eventId={event.id} />
-                <DeleteMyEvent eventId={event.id} />
+                <DeleteEvent eventId={event.id} />
               </>
             )}
           </div>
@@ -135,10 +135,10 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               outdoorAreas={outdoorAreas}
             />
             <OrganizerCard
-              profileId={event.profile.id}
-              username={event.profile.username}
-              profileImage={event.profile.profileImage}
-              slogan={event.profile.slogan || undefined}
+              organizerId={event.organizer.id}
+              organizerName={event.organizer.organizerName}
+              organizerImage={event.organizer.organizerImage}
+              slogan={event.organizer.slogan || undefined}
             />
             <LikesCard likes={event._count.likes} />
           </div>
@@ -151,10 +151,10 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               </div>
               <div className="space-y-6">
                 <OrganizerCard
-                  profileId={event.profile.id}
-                  username={event.profile.username}
-                  profileImage={event.profile.profileImage}
-                  slogan={event.profile.slogan || undefined}
+                  organizerId={event.organizer.id}
+                  organizerName={event.organizer.organizerName}
+                  organizerImage={event.organizer.organizerImage}
+                  slogan={event.organizer.slogan || undefined}
                 />
                 <VenueFeaturesCard
                   floors={floors}
@@ -181,10 +181,10 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               </div>
               <div className="space-y-6">
                 <OrganizerCard
-                  profileId={event.profile.id}
-                  username={event.profile.username}
-                  profileImage={event.profile.profileImage}
-                  slogan={event.profile.slogan || undefined}
+                  organizerId={event.organizer.id}
+                  organizerName={event.organizer.organizerName}
+                  organizerImage={event.organizer.organizerImage}
+                  slogan={event.organizer.slogan || undefined}
                 />
                 <LikesCard likes={event._count.likes} />
               </div>
@@ -197,10 +197,10 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           <div className="sticky top-8 space-y-6">
             <CalendarCard selectedDate={selectedDate} />
             <OrganizerCard
-              profileId={event.profile.id}
-              username={event.profile.username}
-              profileImage={event.profile.profileImage}
-              slogan={event.profile.slogan || undefined}
+              organizerId={event.organizer.id}
+              organizerName={event.organizer.organizerName}
+              organizerImage={event.organizer.organizerImage}
+              slogan={event.organizer.slogan || undefined}
             />
             <VenueFeaturesCard
               floors={floors}

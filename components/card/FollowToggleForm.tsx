@@ -6,15 +6,15 @@ import { toggleFollowAction } from "@/utils/actions";
 import { FollowSubmitButton } from "../form/Buttons";
 
 function FollowToggleForm({
-  profileId,
+  organizerId,
   followId,
 }: {
-  profileId: string;
+  organizerId: string;
   followId: string | null;
 }) {
   const pathname = usePathname();
   const toggleAction = toggleFollowAction.bind(null, {
-    profileId,
+    organizerId,
     followId,
     pathname,
   });

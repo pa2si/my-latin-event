@@ -4,19 +4,19 @@ import FollowToggleButton from "@/components/card/FollowToggleButton";
 import { checkFollowAccess } from "@/utils/actions";
 
 interface OrganizerCardProps {
-  profileId: string;
-  username: string;
-  profileImage: string;
+  organizerId: string;
+  organizerName: string;
+  organizerImage: string;
   slogan?: string;
 }
 
 const OrganizerCard = async ({
-  profileId,
-  username,
-  profileImage,
+  organizerId,
+  organizerName,
+  organizerImage,
   slogan,
 }: OrganizerCardProps) => {
-  const { canFollow } = await checkFollowAccess(profileId);
+  const { canFollow } = await checkFollowAccess(organizerId);
 
   return (
     <Card>
@@ -26,13 +26,13 @@ const OrganizerCard = async ({
             Event Organizer
           </h3>
           <div className="-mt-2">
-            {canFollow && <FollowToggleButton profileId={profileId} />}
+            {canFollow && <FollowToggleButton organizerId={organizerId} />}
           </div>
         </div>
         <UserInfo
-          profile={{
-            username,
-            profileImage,
+          organizer={{
+            organizerName,
+            organizerImage,
             slogan,
           }}
         />

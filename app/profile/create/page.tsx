@@ -4,26 +4,37 @@ import FormContainer from "@/components/form/FormContainer";
 import { createProfileAction } from "@/utils/actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import HeaderSection from "@/components/ui/HeaderSection";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Suspense } from "react";
+import { ProfileSkeleton } from "@/components/profile/LoadingProfile";
+import ProfileSettings from "@/components/form/ProfileSettings";
+import OrganizersTab from "@/components/profile/OrganizersTab";
 
 const CreateProfile = async () => {
   const user = await currentUser();
+
   if (user?.privateMetadata?.hasProfile) redirect("/");
+
+  const profileData = user
+    ? {
+        firstName: user.firstName ?? undefined,
+        lastName: user.lastName ?? undefined,
+        username: user.username ?? undefined,
+      }
+    : null;
 
   return (
     <section>
-      <h1 className="mb-8 text-2xl font-semibold capitalize">new user</h1>
+      <HeaderSection title="Create your Profile" />
+
       <div className="rounded-md border p-8">
-        <FormContainer action={createProfileAction}>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <FormInput type="text" name="firstName" label="First Name" />
-            <FormInput type="text" name="lastName" label="Last Name" />
-            <FormInput type="text" name="username" label="User Name" />
-            <FormInput type="text" name="slogan" label="Slogan (optional)" />
-          </div>
-          <SubmitButton text="Create Profile" className="mt-8" />
-        </FormContainer>
+        <Suspense fallback={<ProfileSkeleton />}>
+          <ProfileSettings user={profileData} isCreate={true} />
+        </Suspense>
       </div>
     </section>
   );
 };
+
 export default CreateProfile;

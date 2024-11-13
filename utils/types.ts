@@ -41,3 +41,37 @@ export type Organizer = {
 export type OrganizersTabProps = {
   organizers: Organizer[];
 };
+
+// types.ts or can be in the same file
+export type EmailData = {
+  id: string;
+  emailAddress: string;
+  verification: {
+    status: string | undefined;
+  } | null;
+  isPrimary: boolean;
+};
+
+// You might also want these related types
+export type EmailSettingsProps = {
+  emails: EmailData[];
+};
+
+export type EmailListProps = {
+  emails: EmailData[];
+  onResendCode: (emailId: string) => void;
+  onDelete: (
+    prevState: any,
+    formData: FormData,
+  ) => Promise<{ message: string }>;
+  setPrimaryAction: (
+    prevState: any,
+    formData: FormData,
+  ) => Promise<{ message: string }>;
+};
+
+export type EmailListItemProps = {
+  email: EmailData;
+  onResendCode: (emailId: string) => void;
+  onDelete: (emailId: string) => void;
+};

@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import { Edit2, PlusCircle } from "lucide-react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,69 +9,55 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Organizer } from "@/utils/types";
+import { Edit2, PlusCircle } from "lucide-react";
 import OrganizerForm from "@/components/form/OrganizerForm";
+import { Organizer } from "@/utils/types";
 
 type OrganizerDialogProps = {
-  trigger: React.ReactNode;
-  title: string;
-  organizer?: Organizer | null;
+  organizer?: Organizer;
   isEdit?: boolean;
 };
 
-const OrganizerDialog: React.FC<OrganizerDialogProps> = ({
-  trigger,
-  title,
-  organizer = null,
+export function OrganizerDialog({
+  organizer,
   isEdit = false,
-}) => {
-  const [open, setOpen] = useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+}: OrganizerDialogProps) {
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogTrigger asChild>
+        {isEdit ? (
+          <Button variant="ghost" size="sm">
+            <Edit2 className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button className="w-full sm:w-auto">
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Add New Organizer
+          </Button>
+        )}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>
+            {isEdit ? "Edit Organizer" : "Add New Organizer"}
+          </DialogTitle>
         </DialogHeader>
         <OrganizerForm
           organizer={organizer}
           isEdit={isEdit}
-          onClose={handleClose}
+          onSuccess={() => setOpen(false)}
         />
       </DialogContent>
     </Dialog>
   );
-};
+}
 
-// Pre-configured dialogs
-export const AddOrganizerDialog = () => (
-  <OrganizerDialog
-    trigger={
-      <Button className="w-full sm:w-auto">
-        <PlusCircle className="mr-2 h-4 w-4" />
-        Add New Organizer
-      </Button>
-    }
-    title="Add New Organizer"
-  />
-);
+export function AddOrganizerDialog() {
+  return <OrganizerDialog />;
+}
 
-export const EditOrganizerDialog: React.FC<{ organizer: Organizer }> = ({
-  organizer,
-}) => (
-  <OrganizerDialog
-    trigger={
-      <Button variant="ghost" size="sm">
-        <Edit2 className="h-4 w-4" />
-      </Button>
-    }
-    title="Edit Organizer"
-    organizer={organizer}
-    isEdit
-  />
-);
+export function EditOrganizerDialog({ organizer }: { organizer: Organizer }) {
+  return <OrganizerDialog organizer={organizer} isEdit />;
+}

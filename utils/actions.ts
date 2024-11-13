@@ -7,6 +7,7 @@ import {
   eventSchema,
   validateWithZodSchema,
   passwordSchema,
+  organizerSchema,
 } from "./schemas";
 import db from "./db";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
@@ -15,6 +16,7 @@ import { redirect } from "next/navigation";
 import { calculateTotals } from "./calculateTotals";
 import { formatDate } from "./format";
 import { backendClient } from "@/lib/edgestore-server";
+import { EmailData } from "@//utils/types";
 
 /* Helper Functions */
 export const getAuthUser = async () => {
@@ -49,11 +51,12 @@ export const getCurrentUserProfileId = async () => {
   return profile.id;
 };
 
-export const checkEventAccess = async (eventProfileClerkId: string) => {
+export const checkEventAccess = async (organizerClerkId: string) => {
   const { userId } = auth();
+
   return {
     canEdit:
-      eventProfileClerkId === userId || userId === process.env.ADMIN_USER_ID,
+      organizerClerkId === userId || userId === process.env.ADMIN_USER_ID,
   };
 };
 
@@ -63,6 +66,23 @@ export const checkUserRole = async () => {
     isAdminUser: userId === process.env.ADMIN_USER_ID,
     isAuthenticated: !!userId,
   };
+};
+
+// Helper function to check if user owns an organizer
+export const verifyOrganizerOwnership = async (organizerId: string) => {
+  const user = await getAuthUser();
+
+  const organizer = await db.organizer.findFirst({
+    where: {
+      id: organizerId,
+      profile: {
+        clerkId: user.id,
+      },
+    },
+  });
+
+  if (!organizer) throw new Error("Organizer not found or access denied");
+  return organizer;
 };
 
 /* Actions */
@@ -77,8 +97,11 @@ export const createProfileAction = async (
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZodSchema(profileSchema, rawData);
 
+    // Get clerk client instance
+    const clerk = clerkClient();
+
     // Update Clerk user first with core user data
-    await clerkClient.users.updateUser(user.id, {
+    await clerk.users.updateUser(user.id, {
       firstName: validatedFields.firstName,
       lastName: validatedFields.lastName,
       username: validatedFields.username,
@@ -92,7 +115,8 @@ export const createProfileAction = async (
         ...validatedFields,
       },
     });
-    await clerkClient.users.updateUserMetadata(user.id, {
+
+    await clerk.users.updateUserMetadata(user.id, {
       privateMetadata: {
         hasProfile: true,
       },
@@ -101,28 +125,6 @@ export const createProfileAction = async (
     return renderError(error);
   }
   redirect("/");
-};
-
-export const fetchProfile = async () => {
-  const user = await getAuthUser();
-
-  const profile = await db.profile.findUnique({
-    where: {
-      clerkId: user.id,
-    },
-    // Make sure to return id if you need it for relationships
-    include: {
-      // Add any related data you need
-      _count: {
-        select: {
-          followers: true,
-          following: true,
-        },
-      },
-    },
-  });
-  if (!profile) return redirect("/profile/create");
-  return profile;
 };
 
 export async function fetchProfileImage() {
@@ -233,17 +235,12 @@ export const updateProfileAction = async (
 
     revalidatePath("/profile");
     return { message: "Profile updated successfully" };
-  } catch (error: any) {
-    console.log("Final Error:", {
-      name: error?.name,
-      message: error?.message,
-      stack: error?.stack,
-    });
+  } catch (error) {
     return renderError(error);
   }
 };
 
-export const uploadImage = async (file: File): Promise<string> => {
+export const uploadEventImage = async (file: File): Promise<string> => {
   try {
     const res = await backendClient.eventImages.upload({
       content: {
@@ -259,82 +256,197 @@ export const uploadImage = async (file: File): Promise<string> => {
   }
 };
 
-// Create a new organizer
-export async function createOrganizerAction(formData: FormData) {
+export const uploadOrganizerImage = async (file: File): Promise<string> => {
   try {
-    // Will need:
-    // - organizerName from formData
-    // - organizerImage from formData
-    // - slogan from formData
-    // - profileId from auth session
-    return { success: true, message: "Organizer created successfully" };
+    const res = await backendClient.organizerImages.upload({
+      content: {
+        blob: new Blob([file], { type: file.type }), // Use file type for proper content-type
+        extension: file.name.split(".").pop() || "", // Extract file extension from filename
+      },
+    });
+
+    return res.url;
   } catch (error) {
-    return { success: false, message: "Failed to create organizer" };
+    console.error("Error uploading image:", error);
+    throw new Error("Failed to upload image");
   }
-}
+};
 
-export async function updateOrganizerImage(formData: FormData) {
+// Fetch all organizers for the current user
+export const fetchOrganizers = async () => {
+  const user = await getAuthUser();
+
+  const profile = await db.profile.findUnique({
+    where: { clerkId: user.id },
+    include: {
+      organizers: {
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  });
+
+  if (!profile) return redirect("/profile/create");
+  return profile.organizers;
+};
+
+// Create new organizer
+export const createOrganizerAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+
   try {
-    const image = formData.get("image") as File;
-    const organizerId = formData.get("organizerId") as string;
+    const currentProfile = await db.profile.findUnique({
+      where: { clerkId: user.id },
+      select: { id: true },
+    });
 
-    if (!image || !organizerId) {
-      return { success: false, error: "No image or organizer ID provided" };
+    if (!currentProfile) throw new Error("Profile not found");
+
+    const rawData = Object.fromEntries(formData);
+    // Handle image upload
+    console.log("thats the raw data", rawData);
+    const file = formData.get("image") as File;
+
+    const validatedFields = validateWithZodSchema(organizerSchema, rawData);
+    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+    const fullPath = await uploadOrganizerImage(validatedFile.image);
+
+    // Create the organizer
+    await db.organizer.create({
+      data: {
+        ...validatedFields,
+        organizerImage: fullPath,
+        profileId: currentProfile.id,
+      },
+    });
+
+    revalidatePath("/profile");
+    return { message: "Organizer created successfully" };
+  } catch (error: any) {
+    return renderError(error);
+  }
+};
+
+// Update existing organizer
+export const updateOrganizerAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+
+  try {
+    const organizerId = formData.get("id") as string;
+    if (!organizerId) throw new Error("Organizer ID is required");
+
+    // Verify ownership
+    const organizer = await db.organizer.findFirst({
+      where: {
+        id: organizerId,
+        profile: {
+          clerkId: user.id,
+        },
+      },
+    });
+
+    if (!organizer) throw new Error("Organizer not found or access denied");
+
+    const rawData = Object.fromEntries(formData);
+    const validatedFields = validateWithZodSchema(organizerSchema, rawData);
+
+    // Only handle image if a new one was uploaded
+    const file = formData.get("image") as File;
+    let imageUrl = organizer.organizerImage; // Keep existing image by default
+
+    if (file?.size > 0) {
+      const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+      imageUrl = await uploadOrganizerImage(validatedFile.image);
     }
 
-    // Validate file size
-    if (image.size > 5 * 1024 * 1024) {
-      return { success: false, error: "Image must be less than 5MB" };
+    // Update the organizer
+    await db.organizer.update({
+      where: { id: organizerId },
+      data: {
+        ...validatedFields,
+        organizerImage: imageUrl, // Use new image if uploaded, otherwise keep existing
+      },
+    });
+
+    revalidatePath("/profile");
+    return { message: "Organizer updated successfully" };
+  } catch (error: any) {
+    return renderError(error);
+  }
+};
+
+// Delete organizer
+export const deleteOrganizerAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+
+  try {
+    const organizerId = formData.get("id") as string;
+    if (!organizerId) throw new Error("Organizer ID is required");
+
+    // Verify ownership
+    const organizer = await db.organizer.findFirst({
+      where: {
+        id: organizerId,
+        profile: {
+          clerkId: user.id,
+        },
+      },
+    });
+
+    if (!organizer) throw new Error("Organizer not found or access denied");
+
+    // Delete image from EdgeStore
+    if (organizer.organizerImage) {
+      try {
+        await backendClient.organizerImages.deleteFile({
+          url: organizer.organizerImage,
+        });
+      } catch (error) {
+        console.error("Failed to delete image from EdgeStore:", error);
+      }
     }
 
-    // Validate file type
-    if (!image.type.startsWith("image/")) {
-      return { success: false, error: "File must be an image" };
-    }
+    // Delete the organizer
+    await db.organizer.delete({
+      where: { id: organizerId },
+    });
 
-    // Your image upload logic here
-    // const uploadedUrl = await uploadToStorage(image);
-    // await updateOrganizerImageInDb(organizerId, uploadedUrl);
-
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: "Failed to update image" };
+    revalidatePath("/profile");
+    return { message: "Organizer deleted successfully" };
+  } catch (error: any) {
+    return renderError(error);
   }
-}
-
-// Update an existing organizer
-export async function updateOrganizerAction(formData: FormData) {
-  try {
-    // Will need:
-    // - id from formData
-    // - organizerName from formData
-    // - organizerImage from formData
-    // - slogan from formData
-    // - profileId from auth session for verification
-    return { success: true, message: "Organizer updated successfully" };
-  } catch (error) {
-    return { success: false, message: "Failed to update organizer" };
-  }
-}
-
-// Delete an organizer
-export async function deleteOrganizerAction(organizerId: string) {
-  try {
-    // Will need:
-    // - organizerId
-    // - profileId from auth session for verification
-    return { success: true, message: "Organizer deleted successfully" };
-  } catch (error) {
-    return { success: false, message: "Failed to delete organizer" };
-  }
-}
+};
 
 export const createEventAction = async (
   prevState: any,
   formData: FormData,
 ): Promise<{ message: string }> => {
   try {
-    const profileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
+    const organizerId = formData.get("organizerId") as string;
+
+    if (!organizerId) throw new Error("Organizer ID is required");
+
+    // Verify organizer ownership
+    const organizer = await db.organizer.findFirst({
+      where: {
+        id: organizerId,
+        profile: {
+          clerkId: user.id,
+        },
+      },
+    });
+
+    if (!organizer) throw new Error("Organizer not found or access denied");
 
     const rawData = Object.fromEntries(formData);
     console.log("thats the raw data", rawData);
@@ -342,7 +454,7 @@ export const createEventAction = async (
 
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
-    const fullPath = await uploadImage(validatedFile.image);
+    const fullPath = await uploadEventImage(validatedFile.image);
     const eventDateAndTime = validatedFields.eventDateAndTime as Date;
     const eventEndDateAndTime =
       validatedFields.eventEndDateAndTime as Date | null;
@@ -351,7 +463,7 @@ export const createEventAction = async (
       data: {
         ...validatedFields,
         image: fullPath,
-        profileId, // Use the profile id
+        organizerId,
         eventDateAndTime,
         eventEndDateAndTime,
       },
@@ -359,6 +471,7 @@ export const createEventAction = async (
   } catch (error) {
     return renderError(error);
   }
+
   redirect("/");
 };
 
@@ -494,14 +607,17 @@ export const fetchEventDetails = async (id: string) => {
       outdoorAreas: true,
       eventDateAndTime: true,
       eventEndDateAndTime: true,
-      profile: {
+      organizer: {
         select: {
           id: true,
-          firstName: true,
-          profileImage: true,
+          organizerName: true,
+          organizerImage: true,
           slogan: true,
-          clerkId: true, // Only needed for ownership check
-          username: true,
+          profile: {
+            select: {
+              clerkId: true, // Only needed for ownership check
+            },
+          },
         },
       },
       _count: {
@@ -727,11 +843,15 @@ export const deleteBookingAction = async (prevState: { bookingId: string }) => {
 
 export const fetchMyEvents = async () => {
   try {
-    const currentUserProfileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
 
     const myEvents = await db.event.findMany({
       where: {
-        profileId: currentUserProfileId,
+        organizer: {
+          profile: {
+            clerkId: user.id,
+          },
+        },
       },
       select: {
         id: true,
@@ -739,6 +859,11 @@ export const fetchMyEvents = async () => {
         location: true,
         price: true,
         eventDateAndTime: true,
+        organizer: {
+          select: {
+            organizerName: true,
+          },
+        },
         _count: {
           select: {
             likes: true,
@@ -757,18 +882,22 @@ export const fetchMyEvents = async () => {
   }
 };
 
-export const deleteMyEventAction = async (prevState: { eventId: string }) => {
+export const deleteEventAction = async (prevState: { eventId: string }) => {
   const { eventId } = prevState;
   const user = await getAuthUser();
 
   try {
-    const profileId = await getCurrentUserProfileId();
+    // Find event with organizer and profile info
     const event = await db.event.findUnique({
       where: { id: eventId },
       include: {
-        profile: {
+        organizer: {
           select: {
-            clerkId: true,
+            profile: {
+              select: {
+                clerkId: true,
+              },
+            },
           },
         },
       },
@@ -778,11 +907,13 @@ export const deleteMyEventAction = async (prevState: { eventId: string }) => {
       return { message: "Event not found" };
     }
 
+    // Check authorization
     const isAdminUser = user.id === process.env.ADMIN_USER_ID;
-    if (event.profile.clerkId !== user.id && !isAdminUser) {
+    if (event.organizer.profile.clerkId !== user.id && !isAdminUser) {
       return { message: "Not authorized to delete this event" };
     }
-    //delete image
+
+    // Delete image
     if (event.image) {
       try {
         await backendClient.eventImages.deleteFile({
@@ -793,6 +924,7 @@ export const deleteMyEventAction = async (prevState: { eventId: string }) => {
       }
     }
 
+    // Delete event
     await db.event.delete({
       where: { id: eventId },
     });
@@ -806,11 +938,15 @@ export const deleteMyEventAction = async (prevState: { eventId: string }) => {
 
 export const fetchMyLocationDetails = async (eventId: string) => {
   try {
-    const profileId = await getCurrentUserProfileId();
-    return db.event.findUnique({
+    const user = await getAuthUser();
+    return db.event.findFirst({
       where: {
         id: eventId,
-        profileId,
+        organizer: {
+          profile: {
+            clerkId: user.id,
+          },
+        },
       },
     });
   } catch (error) {
@@ -826,7 +962,7 @@ export const updateEventAction = async (
   const eventId = formData.get("id") as string;
 
   try {
-    const profileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
 
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZodSchema(eventSchema, rawData);
@@ -836,9 +972,20 @@ export const updateEventAction = async (
     const eventEndDateAndTime =
       validatedFields.eventEndDateAndTime as Date | null;
 
-    const existingEvent = await db.event.findUnique({
-      where: { id: eventId, profileId },
-      select: { image: true },
+    // Find event and verify ownership through organizer relationship
+    const existingEvent = await db.event.findFirst({
+      where: {
+        id: eventId,
+        organizer: {
+          profile: {
+            clerkId: user.id,
+          },
+        },
+      },
+      select: {
+        image: true,
+        organizerId: true,
+      },
     });
 
     if (!existingEvent) {
@@ -847,33 +994,24 @@ export const updateEventAction = async (
       );
     }
 
-    let imagePath = existingEvent.image;
-    //check if there is a new image
-    if (formData.get("newImage") === "true") {
-      const file = formData.get("image") as File;
-      if (file && file.size > 0) {
-        const validatedFile = validateWithZodSchema(imageSchema, {
-          image: file,
-        });
-        //delete old image
-        if (existingEvent.image) {
-          await backendClient.eventImages.deleteFile({
-            url: existingEvent.image,
-          });
-        }
-        //
-        imagePath = await uploadImage(validatedFile.image);
-      }
+    // Only handle image if a new one was uploaded
+    const file = formData.get("image") as File;
+    let imageUrl = existingEvent.image; // Keep existing image by default
+
+    if (file?.size > 0) {
+      const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+      imageUrl = await uploadEventImage(validatedFile.image);
     }
-    //update event
+
+    // Update event
     await db.event.update({
       where: {
         id: eventId,
-        profileId,
+        organizerId: existingEvent.organizerId,
       },
       data: {
         ...validatedFields,
-        image: imagePath,
+        image: imageUrl,
         eventDateAndTime,
         eventEndDateAndTime,
       },
@@ -997,14 +1135,16 @@ export const fetchReservationStats = async () => {
   };
 };
 
-export async function fetchFollowId({ profileId }: { profileId: string }) {
+export async function fetchFollowId({ organizerId }: { organizerId: string }) {
   try {
-    const myProfileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
 
     const follow = await db.follow.findFirst({
       where: {
-        followerId: myProfileId, // I am the follower
-        followingId: profileId, // Looking for the profile I'm following
+        profile: {
+          clerkId: user.id, // I am the follower
+        },
+        organizerId: organizerId, // Looking for the organizer I'm following
       },
       select: {
         id: true,
@@ -1018,18 +1158,27 @@ export async function fetchFollowId({ profileId }: { profileId: string }) {
 }
 
 export async function toggleFollowAction({
-  profileId, // This is the profile I want to follow
+  organizerId, // This is the organizer I want to follow
   followId,
   pathname,
 }: {
-  profileId: string;
+  organizerId: string;
   followId: string | null;
   pathname: string;
 }) {
   try {
-    const myProfileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
+
+    // Get current user's profile
+    const profile = await db.profile.findUnique({
+      where: { clerkId: user.id },
+      select: { id: true },
+    });
+
+    if (!profile) throw new Error("Profile not found");
 
     if (followId) {
+      // Unfollow
       await db.follow.delete({
         where: {
           id: followId,
@@ -1039,10 +1188,11 @@ export async function toggleFollowAction({
       return { message: "Unfollowed successfully" };
     }
 
+    // Follow
     await db.follow.create({
       data: {
-        followerId: myProfileId,
-        followingId: profileId,
+        profileId: profile.id, // Current user's profile
+        organizerId: organizerId, // Organizer being followed
       },
     });
     revalidatePath(pathname);
@@ -1053,11 +1203,22 @@ export async function toggleFollowAction({
   }
 }
 
-export const checkFollowAccess = async (profileId: string) => {
+export const checkFollowAccess = async (organizerId: string) => {
   try {
-    const currentUserProfileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
+
+    // Check if this organizer belongs to the current user
+    const organizer = await db.organizer.findFirst({
+      where: {
+        id: organizerId,
+        profile: {
+          clerkId: user.id,
+        },
+      },
+    });
+
     return {
-      canFollow: currentUserProfileId !== profileId,
+      canFollow: !organizer, // Can follow if it's not user's own organizer
     };
   } catch (error) {
     return {
@@ -1068,7 +1229,7 @@ export const checkFollowAccess = async (profileId: string) => {
 
 export const fetchFollowedOrganizersEvents = async () => {
   try {
-    const currentUserProfileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
 
     // Get current date at start of day
     const today = new Date();
@@ -1078,10 +1239,12 @@ export const fetchFollowedOrganizersEvents = async () => {
       where: {
         AND: [
           {
-            profile: {
+            organizer: {
               followers: {
                 some: {
-                  followerId: currentUserProfileId,
+                  profile: {
+                    clerkId: user.id,
+                  },
                 },
               },
             },
@@ -1102,11 +1265,11 @@ export const fetchFollowedOrganizersEvents = async () => {
         image: true,
         price: true,
         eventDateAndTime: true,
-        profile: {
+        organizer: {
           select: {
             id: true,
-            firstName: true,
-            profileImage: true,
+            organizerName: true,
+            organizerImage: true,
           },
         },
       },
@@ -1121,7 +1284,6 @@ export const fetchFollowedOrganizersEvents = async () => {
     return [];
   }
 };
-
 export const fetchBreadcrumbInfo = async () => {
   try {
     return {
@@ -1135,25 +1297,83 @@ export const fetchBreadcrumbInfo = async () => {
   }
 };
 
-export async function changePasswordAction(prevState: any, formData: FormData) {
+// export async function changePasswordAction(prevState: any, formData: FormData) {
+//   try {
+//     // Convert FormData to an object
+//     const formValues = Object.fromEntries(formData.entries());
+//     const { currentPassword, password, confirmPassword } = formValues;
+
+//     // Validate the input
+//     const validatedFields = passwordSchema.safeParse({
+//       currentPassword,
+//       password,
+//       confirmPassword,
+//     });
+
+//     if (!validatedFields.success) {
+//       return {
+//         message: validatedFields.error.errors[0].message,
+//       };
+//     }
+
+//     const user = await getAuthUser();
+//     const { sessionId } = await auth();
+
+//     if (!sessionId) {
+//       return {
+//         message: "No active session found",
+//       };
+//     }
+
+//     try {
+//       await (
+//         await clerkClient()
+//       ).users.verifyPassword({
+//         userId: user.id,
+//         password: currentPassword as string,
+//       });
+//     } catch (error) {
+//       return {
+//         message: "Current password is incorrect",
+//       };
+//     }
+
+//     await (
+//       await clerkClient()
+//     ).users.updateUser(user.id, {
+//       password: password as string,
+//       signOutOfOtherSessions: true,
+//     });
+
+//     await (await clerkClient()).sessions.revokeSession(sessionId);
+
+//     revalidatePath("/profile");
+
+//     return {
+//       message: "Password updated successfully! Redirecting...",
+//     };
+//   } catch (error) {
+//     return {
+//       message:
+//         error instanceof Error ? error.message : "Failed to update password",
+//     };
+//   }
+// }
+
+// app/actions/password.ts
+
+// actions/password.ts
+
+type FormState = {
+  message: string;
+  success?: boolean;
+};
+
+export async function changePasswordAction(
+  prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   try {
-    // Convert FormData to an object
-    const formValues = Object.fromEntries(formData.entries());
-    const { currentPassword, password, confirmPassword } = formValues;
-
-    // Validate the input
-    const validatedFields = passwordSchema.safeParse({
-      currentPassword,
-      password,
-      confirmPassword,
-    });
-
-    if (!validatedFields.success) {
-      return {
-        message: validatedFields.error.errors[0].message,
-      };
-    }
-
     const user = await getAuthUser();
     const { sessionId } = await auth();
 
@@ -1163,12 +1383,25 @@ export async function changePasswordAction(prevState: any, formData: FormData) {
       };
     }
 
+    const formValues = {
+      currentPassword: formData.get("currentPassword") as string,
+      password: formData.get("password") as string,
+      confirmPassword: formData.get("confirmPassword") as string,
+    };
+
+    const validationResult = passwordSchema.safeParse(formValues);
+    if (!validationResult.success) {
+      return {
+        message: validationResult.error.errors[0].message,
+      };
+    }
+
     try {
       await (
         await clerkClient()
       ).users.verifyPassword({
         userId: user.id,
-        password: currentPassword as string,
+        password: formValues.currentPassword,
       });
     } catch (error) {
       return {
@@ -1176,25 +1409,25 @@ export async function changePasswordAction(prevState: any, formData: FormData) {
       };
     }
 
+    // First revoke the session
+    await (await clerkClient()).sessions.revokeSession(sessionId);
+
+    // Then update the password
     await (
       await clerkClient()
     ).users.updateUser(user.id, {
-      password: password as string,
-      signOutOfOtherSessions: true,
+      password: formValues.password,
     });
 
-    await (await clerkClient()).sessions.revokeSession(sessionId);
-
-    revalidatePath("/profile");
+    // Revalidate paths
+    revalidatePath("/", "layout");
 
     return {
-      message: "Password updated successfully! Redirecting...",
+      message: "Password updated successfully! Redirecting to homepage...",
+      success: true,
     };
   } catch (error) {
-    return {
-      message:
-        error instanceof Error ? error.message : "Failed to update password",
-    };
+    return renderError(error);
   }
 }
 
@@ -1282,15 +1515,13 @@ export const setPrimaryEmailAction = async (
       throw new Error("No email address selected");
     }
 
-    const clerk = await clerkClient();
-
-    // First update the primary email in Clerk
-    await clerk.users.updateUser(user.id, {
+    // Update the primary email in Clerk
+    await clerkClient.users.updateUser(user.id, {
       primaryEmailAddressID: selectedEmailId,
     });
 
-    // Get the updated user data from Clerk to ensure we have the latest state
-    const updatedUser = await clerk.users.getUser(user.id);
+    // Get the updated user data to ensure we have the latest state
+    const updatedUser = await clerkClient.users.getUser(user.id);
 
     // Find the new primary email from Clerk's data
     const primaryEmail = updatedUser.emailAddresses.find(
@@ -1309,22 +1540,12 @@ export const setPrimaryEmailAction = async (
       },
     });
 
-    revalidatePath("/profile");
+    revalidatePath("/settings/emails");
     return {
       message: "Primary email updated successfully",
     };
-  } catch (error: any) {
-    console.error("Set primary email error:", {
-      name: error?.name,
-      message: error?.message,
-      stack: error?.stack,
-    });
-    return {
-      message:
-        error instanceof Error
-          ? error.message
-          : "Failed to update primary email",
-    };
+  } catch (error) {
+    return renderError(error);
   }
 };
 
@@ -1341,11 +1562,8 @@ export const deleteEmailAction = async (
     return {
       message: "Email address deleted successfully",
     };
-  } catch (error: any) {
-    return {
-      message:
-        error instanceof Error ? error.message : "Failed to delete email",
-    };
+  } catch (error) {
+    return renderError(error);
   }
 };
 

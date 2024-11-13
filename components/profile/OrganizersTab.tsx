@@ -12,7 +12,7 @@ import { AddOrganizerDialog } from "./OrganizerDialog";
 import { MessageCircle } from "lucide-react";
 
 type OrganizersTabProps = {
-  organizers: Organizer[];
+  organizers?: Organizer[];
 };
 
 const OrganizersTab: React.FC<OrganizersTabProps> = ({ organizers = [] }) => {
@@ -28,10 +28,10 @@ const OrganizersTab: React.FC<OrganizersTabProps> = ({ organizers = [] }) => {
         <CardContent className="space-y-6">
           {organizers.length === 0 ? (
             <div className="flex gap-2">
-              <MessageCircle />{" "}
+              <MessageCircle />
               <p>
-                You haven not created any organizers yet. Add your first
-                organizer to start creating events!
+                You havent created any organizers yet. Add your first organizer
+                to start creating events!
               </p>
             </div>
           ) : null}

@@ -1,20 +1,19 @@
 To do:
 
-- check if create profile works fine
-  - add organization field and use arganization name in event slug
+- add organization field and use arganization name in event slug
 - in profile module add a city section. this shall be used to display local events
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
-CURERNT STATUS:
-
-- a profile can create an event. right now there is no organizer in db.
-
-PLAN:
-
-- plan: update prisma schema: a profile can create several organizers with each a unique id. these organzers a stored in profile. when creating am event i can choose a organizer to create an event with. a profile can follow an organzier and all its events..
-
 WHATS DONE IN VERSIONS
+
+v 0.1.48
+
+- implemented the new Schema with Organizer in prisma
+- refactured all Profile Settings including email and password to be able to use Oranizer
+- multiple organizer can now be set for one profile
+- in FormContainer added the prop success and a redirection in case of success with useEffect
+- refactured create Profile to use with Organizer.
 
 v 0.1.47
 

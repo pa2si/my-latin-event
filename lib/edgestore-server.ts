@@ -9,6 +9,10 @@ const edgeStoreRouter = es.router({
     maxSize: 1024 * 1024 * 5, // 5MB
     accept: ["image/jpeg", "image/png", "image/webp"],
   }),
+  organizerImages: es.imageBucket({
+    maxSize: 1024 * 1024 * 5, // 5MB
+    accept: ["image/jpeg", "image/png", "image/webp"],
+  }),
 });
 
 export const backendClient = initEdgeStoreClient({

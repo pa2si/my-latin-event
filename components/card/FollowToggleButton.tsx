@@ -3,13 +3,13 @@ import { FollowButton } from "../form/Buttons";
 import { fetchFollowId } from "@/utils/actions";
 import FollowToggleForm from "./FollowToggleForm";
 
-async function FollowToggleButton({ profileId }: { profileId: string }) {
+async function FollowToggleButton({ organizerId }: { organizerId: string }) {
   const { userId } = auth();
   if (!userId) return <FollowButton />;
 
-  const followId = await fetchFollowId({ profileId });
+  const followId = await fetchFollowId({ organizerId });
 
-  return <FollowToggleForm followId={followId} profileId={profileId} />;
+  return <FollowToggleForm followId={followId} organizerId={organizerId} />;
 }
 
 export default FollowToggleButton;
