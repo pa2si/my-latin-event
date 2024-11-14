@@ -17,7 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
 import SubmitReview from "@/components/reviews/SubmitReview";
 import EventReviews from "@/components/reviews/EventReviews";
-import { auth } from "@clerk/nextjs/server";
+
 import DeleteEvent from "@/components/events/DeleteEvent";
 import EditMyEvent from "@/components/events/EditMyEvent";
 
@@ -47,6 +47,8 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const { floors, bars, outdoorAreas, eventDateAndTime, eventEndDateAndTime } =
     event;
 
+  const hasVenueFeatures = floors > 0 || bars > 0 || outdoorAreas > 0;
+
   // Date formatting
   const selectedDate = new Date(eventDateAndTime);
   const formattedDate = format(eventDateAndTime, "dd.MM.yy");
@@ -67,7 +69,9 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
         <div className="mt-4 items-center justify-between sm:flex">
           <div>
             <h1 className="mb-1 text-4xl font-bold">{event.name}</h1>
-            <p className="text-xl text-muted-foreground">{event.subtitle}</p>
+            {event.subtitle && (
+              <p className="text-xl text-muted-foreground">{event.subtitle}</p>
+            )}
           </div>
           <div className="mt-4 flex gap-4 sm:mt-0">
             <ShareButton name={event.name} eventId={event.id} />
@@ -97,6 +101,12 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             price={event.price}
             genre={event.genre}
           />
+          <p className="mt-2 text-sm text-muted-foreground">
+            Created {format(event.createdAt, "dd.MM.yyyy")}
+            {event.updatedAt &&
+              event.updatedAt !== event.createdAt &&
+              ` • Modified ${format(event.updatedAt, "dd.MM.yyyy HH:mm")}`}
+          </p>
 
           {/* Event Details */}
           <EventDetailsCard
@@ -129,11 +139,13 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           {/* Mobile Layout (below sm) - Single column */}
           <div className="mt-8 space-y-6 sm:hidden">
             <CalendarCard mode="single" selectedDate={selectedDate} />
-            <VenueFeaturesCard
-              floors={floors}
-              bars={bars}
-              outdoorAreas={outdoorAreas}
-            />
+            {hasVenueFeatures && (
+              <VenueFeaturesCard
+                floors={floors}
+                bars={bars}
+                outdoorAreas={outdoorAreas}
+              />
+            )}
             <OrganizerCard
               organizerId={event.organizer.id}
               organizerName={event.organizer.organizerName}
@@ -156,11 +168,13 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                   organizerImage={event.organizer.organizerImage}
                   slogan={event.organizer.slogan || undefined}
                 />
-                <VenueFeaturesCard
-                  floors={floors}
-                  bars={bars}
-                  outdoorAreas={outdoorAreas}
-                />
+                {hasVenueFeatures && (
+                  <VenueFeaturesCard
+                    floors={floors}
+                    bars={bars}
+                    outdoorAreas={outdoorAreas}
+                  />
+                )}
                 <LikesCard likes={event._count.likes} />
               </div>
             </div>
@@ -173,11 +187,13 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                 <CalendarCard selectedDate={selectedDate} />
               </div>
               <div>
-                <VenueFeaturesCard
-                  floors={floors}
-                  bars={bars}
-                  outdoorAreas={outdoorAreas}
-                />
+                {hasVenueFeatures && (
+                  <VenueFeaturesCard
+                    floors={floors}
+                    bars={bars}
+                    outdoorAreas={outdoorAreas}
+                  />
+                )}
               </div>
               <div className="space-y-6">
                 <OrganizerCard
@@ -202,11 +218,13 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               organizerImage={event.organizer.organizerImage}
               slogan={event.organizer.slogan || undefined}
             />
-            <VenueFeaturesCard
-              floors={floors}
-              bars={bars}
-              outdoorAreas={outdoorAreas}
-            />
+            {hasVenueFeatures && (
+              <VenueFeaturesCard
+                floors={floors}
+                bars={bars}
+                outdoorAreas={outdoorAreas}
+              />
+            )}
             <LikesCard likes={event._count.likes} />
           </div>
         </aside>

@@ -11,6 +11,7 @@ import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer
 import GenresInput from "@/components/form/GenresInput";
 import StylesInput from "@/components/form/StylesInput";
 import AddressInputContainer from "@/components/form/AddressInputContainer";
+import OrganizerSelect from "@/components/form/OrganizerSelect";
 
 const defaultGenre = "Latin";
 const defaultStyles: Style[] = [];
@@ -24,7 +25,7 @@ const CreateEvent = () => {
     <section>
       <h1 className="mb-8 text-2xl font-semibold capitalize">create event</h1>
       <div className="rounded-md border p-8">
-        <h3 className="mb-4 text-lg font-medium">General Info</h3>
+        <h3 className="mb-4 text-lg font-medium uppercase">General Info</h3>
         <FormContainer action={createEventAction}>
           <ImageInput />
           <NameAndSubtitleContainer defaultName="test" />
@@ -45,10 +46,14 @@ const CreateEvent = () => {
             name="description"
             labelText="Description (max 100 Words)"
           />
-          <h3 className="mb-4 mt-12 text-lg font-medium">Direction</h3>
+          <h3 className="mb-4 mt-12 text-lg font-medium uppercase">
+            Direction
+          </h3>
           <AddressInputContainer />
           <div>
-            <h3 className="mb-4 mt-8 text-lg font-medium">Location Details</h3>
+            <h3 className="mb-4 mt-8 text-lg font-medium uppercase">
+              Location Details
+            </h3>
             <CounterInput detail="floors" />
             <CounterInput detail="bars" />
             <CounterInput detail="outdoorAreas" />
@@ -57,6 +62,8 @@ const CreateEvent = () => {
               defaultEndValue=""
             />
           </div>
+          <h3 className="mb-4 mt-8 text-lg font-medium uppercase">Organizer</h3>
+          <OrganizerSelect />
           <SubmitButton text="create event" className="mt-12" />
         </FormContainer>
       </div>

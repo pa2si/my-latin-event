@@ -87,16 +87,18 @@ const DateAndTimePickerContainer = ({
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <div>
-        <EventDateAndTimeInput
-          date={date}
-          setDate={handleStartDateChange}
-          hours={hours}
-          minutes={minutes}
-          setTime={handleStartTimeChange}
-          label="Event Start Date & Time"
-          name="eventDateAndTime"
-        />
-        <div className="mt-4 flex items-center">
+        <div className="uppercase">
+          <EventDateAndTimeInput
+            date={date}
+            setDate={handleStartDateChange}
+            hours={hours}
+            minutes={minutes}
+            setTime={handleStartTimeChange}
+            label="Event Start Date & Time"
+            name="eventDateAndTime"
+          />
+        </div>
+        <div className="mt-4 flex items-center text-muted-foreground">
           <FormCheckbox
             id="set-ending"
             label="Set ending time"
@@ -114,6 +116,7 @@ const DateAndTimePickerContainer = ({
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
+            className="uppercase"
           >
             <EventDateAndTimeInput
               date={endDate}

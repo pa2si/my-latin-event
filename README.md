@@ -7,6 +7,11 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.50
+
+- added organizer to CreateEvent
+  - when there is no organizer related to the profile alert with prompt for action accurs
+
 v 0.1.49
 
 - added property unoptimized to all nextjs Image components

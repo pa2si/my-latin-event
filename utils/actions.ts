@@ -286,12 +286,12 @@ export const fetchOrganizers = async () => {
     where: { clerkId: user.id },
     include: {
       organizers: {
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: "asc" },
       },
     },
   });
 
-  if (!profile) return redirect("/profile/create");
+  if (!profile) return redirect("/profile");
   return profile.organizers;
 };
 
@@ -595,6 +595,8 @@ export const fetchEventDetails = async (id: string) => {
     },
     select: {
       id: true,
+      createdAt: true,
+      updatedAt: true,
       name: true,
       subtitle: true,
       location: true,

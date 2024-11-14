@@ -32,7 +32,7 @@ const NameAndSubtitleContainer = ({
           <FormInput
             name="name"
             type="text"
-            label="Name"
+            label="Event Name"
             placeholder="Enter your event name"
             required={true}
             defaultValue={defaultName}
@@ -40,7 +40,7 @@ const NameAndSubtitleContainer = ({
         </div>
 
         {/* Checkbox for Subtitle */}
-        <div className="ml-1 mt-5 flex-grow">
+        <div className="ml-1 mt-5 flex-grow text-muted-foreground">
           <FormCheckbox
             id="add-subtitle"
             label="Add Subtitle"

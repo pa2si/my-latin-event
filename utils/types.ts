@@ -32,10 +32,10 @@ export type Organizer = {
   id: string;
   organizerName: string;
   organizerImage: string;
-  slogan?: string | null;
-  createdAt: string | Date;
-  updatedAt: string | Date;
+  slogan: string | null;
   profileId: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type OrganizersTabProps = {

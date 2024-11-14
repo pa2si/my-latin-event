@@ -13,7 +13,7 @@ const OrganizerProfile: React.FC<OrganizerProfileProps> = ({ organizer }) => {
     <div className="flex items-center justify-between space-x-2 rounded-lg border p-3 hover:bg-accent/5">
       <div className="flex items-center space-x-4">
         <img
-          src={organizer.organizerImage || "/api/placeholder/40/40"}
+          src={organizer.organizerImage}
           alt={organizer.organizerName}
           className="h-10 w-10 rounded-full object-cover"
         />

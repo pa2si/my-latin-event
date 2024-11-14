@@ -10,8 +10,8 @@ export async function optimizeImage(
   // Different optimization settings based on type
   const settings = {
     avatar: {
-      maxWidth: 400,
-      quality: 60,
+      maxWidth: 50,
+      quality: 80,
       format: "webp" as const,
     },
     flyer: {
