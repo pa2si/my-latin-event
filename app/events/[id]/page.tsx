@@ -4,7 +4,7 @@ import EventRating from "@/components/card/EventRating";
 import BreadCrumbs from "@/components/events/BreadCrumbs";
 import ImageContainer from "@/components/events/ImageContainer";
 import ShareButton from "@/components/events/ShareButton";
-
+222;
 import {
   checkEventAccess,
   fetchEventDetails,
@@ -27,6 +27,7 @@ import VenueFeaturesCard from "@/components/events/VenueFeaturesCard";
 import LikesCard from "@/components/events/LikesCard";
 import { QuickInfoCard } from "@/components/events/QuickInfoCard";
 import EventDetailsCard from "@/components/events/EventDetailsCard";
+import HeaderSection from "@/components/events/HeaderSection";
 
 const DynamicMap = dynamic(() => import("@/components/events/EventMap"), {
   ssr: false,
@@ -64,27 +65,12 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       {/* Header Section */}
-      <div className="mb-4 sm:mb-8">
-        <BreadCrumbs name={event.name} />
-        <div className="mt-4 items-center justify-between sm:flex">
-          <div>
-            <h1 className="mb-1 text-4xl font-bold">{event.name}</h1>
-            {event.subtitle && (
-              <p className="text-xl text-muted-foreground">{event.subtitle}</p>
-            )}
-          </div>
-          <div className="mt-4 flex gap-4 sm:mt-0">
-            <ShareButton name={event.name} eventId={event.id} />
-            <LikeToggleButton eventId={event.id} />
-            {canEdit && (
-              <>
-                <EditMyEvent eventId={event.id} />
-                <DeleteEvent eventId={event.id} />
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+      <HeaderSection
+        eventId={event.id}
+        eventName={event.name}
+        eventSubtitle={event.subtitle}
+        canEdit={canEdit}
+      />
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-12">
@@ -134,76 +120,29 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             />
           </div>
 
-          {/* Progressive Grid Layouts */}
-
-          {/* Mobile Layout (below sm) - Single column */}
-          <div className="mt-8 space-y-6 sm:hidden">
-            <CalendarCard mode="single" selectedDate={selectedDate} />
-            {hasVenueFeatures && (
-              <VenueFeaturesCard
-                floors={floors}
-                bars={bars}
-                outdoorAreas={outdoorAreas}
-              />
-            )}
-            <OrganizerCard
-              organizerId={event.organizer.id}
-              organizerName={event.organizer.organizerName}
-              organizerImage={event.organizer.organizerImage}
-              slogan={event.organizer.slogan || undefined}
-            />
-            <LikesCard likes={event._count.likes} />
-          </div>
-
-          {/* Tablet Layout (sm to lg) - Two columns */}
-          <div className="mt-8 hidden sm:block lg:hidden">
-            <div className="grid grid-cols-2 gap-8">
-              <div>
-                <CalendarCard selectedDate={selectedDate} />
-              </div>
-              <div className="space-y-6">
-                <OrganizerCard
-                  organizerId={event.organizer.id}
-                  organizerName={event.organizer.organizerName}
-                  organizerImage={event.organizer.organizerImage}
-                  slogan={event.organizer.slogan || undefined}
-                />
-                {hasVenueFeatures && (
-                  <VenueFeaturesCard
-                    floors={floors}
-                    bars={bars}
-                    outdoorAreas={outdoorAreas}
-                  />
-                )}
-                <LikesCard likes={event._count.likes} />
-              </div>
+          {/* Responsive Components Grid */}
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:hidden">
+            {/* First Column */}
+            <div className="order-1 mx-auto sm:mx-0">
+              <CalendarCard selectedDate={selectedDate} />
             </div>
-          </div>
 
-          {/* Desktop Layout (lg to xl) - Three columns */}
-          <div className="mt-8 hidden lg:block xl:hidden">
-            <div className="grid grid-cols-3 gap-8">
-              <div>
-                <CalendarCard selectedDate={selectedDate} />
-              </div>
-              <div>
-                {hasVenueFeatures && (
-                  <VenueFeaturesCard
-                    floors={floors}
-                    bars={bars}
-                    outdoorAreas={outdoorAreas}
-                  />
-                )}
-              </div>
-              <div className="space-y-6">
-                <OrganizerCard
-                  organizerId={event.organizer.id}
-                  organizerName={event.organizer.organizerName}
-                  organizerImage={event.organizer.organizerImage}
-                  slogan={event.organizer.slogan || undefined}
+            {/* Second Column */}
+            <div className="order-2 space-y-6">
+              {hasVenueFeatures && (
+                <VenueFeaturesCard
+                  floors={floors}
+                  bars={bars}
+                  outdoorAreas={outdoorAreas}
                 />
-                <LikesCard likes={event._count.likes} />
-              </div>
+              )}
+              <OrganizerCard
+                organizerId={event.organizer.id}
+                organizerName={event.organizer.organizerName}
+                organizerImage={event.organizer.organizerImage}
+                slogan={event.organizer.slogan || undefined}
+              />
+              <LikesCard likes={event._count.likes} />
             </div>
           </div>
         </div>

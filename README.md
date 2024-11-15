@@ -7,6 +7,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.52
+
+- Eventslug component refactured to minimize redudant code
+
 v 0.1.51
 
 - reusable SelectionDialog implemented in PriceInput, GenreSelect and TimePicker (using shadcn Dialog). no more SelectModal...

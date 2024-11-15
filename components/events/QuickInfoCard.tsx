@@ -30,7 +30,7 @@ export const QuickInfoCard = ({
         {/* Duration */}
         <div className="flex flex-col gap-2">
           <Clock className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Duration</h3>
+          <h3 className="font-semibold">{endTime ? "Duration" : "Start"}</h3>
           <p className="text-sm text-muted-foreground">
             {time} {endTime && `- ${endTime}`}
           </p>
