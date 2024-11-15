@@ -24,7 +24,7 @@ const CreateEvent = () => {
   return (
     <section>
       <h1 className="mb-8 text-2xl font-semibold capitalize">create event</h1>
-      <div className="rounded-md border p-8">
+      <div className="-mx-4 rounded-md border p-8 sm:mx-0">
         <h3 className="mb-4 text-lg font-medium uppercase">General Info</h3>
         <FormContainer action={createEventAction}>
           <ImageInput />

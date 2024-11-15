@@ -7,6 +7,12 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.51
+
+- reusable SelectionDialog implemented in PriceInput, GenreSelect and TimePicker (using shadcn Dialog). no more SelectModal...
+- for createEvent set a -mx-2 for mobile view
+- DateAndTimePicker now gets displayed in a row in mobile view due to space problems
+
 v 0.1.50
 
 - added organizer to CreateEvent

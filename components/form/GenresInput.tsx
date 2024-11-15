@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { genres } from "@/utils/genres";
-import SelectModal from "./SelectModal";
-import { SelectButton } from "@/components/form/Buttons";
 import { useGenreStylesStore } from "@/utils/store";
 import { useGenreStyles } from "@/utils/useGenreStyles";
 import { Style } from "@/utils/styles";
+import SelectionDialog from "@/components/form/SelectionDialog";
 
 const name = "genre";
 
@@ -18,7 +19,7 @@ const GenresInput = ({
   defaultValue: string;
   defaultStyles: Style[];
 }) => {
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { selectedGenre, setSelectedGenre } = useGenreStylesStore();
   const { styles } = useGenreStyles(defaultValue, defaultStyles);
 
@@ -28,9 +29,10 @@ const GenresInput = ({
     }
   }, [defaultValue, selectedGenre, setSelectedGenre]);
 
-  const handleGenreChange = (value: string) => {
+  const handleGenreChange = (e: React.MouseEvent, value: string) => {
+    e.preventDefault();
     setSelectedGenre(value);
-    setModalVisible(false); // Close modal after selection
+    setIsOpen(false);
   };
 
   return (
@@ -38,30 +40,38 @@ const GenresInput = ({
       <Label htmlFor={name} className="capitalize">
         Genres
       </Label>
-      <SelectButton
-        text={selectedGenre}
-        onClick={() => setModalVisible(true)}
-        className="w-full"
-      />
+      <Button
+        type="button"
+        variant="outline"
+        onClick={(e) => {
+          e.preventDefault();
+          setIsOpen(true);
+        }}
+        className="w-full justify-start text-left font-normal"
+      >
+        {selectedGenre}
+      </Button>
 
-      <SelectModal
-        isVisible={isModalVisible}
-        onClose={() => setModalVisible(false)}
+      <SelectionDialog
+        open={isOpen}
+        onOpenChange={setIsOpen}
         title="Choose a Genre"
       >
-        <div className="flex h-72 w-full flex-col items-center overflow-scroll p-4">
-          {genres.map((item) => (
-            <div
-              key={item.label}
-              onClick={() => handleGenreChange(item.label)}
-              className="flex cursor-pointer items-center gap-2 rounded p-2 hover:bg-gray-300"
-            >
-              {/* <item.icon className="text-lg" /> */}
-              <span>{item.label}</span>
-            </div>
-          ))}
-        </div>
-      </SelectModal>
+        {genres.map((item) => (
+          <Button
+            key={item.label}
+            type="button"
+            variant="ghost"
+            onClick={(e) => handleGenreChange(e, item.label)}
+            className={cn(
+              "w-full justify-center gap-2 text-center",
+              selectedGenre === item.label && "text-primary",
+            )}
+          >
+            <span>{item.label}</span>
+          </Button>
+        ))}
+      </SelectionDialog>
 
       <input type="hidden" name={name} value={selectedGenre} />
     </div>

@@ -1,24 +1,25 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import SelectModal from './SelectModal'; // Assuming you have SelectModal component
-import { SelectButton } from '@/components/form/Buttons'; // Assuming you have SelectButton component
+import React, { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import SelectionDialog from "@/components/form/SelectionDialog";
 
-const name = 'price';
+const name = "price";
 
 type FormInputNumberProps = {
   defaultValue?: number;
 };
 
 function PriceInput({ defaultValue }: FormInputNumberProps) {
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState(defaultValue || 8);
 
   const handlePriceChange = (value: number) => {
     setSelectedPrice(value);
-    setModalVisible(false); // Close modal after selection
+    setIsOpen(false);
   };
 
   return (
@@ -26,50 +27,47 @@ function PriceInput({ defaultValue }: FormInputNumberProps) {
       <Label htmlFor={name} className="capitalize">
         Price (€)
       </Label>
-      <div className="flex gap-4 items-center">
-        {/* Numeric input for price */}
+      <div className="flex items-center gap-4">
         <Input
           id={name}
           type="number"
-          name={name}
           min={0}
           value={selectedPrice}
           onChange={(e) => setSelectedPrice(Number(e.target.value))}
           required
         />
-
-        {/* Button to open the price selection modal */}
-        <SelectButton
-          text="Choose Price"
-          onClick={() => setModalVisible(true)}
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setIsOpen(true)}
           className="ml-2"
-        />
+        >
+          Choose Price
+        </Button>
       </div>
 
-      {/* Price selection modal */}
-      <SelectModal
-        isVisible={isModalVisible}
-        onClose={() => setModalVisible(false)}
+      <SelectionDialog
+        open={isOpen}
+        onOpenChange={setIsOpen}
         title="Choose a Price"
+        width="w-72"
       >
-        <div className="flex flex-col p-4 h-72 overflow-scroll items-center w-full">
-          {Array.from({ length: 1000 }, (_, i) => i + 1).map((price) => (
-            <div
-              key={price}
-              onClick={() => handlePriceChange(price)}
-              className={`cursor-pointer p-2 rounded flex items-center ${
-                price === selectedPrice
-                  ? 'text-primary font-bold'
-                  : 'hover:bg-gray-300'
-              }`}
-            >
-              €{price}
-            </div>
-          ))}
-        </div>
-      </SelectModal>
+        <div className="h-44" />
+        {Array.from({ length: 1000 }, (_, i) => i + 1).map((price) => (
+          <div
+            key={price}
+            onClick={() => handlePriceChange(price)}
+            className={cn(
+              "flex w-full cursor-pointer items-center justify-center rounded p-2 hover:bg-gray-100",
+              price === selectedPrice && "font-bold text-primary",
+            )}
+          >
+            {price}
+          </div>
+        ))}
+        <div className="h-44" />
+      </SelectionDialog>
 
-      {/* Hidden input field to submit the selected price */}
       <input type="hidden" name={name} value={selectedPrice} />
     </div>
   );

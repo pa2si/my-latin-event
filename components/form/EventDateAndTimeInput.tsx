@@ -42,7 +42,7 @@ const EventDateAndTimeInput: React.FC<EventDateAndTimeProps> = ({
         <h3 className="mb-4 mt-8 text-lg font-medium">{label}</h3>
       </div>
       <div>
-        <div className="flex flex-row items-center justify-center gap-4">
+        <div className="flex flex-col items-center gap-4 sm:flex-row">
           <DatePicker setDate={setDate} initialDate={date} />
           <input
             type="hidden"
