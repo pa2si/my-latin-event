@@ -1,7 +1,7 @@
-import LoadingCards from '@/components/card/LoadingCards';
-import GenresList from '@/components/home/GenresList';
-import EventsContainer from '@/components/home/EventsContainer';
-import { Suspense } from 'react';
+import LoadingCards from "@/components/card/LoadingCards";
+import GenresList from "@/components/home/GenresList";
+import EventsContainer from "@/components/home/EventsContainer";
+import { Suspense } from "react";
 
 const HomePage = ({
   searchParams,

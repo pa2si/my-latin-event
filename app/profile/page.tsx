@@ -6,8 +6,18 @@ import ProfileSettings from "@/components/form/ProfileSettings";
 import OrganizersTab from "@/components/profile/OrganizersTab";
 import HeaderSection from "@/components/ui/HeaderSection";
 import { currentUser } from "@clerk/nextjs/server";
+import { isValidTab } from "@/utils/isValidTab";
+import { ProfileTab } from "@/utils/types";
 
-const ProfilePage = async () => {
+interface ProfilePageProps {
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+const ProfilePage = async ({ searchParams }: ProfilePageProps) => {
+  const defaultTab: ProfileTab = isValidTab(searchParams.tab)
+    ? searchParams.tab
+    : "profile";
+
   const emails = await getAllEmailAddresses();
   const organizers = await fetchOrganizers();
   const user = await currentUser();
@@ -31,7 +41,7 @@ const ProfilePage = async () => {
         }}
       />
       <div className="rounded-md border">
-        <Tabs defaultValue="profile" className="w-full">
+        <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="organizers">Organizers</TabsTrigger>

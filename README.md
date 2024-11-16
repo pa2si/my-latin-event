@@ -1,11 +1,18 @@
 To do:
 
-- add organization field and use arganization name in event slug
-- in profile module add a city section. this shall be used to display local events
+- in profile module add a userCity section and probably also userCountry. this shall be used to display local events
+- a user that is not logged in shall get a prompt to select a city. fetch events shall only run if there is a city selected
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.53
+
+- added userCity and userCountry to prisma Profile model and Schemas
+  - db is updated and i set manually Berlin and Germany
+- fetchEvents now checks if there is a user and if there is it fetches only the events where there is a match from event city and userCity
+- in profile route the tabs can now get accessed with search params
 
 v 0.1.52
 

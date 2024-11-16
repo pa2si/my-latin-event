@@ -122,7 +122,9 @@ const OrganizerSelect = ({ defaultValue = "" }) => {
             <AlertDialogCancel onClick={() => router.push("/")}>
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={() => router.push("/profile")}>
+            <AlertDialogAction
+              onClick={() => router.push("/profile?tab=organizers")}
+            >
               Create Organizer
             </AlertDialogAction>
           </AlertDialogFooter>

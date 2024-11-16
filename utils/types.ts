@@ -75,3 +75,5 @@ export type EmailListItemProps = {
   onResendCode: (emailId: string) => void;
   onDelete: (emailId: string) => void;
 };
+
+export type ProfileTab = "profile" | "organizers" | "email" | "password";

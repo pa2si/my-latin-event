@@ -41,16 +41,6 @@ const renderError = (error: unknown): { message: string } => {
   };
 };
 
-export const getCurrentUserProfileId = async () => {
-  const user = await getAuthUser();
-  const profile = await db.profile.findUnique({
-    where: { clerkId: user.id },
-    select: { id: true },
-  });
-  if (!profile) throw new Error("Profile not found");
-  return profile.id;
-};
-
 export const checkEventAccess = async (organizerClerkId: string) => {
   const { userId } = auth();
 
@@ -488,36 +478,102 @@ export const fetchEvents = async ({
   search?: string;
   genre?: string;
 }) => {
-  const events = await db.event.findMany({
-    where: {
-      genre,
-      OR: [
-        { name: { contains: search, mode: "insensitive" } },
-        { subtitle: { contains: search, mode: "insensitive" } },
-      ],
-    },
-    select: {
-      id: true,
-      name: true,
-      subtitle: true,
-      country: true,
-      image: true,
-      price: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  return events;
+  try {
+    const user = await currentUser();
+
+    if (user) {
+      const userProfile = await db.profile.findUnique({
+        where: {
+          clerkId: user.id,
+        },
+        select: {
+          userCity: true,
+        },
+      });
+
+      if (userProfile) {
+        const events = await db.event.findMany({
+          where: {
+            city: userProfile.userCity,
+            genre: genre || undefined,
+            OR: [
+              {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                subtitle: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+          select: {
+            id: true,
+            name: true,
+            subtitle: true,
+            country: true,
+            image: true,
+            price: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+        return events;
+      }
+    }
+
+    // If no user or no profile, return all events
+    const events = await db.event.findMany({
+      where: {
+        genre: genre || undefined,
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            subtitle: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        subtitle: true,
+        country: true,
+        image: true,
+        price: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return events;
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    return [];
+  }
 };
 
 export const fetchLikeId = async ({ eventId }: { eventId: string }) => {
   try {
-    const profileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
     const like = await db.like.findFirst({
       where: {
         eventId,
-        profileId,
+        profile: {
+          clerkId: user.id,
+        },
       },
       select: {
         id: true,
@@ -536,7 +592,15 @@ export const toggleLikeAction = async (prevState: {
 }) => {
   try {
     const { eventId, likeId, pathname } = prevState;
-    const profileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
+
+    // Get current user's profile
+    const profile = await db.profile.findUnique({
+      where: { clerkId: user.id },
+      select: { id: true },
+    });
+
+    if (!profile) throw new Error("Profile not found");
 
     if (likeId) {
       await db.like.delete({
@@ -548,7 +612,7 @@ export const toggleLikeAction = async (prevState: {
       await db.like.create({
         data: {
           eventId,
-          profileId,
+          profileId: profile.id,
         },
       });
     }
@@ -561,11 +625,13 @@ export const toggleLikeAction = async (prevState: {
 
 export const fetchLikes = async () => {
   try {
-    const profileId = await getCurrentUserProfileId();
+    const user = await getAuthUser();
 
     const likes = await db.like.findMany({
       where: {
-        profileId,
+        profile: {
+          clerkId: user.id,
+        },
       },
       select: {
         event: {
@@ -1601,3 +1667,20 @@ export const resendVerificationAction = async (
     };
   }
 };
+
+export async function getUserCity() {
+  try {
+    const user = await currentUser();
+    if (!user) return null;
+
+    const profile = await db.profile.findUnique({
+      where: { clerkId: user.id },
+      select: { userCity: true },
+    });
+
+    return profile;
+  } catch (error) {
+    console.error("Error fetching user city:", error);
+    return null;
+  }
+}

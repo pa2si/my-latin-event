@@ -1,7 +1,7 @@
-import { fetchEvents } from '@/utils/actions';
-import EventsList from './EventsList';
-import EmptyList from './EmptyList';
-import type { EventCardProps } from '@/utils/types';
+import { fetchEvents } from "@/utils/actions";
+import EventsList from "./EventsList";
+import EmptyList from "./EmptyList";
+import type { EventCardProps } from "@/utils/types";
 
 const EventsContainer = async ({
   genre,

@@ -1,15 +1,19 @@
-import NavSearch from './NavSearch';
-import LinksDropdown from './LinksDropdown';
-import DarkMode from './DarkMode';
-import Logo from './Logo';
+import NavSearch from "./NavSearch";
+import LinksDropdown from "./LinksDropdown";
+import DarkMode from "./DarkMode";
+import Logo from "./Logo";
+import CityFilterIndicator from "@/components/navbar/CityFilterIndicator";
 
 const Navbar = () => {
   return (
     <nav className="border-b">
-      <div className="container flex flex-col sm:flex-row  sm:justify-between sm:items-center flex-wrap gap-4 py-8">
+      <div className="container flex flex-col flex-wrap gap-4 py-8 sm:flex-row sm:items-center sm:justify-between">
         <Logo />
-        <NavSearch />
-        <div className="flex gap-4 items-center ">
+        <div className="flex items-center gap-2">
+          <NavSearch />
+          <CityFilterIndicator />
+        </div>
+        <div className="flex items-center gap-4">
           <DarkMode />
           <LinksDropdown />
         </div>
@@ -17,4 +21,5 @@ const Navbar = () => {
     </nav>
   );
 };
+
 export default Navbar;
