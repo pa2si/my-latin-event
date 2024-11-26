@@ -99,7 +99,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
           </div>
           <button
             onClick={handleSelectClick}
-            className={`absolute ${isProfileImage ? "bottom-3 px-1 py-0 text-xs" : "bottom-8 px-4 py-1 text-sm"} rounded-lg bg-gray-500 px-4 py-1 text-gray-100 transition-colors duration-200 hover:bg-primary focus:outline-none focus:ring-1 focus:ring-gray-600`}
+            className={`absolute ${isProfileImage ? "bottom-3 px-1 py-0 text-xs" : "bottom-8 px-4 py-1 text-sm"} rounded-lg bg-gray-500 px-4 py-1 text-gray-100 transition-colors duration-200 hover:bg-primary focus:outline-none focus:ring-1`}
             type="button"
           >
             select

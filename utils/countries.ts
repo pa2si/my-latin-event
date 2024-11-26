@@ -1,11 +1,10 @@
-import countries from "world-countries";
+import { Country } from "country-state-city";
 
-export const formattedCountries = countries.map((item) => ({
-  code: item.cca2,
-  name: item.name.common,
+export const formattedCountries = Country.getAllCountries().map((item) => ({
+  code: item.isoCode,
+  name: item.name,
   flag: item.flag,
-  location: item.latlng,
-  region: item.region,
+  location: [item.latitude, item.longitude],
 }));
 
 export const findCountryByCode = (code: string) =>

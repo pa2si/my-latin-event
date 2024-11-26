@@ -117,6 +117,34 @@ export const createProfileAction = async (
   redirect("/");
 };
 
+export const fetchUserLocation = async () => {
+  try {
+    const user = await getAuthUser();
+
+    const profile = await db.profile.findUnique({
+      where: { clerkId: user.id },
+      select: {
+        userCountry: true,
+        userState: true,
+        userCity: true,
+      },
+    });
+
+    return {
+      userCountry: profile?.userCountry || "",
+      userState: profile?.userState || "",
+      userCity: profile?.userCity || "",
+    };
+  } catch (error) {
+    console.error("Error fetching user location:", error);
+    return {
+      userCountry: "",
+      userState: "",
+      userCity: "",
+    };
+  }
+};
+
 export async function fetchProfileImage() {
   try {
     const user = await getAuthUser();
@@ -220,6 +248,9 @@ export const updateProfileAction = async (
         firstName: updatedClerkUser.firstName ?? "",
         lastName: updatedClerkUser.lastName ?? "",
         username: updatedClerkUser.username ?? "",
+        userCountry: validatedFields.userCountry,
+        userState: validatedFields.userState,
+        userCity: validatedFields.userCity || "",
       },
     });
 
@@ -488,13 +519,16 @@ export const fetchEvents = async ({
         },
         select: {
           userCity: true,
+          userState: true,
+          userCountry: true,
         },
       });
 
       if (userProfile) {
         const events = await db.event.findMany({
           where: {
-            city: userProfile.userCity,
+            city: userProfile.userCity || userProfile.userState, // Match city with either userCity or userState
+            country: userProfile.userCountry,
             genre: genre || undefined,
             OR: [
               {
@@ -527,7 +561,7 @@ export const fetchEvents = async ({
       }
     }
 
-    // If no user or no profile, return all events
+    // Fallback: return all events if no user or profile
     const events = await db.event.findMany({
       where: {
         genre: genre || undefined,
@@ -1371,73 +1405,6 @@ export const fetchBreadcrumbInfo = async () => {
   }
 };
 
-// export async function changePasswordAction(prevState: any, formData: FormData) {
-//   try {
-//     // Convert FormData to an object
-//     const formValues = Object.fromEntries(formData.entries());
-//     const { currentPassword, password, confirmPassword } = formValues;
-
-//     // Validate the input
-//     const validatedFields = passwordSchema.safeParse({
-//       currentPassword,
-//       password,
-//       confirmPassword,
-//     });
-
-//     if (!validatedFields.success) {
-//       return {
-//         message: validatedFields.error.errors[0].message,
-//       };
-//     }
-
-//     const user = await getAuthUser();
-//     const { sessionId } = await auth();
-
-//     if (!sessionId) {
-//       return {
-//         message: "No active session found",
-//       };
-//     }
-
-//     try {
-//       await (
-//         await clerkClient()
-//       ).users.verifyPassword({
-//         userId: user.id,
-//         password: currentPassword as string,
-//       });
-//     } catch (error) {
-//       return {
-//         message: "Current password is incorrect",
-//       };
-//     }
-
-//     await (
-//       await clerkClient()
-//     ).users.updateUser(user.id, {
-//       password: password as string,
-//       signOutOfOtherSessions: true,
-//     });
-
-//     await (await clerkClient()).sessions.revokeSession(sessionId);
-
-//     revalidatePath("/profile");
-
-//     return {
-//       message: "Password updated successfully! Redirecting...",
-//     };
-//   } catch (error) {
-//     return {
-//       message:
-//         error instanceof Error ? error.message : "Failed to update password",
-//     };
-//   }
-// }
-
-// app/actions/password.ts
-
-// actions/password.ts
-
 type FormState = {
   message: string;
   success?: boolean;
@@ -1675,12 +1642,20 @@ export async function getUserCity() {
 
     const profile = await db.profile.findUnique({
       where: { clerkId: user.id },
-      select: { userCity: true },
+      select: {
+        userCity: true,
+        userState: true,
+      },
     });
 
-    return profile;
+    if (!profile) return null;
+
+    return {
+      location: profile.userCity || profile.userState,
+      isCity: !!profile.userCity, // Boolean flag to indicate if it's a city or state
+    };
   } catch (error) {
-    console.error("Error fetching user city:", error);
+    console.error("Error fetching user location:", error);
     return null;
   }
 }

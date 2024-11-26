@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import useGoogleAutocomplete from "@/utils/useGoogleAutocomplete";
 import FormInput from "./FormInput";
-import CountryInput from "./CountryInput";
+import CountrySelect from "./CountrySelect";
 
 interface AddressInputContainerProps {
   defaultValues?: {
@@ -78,13 +78,15 @@ const AddressInputContainer = ({
         onChange={handleChange}
         placeholder="Enter postal code"
       />
-      <CountryInput
+      <CountrySelect
         label="Country"
         name="country"
         ref={countryRef}
         value={formData.country}
-        onChange={handleChange}
-        placeholder="Enter country"
+        onSelect={(selectedCountry) => {
+          setFormData((prev) => ({ ...prev, country: selectedCountry.name }));
+        }}
+        placeholder="Select country"
       />
 
       <FormInput

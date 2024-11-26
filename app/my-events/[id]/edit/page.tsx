@@ -2,7 +2,6 @@ import { fetchMyLocationDetails, updateEventAction } from "@/utils/actions";
 import FormContainer from "@/components/form/FormContainer";
 import PriceInput from "@/components/form/PriceInput";
 import TextAreaInput from "@/components/form/TextAreaInput";
-import CountriesInput from "@/components/form/CountriesInput";
 import CounterInput from "@/components/form/CounterInput";
 import { SubmitButton } from "@/components/form/Buttons";
 import { redirect } from "next/navigation";
@@ -65,9 +64,6 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
               googleMapsLink: event.googleMapsLink ?? "",
             }}
           />
-          {/* <div className="mt-4 grid gap-8 sm:grid-cols-2">
-            <CountriesInput defaultValue={event.country} />
-          </div> */}
 
           <h3 className="mb-4 mt-8 text-lg font-medium">Location Details</h3>
           <CounterInput

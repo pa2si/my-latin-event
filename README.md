@@ -1,11 +1,21 @@
 To do:
 
 - in profile module add a userCity section and probably also userCountry. this shall be used to display local events
-- a user that is not logged in shall get a prompt to select a city. fetch events shall only run if there is a city selected
+- a user that is not logged in shall get a prompt to select a city. fetch events shall only run if there is a city selected. the selection should be stored in local storage if possible
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.54
+
+- Added userCountry, userState and userCity to Profile Model in Schema and Prisma
+- Library world-countries replaced with library country-state-city, therefore i created a new countryInput Field called CountrySelect. All helper function are updated to the new package.
+  - its used now in AddressInputContainer instead of CountriesInput.
+- In ProfileSettings I added new InputFields: Country, State, City.
+  - userCountry uses headlessUI Component.
+- new loading Skeleton for Profile route.
+- Updated Server Functions implementing userCountry and userState
 
 v 0.1.53
 

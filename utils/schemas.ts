@@ -27,14 +27,21 @@ export const profileSchema = z.object({
     .trim()
     .min(2, { message: "Username must be at least 2 characters." })
     .max(30, { message: "Username cannot exceed 30 characters." }),
-  userCity: z
-    .string()
-    .trim()
-    .max(100, { message: "City cannot exceed 100 characters." }),
   userCountry: z
     .string()
     .trim()
+    .min(1, { message: "Country is required" })
     .max(100, { message: "Country cannot exceed 100 characters." }),
+  userState: z
+    .string()
+    .trim()
+    .min(1, { message: "State is required" })
+    .max(100, { message: "State cannot exceed 100 characters." }),
+  userCity: z
+    .string()
+    .trim()
+    .max(100, { message: "City cannot exceed 100 characters." })
+    .optional(),
 });
 
 /*  validate With ZodSchema */

@@ -143,4 +143,3 @@ const useGoogleAutocomplete = (
 };
 
 export default useGoogleAutocomplete;
-222;

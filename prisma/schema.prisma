@@ -24,8 +24,9 @@ model Profile {
   reviews      Review[]
   bookings     Booking[]
   following    Follow[]
-  userCity     String
   userCountry  String
+  userState    String
+  userCity     String?
 }
 model Organizer {
   id             String   @id @default(uuid())

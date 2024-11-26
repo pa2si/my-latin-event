@@ -1,4 +1,8 @@
-import { fetchOrganizers, getAllEmailAddresses } from "@/utils/actions";
+import {
+  fetchOrganizers,
+  fetchUserLocation,
+  getAllEmailAddresses,
+} from "@/utils/actions";
 import ChangePassword from "@/components/profile/ChangePassword";
 import EmailSettings from "@/components/profile/EmailSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,17 +22,25 @@ const ProfilePage = async ({ searchParams }: ProfilePageProps) => {
     ? searchParams.tab
     : "profile";
 
-  const emails = await getAllEmailAddresses();
-  const organizers = await fetchOrganizers();
-  const user = await currentUser();
+  const [emails, organizers, user, locationData] = await Promise.all([
+    getAllEmailAddresses(),
+    fetchOrganizers(),
+    currentUser(),
+    fetchUserLocation(),
+  ]);
 
   const profileData = user
     ? {
         firstName: user.firstName ?? undefined,
         lastName: user.lastName ?? undefined,
         username: user.username ?? undefined,
+        userCountry: locationData.userCountry,
+        userState: locationData.userState,
+        userCity: locationData.userCity,
       }
     : null;
+
+  console.log("Profile data being passed:", profileData); // Add this to debug
 
   return (
     <>

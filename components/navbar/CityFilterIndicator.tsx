@@ -16,9 +16,9 @@ import Link from "next/link";
 import { getUserCity } from "@/utils/actions";
 
 const CityFilterIndicator = async () => {
-  const userProfile = await getUserCity();
+  const userLocation = await getUserCity();
 
-  if (!userProfile) return null;
+  if (!userLocation) return null;
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -31,7 +31,7 @@ const CityFilterIndicator = async () => {
                 className="text-md cursor-pointer gap-1 text-primary transition-colors hover:bg-accent"
               >
                 <MapPin className="h-5 w-5" />
-                {userProfile.userCity}
+                {userLocation.location}
               </Badge>
             </PopoverTrigger>
           </TooltipTrigger>
@@ -46,14 +46,14 @@ const CityFilterIndicator = async () => {
               <div className="text-sm text-muted-foreground">
                 Currently showing events in{" "}
                 <span className="font-medium text-foreground">
-                  {userProfile.userCity}
+                  {userLocation.location}
                 </span>
                 . This filter is based on your profile settings.
               </div>
 
               <div className="flex items-center gap-2">
                 <Link href="/profile" className="w-full">
-                  <Button className="">Update Location</Button>
+                  <Button className="w-full">Update Location</Button>
                 </Link>
               </div>
             </div>

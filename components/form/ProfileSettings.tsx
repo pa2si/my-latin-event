@@ -1,18 +1,23 @@
+"use client";
+
 import React from "react";
 import ProfileImageUpload from "../profile/ProfileImageUpload";
 import FormContainer from "./FormContainer";
 import FormInput from "./FormInput";
 import { createProfileAction, updateProfileAction } from "@/utils/actions";
 import { SubmitButton } from "./Buttons";
-import TabDescription from "../profile/TabDescription";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import LocationSelectContainer from "@/components/form/LocationSelectContainer";
 
 interface ProfileSettingsProps {
   user: {
     firstName?: string;
     lastName?: string;
     username?: string;
+    userCountry?: string;
+    userState?: string;
+    userCity?: string;
   } | null;
   isCreate?: boolean;
 }
@@ -32,14 +37,12 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
             type="text"
             name="firstName"
             label="First Name"
-            description="(Optional)"
             defaultValue={user?.firstName ?? ""}
           />
           <FormInput
             type="text"
             name="lastName"
             label="Last Name"
-            description="(Optional)"
             defaultValue={user?.lastName ?? ""}
           />
           <FormInput
@@ -47,8 +50,19 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
             name="username"
             label="Username"
             defaultValue={user?.username ?? ""}
-            description="Must be one word only"
+            description="Must be one word only*"
             required
+          />
+          <LocationSelectContainer
+            initialData={
+              user
+                ? {
+                    userCountry: user.userCountry,
+                    userState: user.userState,
+                    userCity: user.userCity,
+                  }
+                : undefined
+            }
           />
         </div>
         {isCreate && (
