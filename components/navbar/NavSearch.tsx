@@ -9,11 +9,11 @@ function NavSearch() {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const [search, setSearch] = useState(
-    searchParams.get("search")?.toString() || "",
+    searchParams?.get("search")?.toString() || "",
   );
   // dont search on every keypress but
   const handleSearch = useDebouncedCallback((value: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams?.toString() || "");
     if (value) {
       // if search is not empty, add it to the url
       params.set("search", value);
@@ -23,7 +23,7 @@ function NavSearch() {
     replace(`/?${params.toString()}`);
   }, 300);
   useEffect(() => {
-    if (!searchParams.get("search")) {
+    if (!searchParams?.get("search")) {
       setSearch("");
     }
   }, [searchParams]);

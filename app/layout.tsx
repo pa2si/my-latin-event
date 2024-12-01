@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Providers from "./providers";
 import { ClerkProvider } from "@clerk/nextjs";
+import { CookiesProvider } from "next-client-cookies/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +21,13 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`debug-screens {${inter.className}`}>
-          <Providers>
-            <Navbar />
-            <main className="container py-10">{children}</main>
-          </Providers>
+        <body className={`debug-screens ${inter.className}`}>
+          <CookiesProvider>
+            <Providers>
+              <Navbar />
+              <main className="container py-10">{children}</main>
+            </Providers>
+          </CookiesProvider>
         </body>
       </html>
     </ClerkProvider>

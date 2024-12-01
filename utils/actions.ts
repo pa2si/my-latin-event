@@ -505,9 +505,15 @@ export const createEventAction = async (
 export const fetchEvents = async ({
   search = "",
   genre,
+  country,
+  state,
+  city,
 }: {
   search?: string;
   genre?: string;
+  country?: string;
+  state?: string;
+  city?: string;
 }) => {
   try {
     const user = await currentUser();
@@ -527,7 +533,7 @@ export const fetchEvents = async ({
       if (userProfile) {
         const events = await db.event.findMany({
           where: {
-            city: userProfile.userCity || userProfile.userState, // Match city with either userCity or userState
+            city: userProfile.userCity || userProfile.userState,
             country: userProfile.userCountry,
             genre: genre || undefined,
             OR: [
@@ -561,7 +567,44 @@ export const fetchEvents = async ({
       }
     }
 
-    // Fallback: return all events if no user or profile
+    // If no user profile, use the provided location parameters
+    if (country || state || city) {
+      const events = await db.event.findMany({
+        where: {
+          city: city || state,
+          country: country,
+          genre: genre || undefined,
+          OR: [
+            {
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+            {
+              subtitle: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+        select: {
+          id: true,
+          name: true,
+          subtitle: true,
+          country: true,
+          image: true,
+          price: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      return events;
+    }
+
+    // Fallback to all events if no location data available
     const events = await db.event.findMany({
       where: {
         genre: genre || undefined,

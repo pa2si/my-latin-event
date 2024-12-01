@@ -6,7 +6,7 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/react";
-import { State, City } from "country-state-city";
+import { State } from "country-state-city";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { CheckIcon } from "lucide-react";
 import { FixedSizeList as List } from "react-window";
@@ -163,6 +163,7 @@ export const StateSelect: React.FC<StateSelectProps> = ({
                 setShowOptions(true);
                 setIsInputActive(true); // Set input as active when focused
               }}
+              autoComplete="off"
               className="flex h-9 w-full rounded-md border border-input bg-muted/20 px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             />
 

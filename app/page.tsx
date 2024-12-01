@@ -1,25 +1,34 @@
 import LoadingCards from "@/components/card/LoadingCards";
-import GenresList from "@/components/home/GenresList";
 import EventsContainer from "@/components/home/EventsContainer";
+import GenresList from "@/components/home/GenresList";
 import { Suspense } from "react";
 
-const HomePage = ({
+const HomePage = async ({
   searchParams,
 }: {
-  searchParams: { genre?: string; search?: string };
+  searchParams: {
+    genre?: string;
+    search?: string;
+  };
 }) => {
   return (
-    <div className="text-3xl">
-      <section>
-        <GenresList genre={searchParams?.genre} search={searchParams?.search} />
-        <Suspense fallback={<LoadingCards />}>
-          <EventsContainer
+    <>
+      <div className="text-3xl">
+        <section>
+          <GenresList
             genre={searchParams?.genre}
             search={searchParams?.search}
           />
-        </Suspense>
-      </section>
-    </div>
+          <Suspense fallback={<LoadingCards />}>
+            <EventsContainer
+              genre={searchParams?.genre}
+              search={searchParams?.search}
+            />
+          </Suspense>
+        </section>
+      </div>
+    </>
   );
 };
+
 export default HomePage;

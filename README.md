@@ -1,11 +1,20 @@
 To do:
 
-- in profile module add a userCity section and probably also userCountry. this shall be used to display local events
-- a user that is not logged in shall get a prompt to select a city. fetch events shall only run if there is a city selected. the selection should be stored in local storage if possible
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.55
+
+- installed next-client-cookies to store location for guest users
+  - CookieProvider in layout.tsx
+- a dialog prompt appears on load of homepage asking for location selection
+  - use of GuestLocationContainer in a Dialog including the same country, state and city selectors as in profile settings
+    - the guestLocation gets stored in a guestLocation Cookie and read in HomePage Component
+  - depening on if there is a user in navbar we display LocationIndicator or GuestLocationIndicator
+  - country, state and city selectors now have : autoComplete="off"
+  - adapted fetchEvents server funtcion in order to deal with the !user case
 
 v 0.1.54
 
