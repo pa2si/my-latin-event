@@ -5,6 +5,12 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.56
+
+- added GenresDropdown to Navbar and removed the previous genre selector from the HomePage component.
+- removed the params sets in guestLocationContainer as its all handled by the cookies
+- modified the loading in profie route
+
 v 0.1.55
 
 - installed next-client-cookies to store location for guest users

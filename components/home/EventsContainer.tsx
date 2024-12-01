@@ -6,16 +6,11 @@ import type { EventCardProps } from "@/utils/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
 
-const EventsContainer = async ({
-  genre,
-  search,
-}: {
-  genre?: string;
-  search?: string;
-}) => {
+const EventsContainer = async ({ search }: { search?: string }) => {
   const user = await currentUser();
   const cookieStore = cookies();
   const locationCookie = cookieStore.get("guestLocation")?.value;
+  const genreCookie = cookieStore.get("selectedGenre")?.value;
 
   // Show loading state if no user and no location data
   if (!user && !locationCookie) {
@@ -38,7 +33,7 @@ const EventsContainer = async ({
   }
 
   const events: EventCardProps[] = await fetchEvents({
-    genre,
+    genre: genreCookie || undefined,
     search,
     ...locationParams,
   });

@@ -5,6 +5,7 @@ import Logo from "./Logo";
 import CityFilterIndicator from "@/components/navbar/CityFilterIndicator";
 import GuestLocationIndicator from "@/components/navbar/GuestLocationIndicator";
 import { currentUser } from "@clerk/nextjs/server";
+import GenresDropdown from "@/components/home/GenresDropdown";
 
 const Navbar = async () => {
   const user = await currentUser();
@@ -16,6 +17,7 @@ const Navbar = async () => {
         <div className="flex items-center gap-2">
           <NavSearch />
           {user ? <CityFilterIndicator /> : <GuestLocationIndicator />}
+          <GenresDropdown />
         </div>
         <div className="flex items-center gap-4">
           <DarkMode />

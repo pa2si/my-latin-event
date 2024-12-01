@@ -2,7 +2,7 @@
 222;
 import { useState, useEffect } from "react";
 import { Country, State } from "country-state-city";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import CountrySelect from "@/components/form/CountrySelect";
 import StateSelect from "@/components/form/StateSelect";
@@ -22,7 +22,6 @@ interface GuestLocationContainerProps {
 
 const GuestLocationContainer = ({ onClose }: GuestLocationContainerProps) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const cookies = useCookies(); // Initialize cookies
 
   // Check if there's a stored location
@@ -84,7 +83,9 @@ const GuestLocationContainer = ({ onClose }: GuestLocationContainerProps) => {
 
   const handleSaveLocation = () => {
     if (formData.countryName && formData.stateName) {
-      // Save all location data in a single cookie as JSON
+      const expires = new Date();
+      expires.setFullYear(expires.getFullYear() + 1);
+
       cookies.set(
         "guestLocation",
         JSON.stringify({
@@ -92,10 +93,11 @@ const GuestLocationContainer = ({ onClose }: GuestLocationContainerProps) => {
           state: formData.stateName,
           city: formData.cityName || "",
         }),
+        {
+          expires,
+        },
       );
 
-      // Removed code that updates URL parameters
-      // Navigate without changing the URL
       router.refresh();
       onClose();
     }
