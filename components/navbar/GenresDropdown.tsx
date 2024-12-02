@@ -23,7 +23,7 @@ const GENRE_COOKIE_KEY = "selectedGenre";
 const GenreInfo = ({ genre }: { genre: string | null }) => (
   <>
     <div className="flex items-center gap-2">
-      <Music className="h-4 w-4 text-muted-foreground" />
+      <Music className="h-4 w-4 text-primary" />
       <div className="font-medium">Genre Filter</div>
     </div>
 
@@ -71,7 +71,7 @@ const GenresDropdown = () => {
   return (
     <>
       {/* Mobile Dropdown */}
-      <div className="md:hidden">
+      <div className="xl:hidden">
         <DropdownMenu onOpenChange={setIsDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="text-primary">
@@ -81,7 +81,7 @@ const GenresDropdown = () => {
           <DropdownMenuContent className="w-80">
             <div className="grid gap-4 p-4">
               <GenreInfo genre={genre} />
-              <div className="rounded-md border bg-popover p-1">
+              <div className="rounded-xl border bg-popover p-1">
                 {genres.map((item) => (
                   <button
                     key={item.label}
@@ -102,7 +102,7 @@ const GenresDropdown = () => {
 
       {/* Desktop Hover Version */}
       <div
-        className="hidden md:block"
+        className="hidden xl:block"
         onMouseLeave={() => {
           setIsHovered(false);
           setIsDropdownOpen(false);
@@ -127,7 +127,7 @@ const GenresDropdown = () => {
           >
             <div className="grid gap-4">
               <GenreInfo genre={genre} />
-              <div className="rounded-md border bg-popover p-1">
+              <div className="rounded-xl border bg-popover p-1">
                 {genres.map((item) => (
                   <button
                     key={item.label}

@@ -2,21 +2,26 @@ import NavSearch from "./NavSearch";
 import LinksDropdown from "./LinksDropdown";
 import DarkMode from "./DarkMode";
 import Logo from "./Logo";
-import CityFilterIndicator from "@/components/navbar/CityFilterIndicator";
+import LocationIndicator from "@/components/navbar/LocationIndicator";
 import GuestLocationIndicator from "@/components/navbar/GuestLocationIndicator";
 import { currentUser } from "@clerk/nextjs/server";
-import GenresDropdown from "@/components/home/GenresDropdown";
+import GenresDropdown from "@/components/navbar/GenresDropdown";
+import { getUserCity } from "@/utils/actions";
 
 const Navbar = async () => {
   const user = await currentUser();
-
+  const userLocation = await getUserCity();
   return (
     <nav className="border-b">
       <div className="container flex flex-col flex-wrap gap-4 py-8 sm:flex-row sm:items-center sm:justify-between">
         <Logo />
         <div className="flex items-center gap-2">
           <NavSearch />
-          {user ? <CityFilterIndicator /> : <GuestLocationIndicator />}
+          {user ? (
+            <LocationIndicator userLocation={userLocation} />
+          ) : (
+            <GuestLocationIndicator />
+          )}
           <GenresDropdown />
         </div>
         <div className="flex items-center gap-4">

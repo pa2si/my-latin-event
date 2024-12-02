@@ -1,9 +1,18 @@
 To do:
 
+- rename CityFilerIndicator to LocationIndicator and adapt the GuestLocationIndicator to also have a hover effects etc.
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.57
+
+- renamed cityFilterIndicator to locationIndicator
+- set responsiveness in guestLocationIndicator and LocationIndicator.
+  - hover now from xl on and click until xl. no shadcn components anymore.
+- GenresDropdown responsivenes of clicking or hovering is now limited at xl instead of md
+- text-primary for icon in genresDropdown
 
 v 0.1.56
 
