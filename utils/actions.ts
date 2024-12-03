@@ -453,10 +453,15 @@ export const deleteOrganizerAction = async (
   }
 };
 
+type ActionResponse = {
+  message: string;
+  success?: boolean;
+};
+
 export const createEventAction = async (
   prevState: any,
   formData: FormData,
-): Promise<{ message: string }> => {
+): Promise<ActionResponse> => {
   try {
     const user = await getAuthUser();
     const organizerId = formData.get("organizerId") as string;
@@ -495,11 +500,13 @@ export const createEventAction = async (
         eventEndDateAndTime,
       },
     });
+    return {
+      message: "",
+      success: true,
+    };
   } catch (error) {
     return renderError(error);
   }
-
-  redirect("/");
 };
 
 export const fetchEvents = async ({

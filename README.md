@@ -1,10 +1,20 @@
 To do:
 
-- rename CityFilerIndicator to LocationIndicator and adapt the GuestLocationIndicator to also have a hover effects etc.
+- different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.58
+
+- when creating an Event successfully EventSuccessDialog gets displayed
+- therefore adapted the server Action
+- added the possibilty to add an icon to HeaderSection
+  - added several icons to the different menus
+- in createEvent replaced the title with the HeaderSection
+  - also added icons for the different sections in the form
+- added icons for paypal, metamask and bitcoin to public folder
 
 v 0.1.57
 

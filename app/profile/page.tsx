@@ -12,6 +12,7 @@ import HeaderSection from "@/components/ui/HeaderSection";
 import { currentUser } from "@clerk/nextjs/server";
 import { isValidTab } from "@/utils/isValidTab";
 import { ProfileTab } from "@/utils/types";
+import { Settings } from "lucide-react";
 
 interface ProfilePageProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -31,13 +32,13 @@ const ProfilePage = async ({ searchParams }: ProfilePageProps) => {
 
   const profileData = user
     ? {
-        firstName: user.firstName ?? undefined,
-        lastName: user.lastName ?? undefined,
-        username: user.username ?? undefined,
-        userCountry: locationData.userCountry,
-        userState: locationData.userState,
-        userCity: locationData.userCity,
-      }
+      firstName: user.firstName ?? undefined,
+      lastName: user.lastName ?? undefined,
+      username: user.username ?? undefined,
+      userCountry: locationData.userCountry,
+      userState: locationData.userState,
+      userCity: locationData.userCity,
+    }
     : null;
 
   console.log("Profile data being passed:", profileData); // Add this to debug
@@ -46,6 +47,7 @@ const ProfilePage = async ({ searchParams }: ProfilePageProps) => {
     <>
       <HeaderSection
         title="Account Settings"
+        icon={Settings}
         breadcrumb={{
           name: "Account Settings",
           parentPath: "/",

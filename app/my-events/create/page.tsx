@@ -1,3 +1,7 @@
+"use client"
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import FormContainer from "@/components/form/FormContainer";
 import { createEventAction } from "@/utils/actions";
 import { SubmitButton } from "@/components/form/Buttons";
@@ -12,21 +16,58 @@ import GenresInput from "@/components/form/GenresInput";
 import StylesInput from "@/components/form/StylesInput";
 import AddressInputContainer from "@/components/form/AddressInputContainer";
 import OrganizerSelect from "@/components/form/OrganizerSelect";
+import EventSuccessDialog from "@/components/form/EventSuccessDialog";
+import HeaderSection from "@/components/ui/HeaderSection";
+import { User, MapPin } from "lucide-react";
+
+
 
 const defaultGenre = "Latin";
 const defaultStyles: Style[] = [];
 
+
+
 const CreateEvent = () => {
+  const router = useRouter();
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+
   const defaultEventDateAndTime = new Date();
   defaultEventDateAndTime.setDate(defaultEventDateAndTime.getDate());
   defaultEventDateAndTime.setHours(20, 0, 0, 0);
 
+  // Wrap the createEventAction to handle success state
+  const handleEventAction = async (prevState: any, formData: FormData) => {
+    const result = await createEventAction(prevState, formData);
+    if (result.success) {
+      setShowSuccessDialog(true);
+      return { ...result, success: false }; // Prevent default redirect
+    }
+    return result;
+  };
+
+  const handleDialogClose = () => {
+    setShowSuccessDialog(false);
+    router.push("/");
+  };
+
   return (
     <section>
-      <h1 className="mb-8 text-2xl font-semibold capitalize">create event</h1>
+      <HeaderSection
+        title="create event"
+        description="Let everyone know about your event"
+        icon='🎉'
+        breadcrumb={{
+          name: "create event",
+          parentPath: "/",
+          parentName: "Home",
+        }}
+      />
       <div className="-mx-4 rounded-md border p-8 sm:mx-0">
-        <h3 className="mb-4 text-lg font-medium uppercase">General Info</h3>
-        <FormContainer action={createEventAction}>
+        <div className="flex items-center gap-2 mb-4">
+          <p>📋</p>
+          <h3 className="text-lg font-medium">General Info</h3>
+        </div>
+        <FormContainer action={handleEventAction}>
           <ImageInput />
           <NameAndSubtitleContainer defaultName="test" />
           <div className="mb-4 grid gap-8 md:grid-cols-2">
@@ -36,24 +77,28 @@ const CreateEvent = () => {
               defaultStyles={defaultStyles}
             />
           </div>
-
           <StylesInput
             defaultGenre={defaultGenre}
             defaultStyles={defaultStyles}
           />
-
           <TextAreaInput
             name="description"
             labelText="Description (max 100 Words)"
           />
-          <h3 className="mb-4 mt-12 text-lg font-medium uppercase">
-            Direction
-          </h3>
+
+          <div className="flex items-center mt-12 gap-2 mb-4">
+            <p>📍</p>
+            <h3 className="text-lg font-medium">Direction</h3>
+          </div>
+
           <AddressInputContainer />
           <div>
-            <h3 className="mb-4 mt-8 text-lg font-medium uppercase">
-              Location Details
-            </h3>
+
+            <div className="flex items-center mt-8 gap-2 mb-4">
+              <MapPin className="h-5 w-5" />
+              <h3 className="text-lg font-medium">Location Details</h3>
+            </div>
+
             <CounterInput detail="floors" />
             <CounterInput detail="bars" />
             <CounterInput detail="outdoorAreas" />
@@ -62,10 +107,21 @@ const CreateEvent = () => {
               defaultEndValue=""
             />
           </div>
-          <h3 className="mb-4 mt-8 text-lg font-medium uppercase">Organizer</h3>
+          <div className="flex items-center mt-8 gap-2 mb-4">
+            <User className="h-5 w-5" />
+            <h3 className="text-lg font-medium">Organizer</h3>
+          </div>
           <OrganizerSelect />
           <SubmitButton text="create event" className="mt-12" />
         </FormContainer>
+
+        <EventSuccessDialog
+          isOpen={showSuccessDialog}
+          onClose={handleDialogClose}
+          paypalUsername="your-paypal@email.com"
+          cryptoWallet="your-metamask-address"
+          bitcoinAddress="your-bitcoin-address"
+        />
       </div>
     </section>
   );

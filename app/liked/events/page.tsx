@@ -22,6 +22,7 @@ const LikedEventsPage = async () => {
       <div className="mb-6 flex items-center justify-between">
         <HeaderSection
           title="Liked Events"
+          icon="❤️"
           description="See all Events you have liked"
           breadcrumb={{
             name: "Liked Events",

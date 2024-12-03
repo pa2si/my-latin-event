@@ -120,7 +120,7 @@ const DateAndTimePickerContainer = ({
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <div>
-        <div className="uppercase">
+        <div className="">
           <EventDateAndTimeInput
             date={date}
             setDate={handleStartDateChange}
