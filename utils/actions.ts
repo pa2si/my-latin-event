@@ -565,6 +565,7 @@ export const fetchEvents = async ({
             country: true,
             image: true,
             price: true,
+            eventDateAndTime: true,
           },
           orderBy: {
             createdAt: "desc",
@@ -603,6 +604,7 @@ export const fetchEvents = async ({
           country: true,
           image: true,
           price: true,
+          eventDateAndTime: true,
         },
         orderBy: {
           createdAt: "desc",
@@ -637,6 +639,7 @@ export const fetchEvents = async ({
         country: true,
         image: true,
         price: true,
+        eventDateAndTime: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -668,6 +671,71 @@ export const fetchLikeId = async ({ eventId }: { eventId: string }) => {
     return null;
   }
 };
+
+export const fetchLikeIds = async ({ eventIds }: { eventIds: string[] }) => {
+  try {
+    const user = await getAuthUser();
+    const likes = await db.like.findMany({
+      where: {
+        eventId: { in: eventIds },
+        profile: { clerkId: user.id },
+      },
+      select: {
+        eventId: true,
+        id: true,
+      },
+    });
+
+    return likes.reduce(
+      (acc, like) => {
+        acc[like.eventId] = like.id;
+        return acc;
+      },
+      {} as Record<string, string | null>,
+    );
+  } catch (error) {
+    console.error("Error fetching likes:", error);
+    return {};
+  }
+};
+
+// export const toggleLikeAction = async (prevState: {
+//   eventId: string;
+//   likeId: string | null;
+//   pathname: string;
+// }) => {
+//   try {
+//     const { eventId, likeId, pathname } = prevState;
+//     const user = await getAuthUser();
+
+//     // Get current user's profile
+//     const profile = await db.profile.findUnique({
+//       where: { clerkId: user.id },
+//       select: { id: true },
+//     });
+
+//     if (!profile) throw new Error("Profile not found");
+
+//     if (likeId) {
+//       await db.like.delete({
+//         where: {
+//           id: likeId,
+//         },
+//       });
+//     } else {
+//       await db.like.create({
+//         data: {
+//           eventId,
+//           profileId: profile.id,
+//         },
+//       });
+//     }
+//     revalidatePath(pathname);
+//     return { message: likeId ? "Removed from Likes" : "Added to Likes" };
+//   } catch (error: any) {
+//     return renderError(error);
+//   }
+// };
 
 export const toggleLikeAction = async (prevState: {
   eventId: string;
@@ -703,7 +771,7 @@ export const toggleLikeAction = async (prevState: {
     revalidatePath(pathname);
     return { message: likeId ? "Removed from Likes" : "Added to Likes" };
   } catch (error: any) {
-    return renderError(error);
+    return { message: error.message || "Error occurred" };
   }
 };
 

@@ -4,11 +4,11 @@ export type actionFunction = (
 ) => Promise<{ message: string }>;
 
 export type EventCardProps = {
-  image: string;
   id: string;
   name: string;
-  subtitle: string | null;
-  country: string;
+  subtitle?: string | null;
+  image: string;
+  eventDateAndTime: string | Date;
   price: number;
 };
 
@@ -23,23 +23,12 @@ export type Booking = {
   checkOut: Date;
 };
 
-export type EventWithDate = EventCardProps & {
-  eventDateAndTime: Date;
-};
-
-// types/organizer.ts
 export type Organizer = {
   id: string;
   organizerName: string;
   organizerImage: string;
-  slogan: string | null;
-  profileId: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type OrganizersTabProps = {
-  organizers: Organizer[];
+  slogan?: string | null;
+  profileId?: string;
 };
 
 // types.ts or can be in the same file

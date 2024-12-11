@@ -1,12 +1,26 @@
-import { fetchEvents } from "@/utils/actions";
-import EventsList from "./EventsList";
+import { fetchEvents, fetchLikeIds } from "@/utils/actions";
 import EmptyList from "./EmptyList";
-import LoadingCards from "@/components/card/LoadingCards";
-import type { EventCardProps } from "@/utils/types";
+import { LoadingCalendar } from "@/components/card/LoadingCards";
+import type { EventCardProps } from "@/utils/types"; // Updated import
 import { currentUser } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
+import dynamic from 'next/dynamic';
 
-const EventsContainer = async ({ search }: { search?: string }) => {
+// Dynamically import the CalendarContainer component
+const CalendarContainer = dynamic(() => import('./CalendarContainer'), {
+  loading: () => <LoadingCalendar />,
+  ssr: false,
+});
+
+interface EventsContainerProps {
+  searchParams: {
+    search?: string;
+  };
+}
+
+const EventsContainer = async ({ searchParams }: EventsContainerProps) => {
+  const { search } = searchParams;
+
   const user = await currentUser();
   const cookieStore = cookies();
   const locationCookie = cookieStore.get("guestLocation")?.value;
@@ -14,7 +28,7 @@ const EventsContainer = async ({ search }: { search?: string }) => {
 
   // Show loading state if no user and no location data
   if (!user && !locationCookie) {
-    return <LoadingCards />;
+    return <LoadingCalendar />;
   }
 
   // Initialize location parameters
@@ -32,23 +46,20 @@ const EventsContainer = async ({ search }: { search?: string }) => {
     }
   }
 
-  const events: EventCardProps[] = await fetchEvents({
+  const events = await fetchEvents({
     genre: genreCookie || undefined,
     search,
     ...locationParams,
   });
 
-  if (events.length === 0) {
-    return (
-      <EmptyList
-        heading="No results."
-        message="Try changing or removing some of your filters."
-        btnText="Clear Filters"
-      />
-    );
-  }
 
-  return <EventsList events={events} />;
+
+  // Fetch all likes for these events at once
+  const eventIds = events.map(event => event.id);
+  const likeIds = user ? await fetchLikeIds({ eventIds }) : {};
+
+
+  return <CalendarContainer events={events} likeIds={likeIds} />;
 };
 
 export default EventsContainer;

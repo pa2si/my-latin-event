@@ -2,21 +2,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import UserInfo from "@/components/events/UserInfo";
 import FollowToggleButton from "@/components/card/FollowToggleButton";
 import { checkFollowAccess } from "@/utils/actions";
+import { Organizer } from "@/utils/types";
 
-interface OrganizerCardProps {
-  organizerId: string;
-  organizerName: string;
-  organizerImage: string;
-  slogan?: string;
-}
+// Pick only the fields we need from Organizer type for UserInfo
+type UserInfoOrganizerProps = Pick<Organizer, 'organizerName' | 'organizerImage' | 'slogan'>;
 
 const OrganizerCard = async ({
-  organizerId,
+  id,
   organizerName,
   organizerImage,
   slogan,
-}: OrganizerCardProps) => {
-  const { canFollow } = await checkFollowAccess(organizerId);
+}: Organizer) => {
+  const { canFollow } = await checkFollowAccess(id);
 
   return (
     <Card>
@@ -26,7 +23,7 @@ const OrganizerCard = async ({
             Event Organizer
           </h3>
           <div className="-mt-2">
-            {canFollow && <FollowToggleButton organizerId={organizerId} />}
+            {canFollow && <FollowToggleButton organizerId={id} />}
           </div>
         </div>
         <UserInfo

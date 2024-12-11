@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import FormContainer from "../form/FormContainer";
 import { toggleLikeAction } from "@/utils/actions";
 import { CardSubmitButton } from "../form/Buttons";
 
@@ -11,16 +10,18 @@ type LikeToggleFormProps = {
 };
 
 function LikeToggleForm({ eventId, likeId }: LikeToggleFormProps) {
-  const pathname = usePathname();
-  const toggleAction = toggleLikeAction.bind(null, {
-    eventId,
-    likeId,
-    pathname,
-  });
+  const pathname = usePathname() || '/';
+
   return (
-    <FormContainer action={toggleAction}>
-      <CardSubmitButton isLiked={likeId ? true : false} />
-    </FormContainer>
+    <form
+      action={async (formData: FormData) => {
+        await toggleLikeAction({ eventId, likeId, pathname });
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <CardSubmitButton isLiked={!!likeId} />
+    </form>
   );
 }
+
 export default LikeToggleForm;

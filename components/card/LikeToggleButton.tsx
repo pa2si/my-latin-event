@@ -1,13 +1,26 @@
-import { auth } from "@clerk/nextjs/server";
+"use client";
+
+import { useAuth } from "@clerk/nextjs";
 import { CardSignInButton } from "../form/Buttons";
-import { fetchLikeId } from "@/utils/actions";
 import LikeToggleForm from "./LikeToggleForm";
 
-async function LikeToggleButton({ eventId }: { eventId: string }) {
-  const { userId } = auth();
-  if (!userId) return <CardSignInButton />;
-  const likeId = await fetchLikeId({ eventId });
+type LikeToggleButtonProps = {
+  eventId: string;
+  likeId: string | null;
+};
+
+function LikeToggleButton({ eventId, likeId }: LikeToggleButtonProps) {
+  const { isSignedIn } = useAuth();
+
+  if (!isSignedIn) {
+    return (
+      <div onClick={(e) => e.stopPropagation()}>
+        <CardSignInButton />
+      </div>
+    );
+  }
 
   return <LikeToggleForm likeId={likeId} eventId={eventId} />;
 }
+
 export default LikeToggleButton;

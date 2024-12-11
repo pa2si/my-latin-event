@@ -1,10 +1,33 @@
 To do:
 
+- must think in a way to better filter genres. eventually with serach params and a list of styles and Latin must be acutally clear filter
+- button genre select in mobile view shall open in sheet
+- add a calendarToggleBtn in homePage. set the tooltip text for home route!
+- when clicking in an empty daycard i must be redirected to create event and the correct date must be pre selected!
+- adapt flyer dimensions event component
 - different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.59
+
+- shadcn sheet installed
+- when loading homepage without being logged in i get edgestore server 404 in console log
+- implemented in home page the calendar view (calendar container, etc.)
+  - implemented loading Calendarcards
+- EventCard mofified to work with client component.
+  - no review anymore
+- in mobile view the genre select opens now in sheet
+- dollar sign in Event Details Page is now a Euro icon
+- Navabr resposiveness adapted
+- ServerFunction FetchEvents now also selects eventDateAndTime
+- LikeToggleButton modified as client component
+  - new function to fetch all liked ids: fetchLikeIds
+  - in HeaderSection we now need to fetch the Ids to pass them down to the LikeToggleButton
+  - every compoennt that uses now LikeToggleButton needs to pass the like ids as prop to avoid fetch each single event as a POST request
+- CalendarEventType replaced with EventCardProps in all instances
 
 v 0.1.58
 

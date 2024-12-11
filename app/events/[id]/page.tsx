@@ -1,26 +1,13 @@
 import { format } from "date-fns";
-import LikeToggleButton from "@/components/card/LikeToggleButton";
-import EventRating from "@/components/card/EventRating";
-import BreadCrumbs from "@/components/events/BreadCrumbs";
 import ImageContainer from "@/components/events/ImageContainer";
-import ShareButton from "@/components/events/ShareButton";
-222;
 import {
   checkEventAccess,
   fetchEventDetails,
-  findExistingReview,
 } from "@/utils/actions";
 import Description from "@/components/events/Description";
 import { redirect } from "next/navigation";
-
 import { Skeleton } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
-import SubmitReview from "@/components/reviews/SubmitReview";
-import EventReviews from "@/components/reviews/EventReviews";
-
-import DeleteEvent from "@/components/events/DeleteEvent";
-import EditMyEvent from "@/components/events/EditMyEvent";
-
 import CalendarCard from "@/components/events/CalendarCard";
 import OrganizerCard from "@/components/events/OrganizerCard";
 import VenueFeaturesCard from "@/components/events/VenueFeaturesCard";
@@ -137,7 +124,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                 />
               )}
               <OrganizerCard
-                organizerId={event.organizer.id}
+                id={event.organizer.id}
                 organizerName={event.organizer.organizerName}
                 organizerImage={event.organizer.organizerImage}
                 slogan={event.organizer.slogan || undefined}
@@ -152,7 +139,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           <div className="sticky top-8 space-y-6">
             <CalendarCard selectedDate={selectedDate} />
             <OrganizerCard
-              organizerId={event.organizer.id}
+              id={event.organizer.id}
               organizerName={event.organizer.organizerName}
               organizerImage={event.organizer.organizerImage}
               slogan={event.organizer.slogan || undefined}

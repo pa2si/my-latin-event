@@ -1,6 +1,6 @@
 // components/events/cards/QuickInfoCard.tsx
 import { Card, CardContent } from "@/components/ui/card";
-import { CalendarIcon, Clock, DollarSign, Music } from "lucide-react";
+import { CalendarIcon, Clock, EuroIcon, Music } from "lucide-react";
 
 interface QuickInfoCardProps {
   date: string;
@@ -38,9 +38,9 @@ export const QuickInfoCard = ({
 
         {/* Price */}
         <div className="flex flex-col gap-2">
-          <DollarSign className="h-5 w-5 text-primary" />
+          <EuroIcon className="h-5 w-5 text-primary" />
           <h3 className="font-semibold">Price</h3>
-          <p className="text-sm text-muted-foreground">{price}€</p>
+          <p className="text-sm text-muted-foreground">{price}</p>
         </div>
 
         {/* Genre */}

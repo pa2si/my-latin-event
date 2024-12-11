@@ -2,12 +2,12 @@ import CalendarToggleBtn from "@/components/events/CalendarToggleBtn";
 import EmptyList from "@/components/home/EmptyList";
 import EventsList from "@/components/home/EventsList";
 import HeaderSection from "@/components/ui/HeaderSection";
-import { fetchLikes } from "@/utils/actions";
+import { fetchLikeIds, fetchLikes } from "@/utils/actions";
 
 const LikedEventsPage = async () => {
-  const likes = await fetchLikes();
+  const likedEvents = await fetchLikes();
 
-  if (likes.length === 0) {
+  if (likedEvents.length === 0) {
     return (
       <EmptyList
         heading="No Liked Events Yet"
@@ -16,6 +16,9 @@ const LikedEventsPage = async () => {
       />
     );
   }
+
+  const eventIds = likedEvents.map(event => event.id);
+  const likeIds = await fetchLikeIds({ eventIds });
 
   return (
     <div className="relative">
@@ -30,10 +33,10 @@ const LikedEventsPage = async () => {
             parentName: "Home",
           }}
         />
-        <CalendarToggleBtn events={likes} />
+        <CalendarToggleBtn events={likedEvents} />
       </div>
 
-      <EventsList events={likes} />
+      <EventsList events={likedEvents} likeIds={likeIds} />
     </div>
   );
 };

@@ -2,10 +2,10 @@
 
 import { genres } from "@/utils/genres";
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-} from "../ui/dropdown-menu";
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   Popover,
   PopoverContent,
@@ -43,7 +43,7 @@ const GenreInfo = ({ genre }: { genre: string | null }) => (
 
 const GenresDropdown = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);  // New state for sheet
   const router = useRouter();
   const cookies = useCookies();
 
@@ -58,36 +58,36 @@ const GenresDropdown = () => {
     });
     router.refresh();
     setIsHovered(false);
-    setIsDropdownOpen(false);
+    setIsSheetOpen(false);  // Update to use sheet state
   };
 
   const handleClear = () => {
     cookies.remove(GENRE_COOKIE_KEY);
     router.refresh();
     setIsHovered(false);
-    setIsDropdownOpen(false);
+    setIsSheetOpen(false);  // Update to use sheet state
   };
 
   return (
     <>
-      {/* Mobile Dropdown */}
+      {/* Mobile Sheet */}
       <div className="xl:hidden">
-        <DropdownMenu onOpenChange={setIsDropdownOpen}>
-          <DropdownMenuTrigger asChild>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger asChild>
             <Button variant="outline" className="text-primary">
               {genre ? `${genre} Events` : "Select Genre"}
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-80">
-            <div className="grid gap-4 p-4">
+          </SheetTrigger>
+          <SheetContent side="right" className="">
+            <div className="grid gap-4 ">
               <GenreInfo genre={genre} />
-              <div className="rounded-xl border bg-popover p-1">
+              <div className="rounded-xl bg-popover p-1">
                 {genres.map((item) => (
                   <button
                     key={item.label}
                     onClick={() => handleSelect(item.label)}
                     className={cn(
-                      "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                       genre === item.label && "text-primary",
                     )}
                   >
@@ -95,18 +95,24 @@ const GenresDropdown = () => {
                   </button>
                 ))}
               </div>
+              {genre && (
+                <Button
+                  variant="ghost"
+                  onClick={handleClear}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Clear Filter
+                </Button>
+              )}
             </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SheetContent>
+        </Sheet>
       </div>
 
       {/* Desktop Hover Version */}
       <div
         className="hidden xl:block"
-        onMouseLeave={() => {
-          setIsHovered(false);
-          setIsDropdownOpen(false);
-        }}
+        onMouseLeave={() => setIsHovered(false)}
       >
         <Popover open={isHovered}>
           <PopoverTrigger asChild>
@@ -120,20 +126,17 @@ const GenresDropdown = () => {
           <PopoverContent
             className="w-80"
             align="start"
-            onMouseEnter={() => {
-              setIsHovered(true);
-              setIsDropdownOpen(true);
-            }}
+            onMouseEnter={() => setIsHovered(true)}
           >
             <div className="grid gap-4">
               <GenreInfo genre={genre} />
-              <div className="rounded-xl border bg-popover p-1">
+              <div className="rounded-xl  bg-popover p-1">
                 {genres.map((item) => (
                   <button
                     key={item.label}
                     onClick={() => handleSelect(item.label)}
                     className={cn(
-                      "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                       genre === item.label && "text-primary",
                     )}
                   >

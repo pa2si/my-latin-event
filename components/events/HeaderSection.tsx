@@ -4,6 +4,7 @@ import ShareButton from "./ShareButton";
 import LikeToggleButton from "../card/LikeToggleButton";
 import EditMyEvent from "./EditMyEvent";
 import DeleteEvent from "./DeleteEvent";
+import { fetchLikeId } from "@/utils/actions";
 
 interface HeaderSectionsProps {
   eventId: string;
@@ -12,12 +13,15 @@ interface HeaderSectionsProps {
   canEdit: boolean;
 }
 
-const HeaderSections = ({
+const HeaderSections = async ({
   eventId,
   eventName,
   eventSubtitle,
   canEdit,
 }: HeaderSectionsProps) => {
+
+  const likeId = await fetchLikeId({ eventId });
+
   return (
     <div className="mb-4 sm:mb-8">
       <BreadCrumbs name={eventName} />
@@ -30,7 +34,7 @@ const HeaderSections = ({
         </div>
         <div className="mt-4 flex gap-4 sm:mt-0">
           <ShareButton name={eventName} eventId={eventId} />
-          <LikeToggleButton eventId={eventId} />
+          <LikeToggleButton eventId={eventId} likeId={likeId} />
           {canEdit && (
             <>
               <EditMyEvent eventId={eventId} />
