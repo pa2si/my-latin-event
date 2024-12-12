@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { format, isToday as isDateToday } from 'date-fns';
-import { Upload } from 'lucide-react';
+import { Upload, ListFilter } from 'lucide-react';
 import {
     Carousel,
     CarouselContent,
@@ -60,7 +59,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
     // Define CSS classes based on the view
     const baseClasses = 'relative bg-neutral-50';
     const weekViewClass = view === 'week'
-        ? 'flex-1 min-w-[140px] max-w-[160px] h-[226px] md:min-w-[280px] md:h-[300px] md:max-w-[280px]'
+        ? 'flex-1 min-w-[140px] max-w-[160px] h-[270px] md:min-w-[280px] md:h-[350px] md:max-w-[280px]'
         : '';
     const monthViewClass = view === 'month'
         ? 'flex-1 min-w-[140px] max-w-[100px] md:min-w-[170px] md:max-w-[170px] h-[230px]'
@@ -75,22 +74,18 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
             return (
                 <div className="w-full h-full relative rounded-lg overflow-visible">
                     {events.length === 1 ? (
-                        <div
-                            className="relative w-full h-full min-h-[400px] md:min-h-[500px] cursor-pointer group"
-                            onClick={() => router.push(`/events/${events[0].id}`)}
-                        >
-                            <Image
+                        <>
+                            <img
                                 src={events[0].image}
                                 alt={events[0].name}
-                                fill
-                                className="object-cover"
+                                className="w-full h-full object-cover absolute inset-0"
                             />
-                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                                <h3 className="text-white font-semibold">
+                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                <h3 className={`text-white font-semibold ${view === 'month' ? 'text-' : 'text-sm md:text-base'}`}>
                                     {events[0].name}
                                 </h3>
                             </div>
-                        </div>
+                        </>
                     ) : (
                         <div className="relative h-full overflow-visible">
                             <Carousel
@@ -108,13 +103,12 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                                 className="relative w-full h-[500px] cursor-pointer group"
                                                 onClick={() => router.push(`/events/${event.id}`)}
                                             >
-                                                <Image
+                                                <img
                                                     src={event.image}
                                                     alt={event.name}
-                                                    fill
-                                                    className="object-cover"
+                                                    className="w-full h-full object-cover absolute inset-0"
                                                 />
-                                                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity mb-8">
+                                                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 mb-8">
                                                     <h3 className="text-white font-semibold">
                                                         {event.name}
                                                     </h3>
@@ -147,26 +141,49 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                 <Sheet>
                     <SheetTrigger asChild>
                         <div className={`
-                            relative
-                            ${events.length === 1 ? 'w-full h-full cursor-pointer group' : `
-                                grid gap-1 w-full h-full cursor-pointer group
-                                ${events.length === 2 ? 'grid-rows-2' : ''}
-                                ${events.length === 3 ? 'grid-cols-2 grid-rows-2' : ''}
-                                ${events.length >= 4 ? 'grid-cols-2 grid-rows-2' : ''}
-                            `}
-                        `}>
+    relative
+    ${events.length === 1 ? 'w-full h-full cursor-pointer group' : `
+        grid gap-0.5 w-full h-full cursor-pointer group
+        ${events.length === 2 ? 'grid-rows-2' : ''}
+        ${events.length === 3 ? 'grid-cols-2 grid-rows-2' : ''}
+        ${events.length >= 4 ? 'grid-cols-2 grid-rows-2' : ''}
+    `}
+`}>
                             {events.length === 1 ? (
                                 <>
-                                    <Image
+                                    <img
                                         src={events[0].image}
                                         alt={events[0].name}
-                                        fill
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover absolute inset-0"
                                     />
-                                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <h3 className="text-white font-semibold">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+
+
+                                        {/* Title */}
+                                        <h3 className={`text-white font-semibold capitalize ${view === 'month' ? 'text-sm' : 'text-sm md:text-base'
+                                            } mb-2`}>
                                             {events[0].name}
                                         </h3>
+
+                                        {/* Location */}
+                                        <div className="text-white/90 text-xs mb-2 capitalize">
+                                            @ {events[0].location}
+                                        </div>
+
+                                        {/* Genres */}
+                                        {events[0].genres && events[0].genres.length > 0 && (
+                                            <div className="flex flex-wrap gap-1">
+                                                {events[0].genres.map((genre, index) => (
+                                                    <span
+                                                        key={index}
+                                                        className="text-xs text-white bg-primary px-2 py-0.5 rounded-full backdrop-blur-sm"
+                                                    >
+                                                        {genre}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </>
                             ) : (
@@ -176,11 +193,10 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                             key={event.id}
                                             className={`relative h-full ${events.length === 3 && index === 2 ? 'col-span-2 row-span-1' : ''}`}
                                         >
-                                            <Image
+                                            <img
                                                 src={event.image}
                                                 alt={event.name}
-                                                fill
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-full object-cover absolute inset-0"
                                             />
                                         </div>
                                     ))}
@@ -189,8 +205,14 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                             +{events.length - 4}
                                         </div>
                                     )}
-                                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <h3 className="text-white font-semibold">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                        <div className="flex items-center gap-2 text-white/90 text-sm mb-2">
+                                            <ListFilter className="h-4 w-4" />
+                                            <span>{events.length} events</span>
+                                        </div>
+                                        <h3 className={`text-white font-semibold ${view === 'month' ? 'text-xs' : 'text-sm md:text-base'
+                                            }`}>
                                             Click to view all events
                                         </h3>
                                     </div>
@@ -247,7 +269,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                 ${monthViewClass} 
                 ${dayViewClass}
                 rounded-lg overflow-hidden shadow-md
-                ${view !== 'day' ? 'transform transition-transform duration-200 hover:scale-105 hover:shadow-xl' : ''}
+                ${view !== 'day' ? 'transform transition-transform duration-250 hover:scale-105 hover:shadow-xl' : ''}
                 flex flex-col relative
             `}
         >

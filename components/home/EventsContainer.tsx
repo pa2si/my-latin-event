@@ -1,7 +1,7 @@
 import { fetchEvents, fetchLikeIds } from "@/utils/actions";
 import EmptyList from "./EmptyList";
 import { LoadingCalendar } from "@/components/card/LoadingCards";
-import type { EventCardProps } from "@/utils/types"; // Updated import
+import type { EventCardProps } from "@/utils/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
 import dynamic from 'next/dynamic';
@@ -24,7 +24,7 @@ const EventsContainer = async ({ searchParams }: EventsContainerProps) => {
   const user = await currentUser();
   const cookieStore = cookies();
   const locationCookie = cookieStore.get("guestLocation")?.value;
-  const genreCookie = cookieStore.get("selectedGenre")?.value;
+  const genresCookie = cookieStore.get("selectedGenres")?.value; // Changed from selectedGenre
 
   // Show loading state if no user and no location data
   if (!user && !locationCookie) {
@@ -46,18 +46,24 @@ const EventsContainer = async ({ searchParams }: EventsContainerProps) => {
     }
   }
 
+  // Parse genres from cookie
+  let selectedGenres: string[] | undefined;
+  try {
+    selectedGenres = genresCookie ? JSON.parse(genresCookie) : undefined;
+  } catch (error) {
+    console.error("Error parsing genres cookie:", error);
+    selectedGenres = undefined;
+  }
+
   const events = await fetchEvents({
-    genre: genreCookie || undefined,
+    genres: selectedGenres,
     search,
     ...locationParams,
   });
 
-
-
   // Fetch all likes for these events at once
   const eventIds = events.map(event => event.id);
   const likeIds = user ? await fetchLikeIds({ eventIds }) : {};
-
 
   return <CalendarContainer events={events} likeIds={likeIds} />;
 };

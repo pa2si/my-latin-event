@@ -2,38 +2,48 @@
 
 import { useEffect } from "react";
 import getStyles from "@/utils/getStyles";
-import { Style } from "@/utils/styles";
 import { useGenreStylesStore } from "./store";
+import { Style } from "./types";
 
-export function useGenreStyles(initialGenre: string, initialStyles: Style[]) {
-  const { selectedGenre, setSelectedGenre, styles, setStyles } =
+export const useGenreStyles = (
+  defaultGenre: string[] | string,
+  defaultStyles: Style[],
+) => {
+  const { selectedGenres, setSelectedGenres, styles, setStyles } =
     useGenreStylesStore();
 
   useEffect(() => {
-    if (!selectedGenre) {
-      setSelectedGenre(initialGenre);
+    // Convert defaultGenre to array if it's a string
+    const genresArray = Array.isArray(defaultGenre)
+      ? defaultGenre
+      : [defaultGenre];
+
+    if (!selectedGenres.length) {
+      setSelectedGenres(genresArray);
     }
-  }, [initialGenre, selectedGenre, setSelectedGenre]);
 
-  useEffect(() => {
-    const fetchStyles = async () => {
-      const allStyles = (await getStyles(selectedGenre)) || [];
-      const updatedStyles = allStyles.map((style) => ({
-        ...style,
-        selected: initialStyles.some(
-          (s) => s.name === style.name && s.selected,
-        ),
-      }));
-      setStyles(updatedStyles);
-    };
+    // Get styles for all selected genres
+    const allStyles = selectedGenres.flatMap((genre) => getStyles(genre));
 
-    fetchStyles();
-  }, [selectedGenre, initialStyles, setStyles]);
+    // Remove duplicates and preserve selection state
+    const uniqueStyles = Array.from(
+      new Set(allStyles.map((style) => style.name)),
+    ).map((name) => {
+      const style = allStyles.find((s) => s.name === name);
+      return {
+        ...style!,
+        selected: defaultStyles.some((ds) => ds.name === name && ds.selected),
+      };
+    });
 
-  return {
-    selectedGenre,
-    setSelectedGenre,
-    styles,
+    setStyles(uniqueStyles);
+  }, [
+    defaultGenre,
+    defaultStyles,
+    selectedGenres,
+    setSelectedGenres,
     setStyles,
-  };
-}
+  ]);
+
+  return { styles };
+};

@@ -1,12 +1,9 @@
-import { IconType } from 'react-icons';
-import { MdCabin } from 'react-icons/md';
-
-import { TbCaravan, TbTent, TbBuildingCottage } from 'react-icons/tb';
-
-import { GiWoodCabin, GiMushroomHouse } from 'react-icons/gi';
-import { PiWarehouse, PiLighthouse, PiVan } from 'react-icons/pi';
-
-import { GoContainer } from 'react-icons/go';
+import { IconType } from "react-icons";
+import { MdCabin } from "react-icons/md";
+import { TbCaravan, TbTent, TbBuildingCottage } from "react-icons/tb";
+import { GiWoodCabin, GiMushroomHouse } from "react-icons/gi";
+import { PiWarehouse, PiLighthouse, PiVan } from "react-icons/pi";
+import { GoContainer } from "react-icons/go";
 
 type Genre = {
   label: GenreLabel;
@@ -14,61 +11,71 @@ type Genre = {
 };
 
 export type GenreLabel =
-  | 'Latin'
-  | 'Salsa'
-  | 'Cumbia'
-  | 'Tropical'
-  | 'Reggeaton'
-  | 'Bachata'
-  | 'Merengue'
-  | 'Bolero'
-  | 'Latin-Rock'
-  | 'Latin-Jazz'
-  | 'Musica Andina';
+  | "Latin"
+  | "Salsa"
+  | "Cumbia"
+  | "Tropical"
+  | "Reggeaton"
+  | "Bachata"
+  | "Merengue"
+  | "Bolero"
+  | "Latin-Rock"
+  | "Latin-Jazz"
+  | "Musica Andina"
+  | "Folclor"
+  | "Cantina";
 
 export const genres: Genre[] = [
   {
-    label: 'Latin',
+    label: "Latin",
     icon: MdCabin,
   },
   {
-    label: 'Salsa',
+    label: "Salsa",
     icon: PiVan,
   },
   {
-    label: 'Cumbia',
+    label: "Cumbia",
     icon: GiWoodCabin,
   },
   {
-    label: 'Tropical',
+    label: "Tropical",
     icon: GiWoodCabin,
   },
   {
-    label: 'Reggeaton',
+    label: "Reggeaton",
     icon: TbTent,
   },
   {
-    label: 'Bachata',
+    label: "Bachata",
     icon: PiWarehouse,
   },
   {
-    label: 'Merengue',
+    label: "Merengue",
     icon: TbBuildingCottage,
   },
   {
-    label: 'Bolero',
+    label: "Bolero",
     icon: PiLighthouse,
   },
   {
-    label: 'Latin-Rock',
+    label: "Latin-Rock",
     icon: GiMushroomHouse,
   },
   {
-    label: 'Latin-Jazz',
+    label: "Latin-Jazz",
     icon: GoContainer,
   },
   {
-    label: 'Musica Andina',
+    label: "Musica Andina",
+    icon: TbCaravan,
+  },
+  {
+    label: "Folclor",
+    icon: TbCaravan,
+  },
+  {
+    label: "Cantina",
     icon: TbCaravan,
   },
 ];

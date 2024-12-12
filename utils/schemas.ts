@@ -141,7 +141,7 @@ export const eventSchema = z
     price: z.coerce.number().int().min(0, {
       message: "price must be a positive number.",
     }),
-    genre: z.string(),
+    genres: z.array(z.string()).min(1, "At least one genre is required"),
     description: z
       .string()
       .refine(
@@ -157,7 +157,7 @@ export const eventSchema = z
     floors: z.coerce.number().int().min(0),
     bars: z.coerce.number().int().min(0),
     outdoorAreas: z.coerce.number().int().min(0),
-    styles: z.string(),
+    styles: z.array(z.string()), // Changed from z.string()
     eventDateAndTime: z.preprocess(
       (arg) => {
         if (typeof arg === "string" || arg instanceof Date) {

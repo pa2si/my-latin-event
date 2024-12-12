@@ -17,7 +17,7 @@ import { calculateTotals } from "./calculateTotals";
 import { formatDate } from "./format";
 import { backendClient } from "@/lib/edgestore-server";
 import { optimizeImage } from "@/utils/imageOptimizer";
-
+import type { Prisma } from "@prisma/client";
 /* Helper Functions */
 export const getAuthUser = async () => {
   const user = await currentUser();
@@ -469,23 +469,26 @@ export const createEventAction = async (
     if (!organizerId) throw new Error("Organizer ID is required");
 
     // Verify organizer ownership
-    const organizer = await db.organizer.findFirst({
-      where: {
-        id: organizerId,
-        profile: {
-          clerkId: user.id,
-        },
-      },
-    });
-
-    if (!organizer) throw new Error("Organizer not found or access denied");
+    const organizer = await verifyOrganizerOwnership(organizerId);
 
     const rawData = Object.fromEntries(formData);
-    console.log("thats the raw data", rawData);
-    const file = formData.get("image") as File;
 
-    const validatedFields = validateWithZodSchema(eventSchema, rawData);
-    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+    // Pre-process genres and styles before validation
+    const rawGenres = formData.get("genres");
+    const rawStyles = formData.get("styles");
+
+    // Parse genres and styles if they're JSON strings
+    const processedData = {
+      ...rawData,
+      genres: rawGenres ? JSON.parse(rawGenres as string) : [],
+      styles: rawStyles ? JSON.parse(rawStyles as string) : [],
+    };
+
+    const validatedFields = validateWithZodSchema(eventSchema, processedData);
+    const validatedFile = validateWithZodSchema(imageSchema, {
+      image: formData.get("image") as File,
+    });
+
     const fullPath = await uploadEventImage(validatedFile.image);
     const eventDateAndTime = validatedFields.eventDateAndTime as Date;
     const eventEndDateAndTime =
@@ -500,6 +503,7 @@ export const createEventAction = async (
         eventEndDateAndTime,
       },
     });
+
     return {
       message: "",
       success: true,
@@ -511,19 +515,49 @@ export const createEventAction = async (
 
 export const fetchEvents = async ({
   search = "",
-  genre,
+  genres,
   country,
   state,
   city,
 }: {
   search?: string;
-  genre?: string;
+  genres?: string[];
   country?: string;
   state?: string;
   city?: string;
 }) => {
   try {
     const user = await currentUser();
+
+    const baseSelect = {
+      id: true,
+      name: true,
+      location: true,
+      subtitle: true,
+      country: true,
+      image: true,
+      price: true,
+      eventDateAndTime: true,
+      genres: true,
+    } satisfies Prisma.EventSelect;
+
+    const baseWhere: Prisma.EventWhereInput = {
+      genres: genres ? { hasSome: genres } : undefined,
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          subtitle: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ],
+    };
 
     if (user) {
       const userProfile = await db.profile.findUnique({
@@ -540,33 +574,11 @@ export const fetchEvents = async ({
       if (userProfile) {
         const events = await db.event.findMany({
           where: {
+            ...baseWhere,
             city: userProfile.userCity || userProfile.userState,
             country: userProfile.userCountry,
-            genre: genre || undefined,
-            OR: [
-              {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-              {
-                subtitle: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-            ],
           },
-          select: {
-            id: true,
-            name: true,
-            subtitle: true,
-            country: true,
-            image: true,
-            price: true,
-            eventDateAndTime: true,
-          },
+          select: baseSelect,
           orderBy: {
             createdAt: "desc",
           },
@@ -579,33 +591,11 @@ export const fetchEvents = async ({
     if (country || state || city) {
       const events = await db.event.findMany({
         where: {
+          ...baseWhere,
           city: city || state,
           country: country,
-          genre: genre || undefined,
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: "insensitive",
-              },
-            },
-            {
-              subtitle: {
-                contains: search,
-                mode: "insensitive",
-              },
-            },
-          ],
         },
-        select: {
-          id: true,
-          name: true,
-          subtitle: true,
-          country: true,
-          image: true,
-          price: true,
-          eventDateAndTime: true,
-        },
+        select: baseSelect,
         orderBy: {
           createdAt: "desc",
         },
@@ -615,32 +605,8 @@ export const fetchEvents = async ({
 
     // Fallback to all events if no location data available
     const events = await db.event.findMany({
-      where: {
-        genre: genre || undefined,
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            subtitle: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        ],
-      },
-      select: {
-        id: true,
-        name: true,
-        subtitle: true,
-        country: true,
-        image: true,
-        price: true,
-        eventDateAndTime: true,
-      },
+      where: baseWhere,
+      select: baseSelect,
       orderBy: {
         createdAt: "desc",
       },
@@ -791,6 +757,8 @@ export const fetchLikes = async () => {
             id: true,
             name: true,
             subtitle: true,
+            genres: true,
+            location: true,
             price: true,
             country: true,
             image: true,
@@ -823,7 +791,7 @@ export const fetchEventDetails = async (id: string) => {
       postalCode: true,
       country: true,
       googleMapsLink: true,
-      genre: true,
+      genres: true, // Changed from genre
       styles: true,
       image: true,
       description: true,
@@ -1191,10 +1159,16 @@ export const updateEventAction = async (
     const user = await getAuthUser();
 
     const rawData = Object.fromEntries(formData);
-    const validatedFields = validateWithZodSchema(eventSchema, rawData);
-    const eventDateAndTime = validatedFields.eventDateAndTime as
-      | Date
-      | undefined;
+
+    // Pre-process genres and styles before validation
+    const processedData = {
+      ...rawData,
+      genres: JSON.parse(rawData.genres as string),
+      styles: JSON.parse(rawData.styles as string),
+    };
+
+    const validatedFields = validateWithZodSchema(eventSchema, processedData);
+    const eventDateAndTime = validatedFields.eventDateAndTime as Date;
     const eventEndDateAndTime =
       validatedFields.eventEndDateAndTime as Date | null;
 
@@ -1222,7 +1196,7 @@ export const updateEventAction = async (
 
     // Only handle image if a new one was uploaded
     const file = formData.get("image") as File;
-    let imageUrl = existingEvent.image; // Keep existing image by default
+    let imageUrl = existingEvent.image;
 
     if (file?.size > 0) {
       const validatedFile = validateWithZodSchema(imageSchema, { image: file });

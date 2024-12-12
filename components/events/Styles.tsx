@@ -1,5 +1,4 @@
-import { Style } from "@/utils/styles";
-import { FaMusic } from "react-icons/fa";
+import { Style } from "@/utils/types";
 import Title from "./Title";
 import { Badge } from "../ui/badge";
 

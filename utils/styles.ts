@@ -1,130 +1,103 @@
-import { IconType } from 'react-icons';
-import {
-  FiCloud,
-  FiTruck,
-  FiZap,
-  FiWind,
-  FiSun,
-  FiCoffee,
-  FiFeather,
-  FiAirplay,
-  FiTrello,
-  FiBox,
-  FiAnchor,
-  FiDroplet,
-  FiMapPin,
-  FiSunrise,
-  FiSunset,
-  FiMusic,
-} from 'react-icons/fi';
-
-export type Style = {
-  name: string;
-  icon: IconType;
-  selected: boolean;
-};
+import { Style } from "./types";
 
 export const latinStyles: Style[] = [
-  { name: 'Salsa', icon: FiBox, selected: false },
-  { name: 'Son', icon: FiBox, selected: false },
-  { name: 'Cumbia', icon: FiAirplay, selected: false },
-  { name: 'Reggeaton', icon: FiAirplay, selected: false },
-  { name: 'Dembow', icon: FiAirplay, selected: false },
-  { name: 'Bouyon', icon: FiAirplay, selected: false },
-  { name: 'Bachata', icon: FiAirplay, selected: false },
-  { name: 'Merengue', icon: FiAirplay, selected: false },
-  { name: 'Hip Hop Latino', icon: FiAirplay, selected: false },
-  { name: 'Tropical', icon: FiAirplay, selected: false },
-  { name: 'Currulao', icon: FiAirplay, selected: false },
-  { name: 'Vallenato', icon: FiAirplay, selected: false },
-  { name: 'Bullerengue', icon: FiAirplay, selected: false },
-  { name: 'Porro', icon: FiAirplay, selected: false },
-  { name: 'Bolero', icon: FiAirplay, selected: false },
-  { name: 'Joropo', icon: FiAirplay, selected: false },
-  { name: 'Latin Rock', icon: FiAirplay, selected: false },
-  { name: 'Latin Jazz', icon: FiAirplay, selected: false },
+  { name: "Pop Latino", selected: false },
+  { name: "Hip Hop Latino", selected: false },
 ];
 
 export const salsaStyles: Style[] = [
-  { name: 'Salsa', icon: FiMusic, selected: false },
-  { name: 'Salsa Brava', icon: FiCloud, selected: false },
-  { name: 'Guaguanco', icon: FiTruck, selected: false },
-  { name: 'Guaracha', icon: FiFeather, selected: false },
-  { name: 'Son Montuno', icon: FiZap, selected: false },
-  { name: 'Son', icon: FiWind, selected: false },
-  { name: 'Son Cubano', icon: FiWind, selected: false },
-  { name: 'Pachanga', icon: FiSun, selected: false },
-  { name: 'Boogaloo', icon: FiCoffee, selected: false },
-  { name: 'Mambo', icon: FiDroplet, selected: false },
-  { name: 'Descarga', icon: FiDroplet, selected: false },
-  { name: 'Bolero', icon: FiAirplay, selected: false },
-  { name: 'Merengue', icon: FiTrello, selected: false },
-  { name: 'Bachata', icon: FiBox, selected: false },
-  { name: 'Timba', icon: FiAnchor, selected: false },
-  { name: 'Cha Cha Cha', icon: FiMapPin, selected: false },
-  { name: 'Plena', icon: FiSunrise, selected: false },
-  { name: 'Bomba', icon: FiSunset, selected: false },
+  { name: "Salsa", selected: false },
+  { name: "Salsa Brava", selected: false },
+  { name: "Guaguanco", selected: false },
+  { name: "Guaracha", selected: false },
+  { name: "Son Montuno", selected: false },
+  { name: "Son", selected: false },
+  { name: "Son Cubano", selected: false },
+  { name: "Pachanga", selected: false },
+  { name: "Boogaloo", selected: false },
+  { name: "Mambo", selected: false },
+  { name: "Descarga", selected: false },
+  { name: "Timba", selected: false },
+  { name: "Cha Cha Cha", selected: false },
 ];
 
 export const cumbiaStyles: Style[] = [
-  { name: 'Villera', icon: FiBox, selected: false },
-  { name: 'Colombiana', icon: FiAirplay, selected: false },
-  { name: 'Peruana', icon: FiAirplay, selected: false },
-  { name: 'Mexicana', icon: FiAirplay, selected: false },
-  { name: 'Chilena', icon: FiAirplay, selected: false },
-  { name: 'Amazonica', icon: FiAirplay, selected: false },
-  { name: 'Psicodelica', icon: FiAirplay, selected: false },
-  { name: 'Folklorica', icon: FiAirplay, selected: false },
-  { name: 'Tropical', icon: FiAirplay, selected: false },
-  { name: 'Chicha', icon: FiAirplay, selected: false },
+  { name: "Cumbia Colombiana", selected: false },
+  { name: "Cumbia con Gaitas", selected: false },
+  { name: "Cumbia Peruana", selected: false },
+  { name: "Cumbia Amazonica", selected: false },
+  { name: "Cumbia Psicodelica", selected: false },
+  { name: "Cumbia Villera", selected: false },
+  { name: "Cumbia Mexicana", selected: false },
+  { name: "Cumbia Chilena", selected: false },
+  { name: "Cumbia Tropical", selected: false },
+  { name: "Chicha", selected: false },
 ];
 
 export const tropicalStyles: Style[] = [
-  { name: 'Vallenato', icon: FiBox, selected: false },
-  { name: 'Salsa', icon: FiAirplay, selected: false },
-  { name: 'Bullerengue', icon: FiAirplay, selected: false },
-  { name: 'Porro', icon: FiAirplay, selected: false },
-  { name: 'Cumbia', icon: FiAirplay, selected: false },
+  { name: "Vallenato", selected: false },
+  { name: "Champeta", selected: false },
+  { name: "Porro", selected: false },
+  { name: "Plena", selected: false },
+  { name: "Bomba", selected: false },
+  { name: "Calypso/Soca", selected: false },
+  { name: "Samba", selected: false },
+  { name: "Forró", selected: false },
+  { name: "Bossa Nova", selected: false },
 ];
 
 export const reggeatonStyles: Style[] = [
-  { name: 'Old School', icon: FiBox, selected: false },
-  { name: 'Neo Perreo', icon: FiAirplay, selected: false },
-  { name: 'Dembow', icon: FiAirplay, selected: false },
-  { name: 'Bouyon', icon: FiAirplay, selected: false },
+  { name: "Old School Reggeaton", selected: false },
+  { name: "Neo Perreo", selected: false },
+  { name: "Dembow", selected: false },
+  { name: "Bouyon", selected: false },
 ];
 
 export const bachataStyles: Style[] = [
-  { name: 'Sensual', icon: FiBox, selected: false },
-  { name: 'Dominicana', icon: FiAirplay, selected: false },
+  { name: "Bachata Sensual", selected: false },
+  { name: "Bachata Dominicana", selected: false },
 ];
 
 export const merengueStyles: Style[] = [
-  { name: 'Classic', icon: FiBox, selected: false },
-  { name: 'Tecno Merengue', icon: FiAirplay, selected: false },
+  { name: "Merengue Classico", selected: false },
+  { name: "Tecno Merengue", selected: false },
 ];
 
 export const boleroStyles: Style[] = [
-  { name: 'Old School', icon: FiBox, selected: false },
-  { name: 'Modern', icon: FiAirplay, selected: false },
+  { name: "Vintage Bolero", selected: false },
+  { name: "Modern Bolero", selected: false },
 ];
 
 export const latinRockStyles: Style[] = [
-  { name: '80s', icon: FiBox, selected: false },
-  { name: '90s', icon: FiAirplay, selected: false },
-  { name: 'modern', icon: FiAirplay, selected: false },
+  { name: "80s latin Rock", selected: false },
+  { name: "90s latin Rock", selected: false },
+  { name: "modern latin Rock", selected: false },
 ];
 export const latinJazzStyles: Style[] = [
-  { name: '80s', icon: FiBox, selected: false },
-  { name: '90s', icon: FiAirplay, selected: false },
-  { name: 'modern', icon: FiAirplay, selected: false },
+  { name: "80s Latin Jazz", selected: false },
+  { name: "90s Latin Jazz", selected: false },
+  { name: "modern Latin Jazz", selected: false },
 ];
 
 export const musicaAndindaStyles: Style[] = [
-  { name: 'Huaino', icon: FiAirplay, selected: false },
-  { name: 'Saya', icon: FiAirplay, selected: false },
-  { name: 'Peruano', icon: FiBox, selected: false },
-  { name: 'Boliviano', icon: FiAirplay, selected: false },
-  { name: 'Argentino', icon: FiAirplay, selected: false },
-  { name: 'Chicha', icon: FiAirplay, selected: false },
+  { name: "Huayno", selected: false },
+  { name: "Saya", selected: false },
+];
+
+export const folclorStyles: Style[] = [
+  { name: "Joropo", selected: false },
+  { name: "Bambuco", selected: false },
+  { name: "Bullerengue", selected: false },
+  { name: "Mapalé", selected: false },
+  { name: "Currulao", selected: false },
+  { name: "Puya", selected: false },
+  { name: "Chacarera", selected: false },
+];
+
+export const cantinaStyles: Style[] = [
+  { name: "Musica Popular", selected: false },
+  { name: "Mariachi", selected: false },
+  { name: "Pasillo", selected: false },
+  { name: "Ranchera", selected: false },
+  { name: "Vals", selected: false },
 ];

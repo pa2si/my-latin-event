@@ -46,8 +46,11 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
     ? format(eventEndDateAndTime, "HH:mm")
     : "";
 
-  // Styles parsing
-  const styles: StyleItem[] = JSON.parse(event.styles);
+  // Convert styles array to StyleItem array
+  const selectedStyles: StyleItem[] = event.styles.map(style => ({
+    name: style,
+    selected: true
+  }));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -72,7 +75,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             time={formattedTime}
             endTime={formattedEndTime}
             price={event.price}
-            genre={event.genre}
+            genres={event.genres} // Using genres directly from event
           />
           <p className="mt-2 text-sm text-muted-foreground">
             Created {format(event.createdAt, "dd.MM.yyyy")}
@@ -89,7 +92,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             city={event.city}
             country={event.country}
             googleMapsLink={event.googleMapsLink || undefined}
-            styles={event.styles}
+            styles={selectedStyles}
           />
 
           {/* Description */}
@@ -124,7 +127,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                 />
               )}
               <OrganizerCard
-                id={event.organizer.id}
+                id={event.organizer.id} // Updated from organizerId to id
                 organizerName={event.organizer.organizerName}
                 organizerImage={event.organizer.organizerImage}
                 slogan={event.organizer.slogan || undefined}
@@ -139,7 +142,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           <div className="sticky top-8 space-y-6">
             <CalendarCard selectedDate={selectedDate} />
             <OrganizerCard
-              id={event.organizer.id}
+              id={event.organizer.id} // Updated from organizerId to id
               organizerName={event.organizer.organizerName}
               organizerImage={event.organizer.organizerImage}
               slogan={event.organizer.slogan || undefined}

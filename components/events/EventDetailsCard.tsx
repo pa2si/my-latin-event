@@ -18,7 +18,7 @@ interface EventDetailsCardProps {
   city: string;
   country: string;
   googleMapsLink?: string;
-  styles: string; // JSON string of StyleItem[]
+  styles: StyleItem[]; // Updated to accept StyleItem[] directly
 }
 
 const EventDetailsCard = ({
@@ -30,9 +30,8 @@ const EventDetailsCard = ({
   googleMapsLink,
   styles,
 }: EventDetailsCardProps) => {
-  // Parse the styles string and filter for selected ones
-  const parsedStyles: StyleItem[] = JSON.parse(styles);
-  const selectedStyles = parsedStyles.filter((style) => style.selected);
+  // Filter for selected styles
+  const selectedStyles = styles.filter((style) => style.selected);
 
   return (
     <div className="mt-8">
@@ -65,12 +64,12 @@ const EventDetailsCard = ({
           )}
         </div>
 
-        {/* Genre & Styles */}
+        {/* Styles */}
         {selectedStyles.length > 0 && (
           <div className="space-y-4">
             <h3 className="flex items-center gap-2 text-lg font-semibold">
               <FaMusic className="h-5 w-5 text-primary" />
-              Music Styles
+              You will listen to:
             </h3>
             <div className="space-y-2">
               <div className="flex flex-wrap gap-2">

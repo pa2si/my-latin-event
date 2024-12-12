@@ -1,7 +1,8 @@
 To do:
 
+- in daycard also set the hover effect of week and monthview in day view
+- set helper functions for at least DayCard component
 - must think in a way to better filter genres. eventually with serach params and a list of styles and Latin must be acutally clear filter
-- button genre select in mobile view shall open in sheet
 - add a calendarToggleBtn in homePage. set the tooltip text for home route!
 - when clicking in an empty daycard i must be redirected to create event and the correct date must be pre selected!
 - adapt flyer dimensions event component
@@ -10,6 +11,18 @@ To do:
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.60
+
+- new loadingCards for EventCards in EventsList
+- DayCard now only with <img> and not Image component anymore
+- now multiple genres are possible to choose when creating an event
+  - updated prisma schema and zod schema (instead of genre -> genres)
+- also you can filter for multiple genres in calendar (genresDropdown)
+- new hover effect for EventCard and DayCard (in DayCard only for month an week view)
+- fetchEvents and fetchlikes now also includes location and genres
+- if you yare not signed in and no cookie is set for userLocation you get prompted to do so and the genresdropdown checks if you are signedin or not.
+  - if you are not signed and a userLocation has already been set then you get prompted to select a genre
 
 v 0.1.59
 

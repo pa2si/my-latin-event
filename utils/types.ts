@@ -3,9 +3,16 @@ export type actionFunction = (
   formData: FormData,
 ) => Promise<{ message: string }>;
 
+export type Style = {
+  name: string;
+  selected: boolean;
+};
+
 export type EventCardProps = {
   id: string;
   name: string;
+  genres: string[];
+  location: string;
   subtitle?: string | null;
   image: string;
   eventDateAndTime: string | Date;

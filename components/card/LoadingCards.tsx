@@ -44,20 +44,31 @@ export const LoadingCalendar = () => {
 
 export function LoadingCards() {
   return (
-    <section className="mt-4 gap-8 grid sm:grid-cols-2  lg:grid-cols-3  xl:grid-cols-4">
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
-    </section>
+    <div className="mt-4">
+      {/* Page Header Skeleton */}
+      <div className="mb-8">
+        <Skeleton className="h-8 w-48 mb-2" /> {/* Title */}
+        <Skeleton className="h-6 w-96" /> {/* Subtitle */}
+      </div>
+
+      {/* Cards Grid */}
+      <section className="mt-4 gap-8 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {[...Array(8)].map((_, i) => (
+          <SkeletonCard key={i} />
+        ))}
+      </section>
+    </div>
   );
 }
-export default LoadingCards;
 
 export function SkeletonCard() {
   return (
     <div>
-      <Skeleton className="h-[300px] rounded-md" />
+      {/* Image container with 3:4 aspect ratio */}
+      <div className="relative pt-[133.33%]">
+        <Skeleton className="absolute inset-0 rounded-md" />
+      </div>
+      {/* Event details */}
       <Skeleton className="h-4 mt-2 w-3/4" />
       <Skeleton className="h-4 mt-2 w-1/2" />
     </div>

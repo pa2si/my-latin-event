@@ -7,7 +7,7 @@ interface QuickInfoCardProps {
   time: string;
   endTime?: string;
   price: number;
-  genre: string;
+  genres: string[];
 }
 
 export const QuickInfoCard = ({
@@ -15,7 +15,7 @@ export const QuickInfoCard = ({
   time,
   endTime,
   price,
-  genre,
+  genres,
 }: QuickInfoCardProps) => {
   return (
     <Card className="mt-6">
@@ -43,11 +43,11 @@ export const QuickInfoCard = ({
           <p className="text-sm text-muted-foreground">{price}</p>
         </div>
 
-        {/* Genre */}
+        {/* Genres */}
         <div className="flex flex-col gap-2">
           <Music className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Genre</h3>
-          <p className="text-sm text-muted-foreground">{genre}</p>
+          <h3 className="font-semibold">Genres</h3>
+          <p className="text-sm text-muted-foreground">{genres.join(", ")}</p>
         </div>
       </CardContent>
     </Card>

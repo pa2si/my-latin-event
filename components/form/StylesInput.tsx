@@ -1,8 +1,8 @@
 "use client";
-
+222
+import { Style } from "@/utils/types";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import { Style } from "@/utils/styles";
 import { Checkbox } from "@/components/ui/checkbox";
 import { staggeredAnimationFromLeft } from "@/utils/animations";
 import { useGenreStylesStore } from "@/utils/store";
@@ -10,14 +10,14 @@ import { useGenreStyles } from "@/utils/useGenreStyles";
 import { FiMusic } from "react-icons/fi";
 
 function StylesInput({
-  defaultGenre,
+  defaultGenres,
   defaultStyles,
 }: {
-  defaultGenre: string;
+  defaultGenres: string[];
   defaultStyles: Style[];
 }) {
   const { styles, setStyles } = useGenreStylesStore();
-  useGenreStyles(defaultGenre, defaultStyles);
+  useGenreStyles(defaultGenres, defaultStyles);
 
   useEffect(() => {
     if (styles.length === 0) {
@@ -28,21 +28,31 @@ function StylesInput({
   const handleChange = (style: Style) => {
     setStyles(
       styles.map((s) =>
-        s.name === style.name ? { ...s, selected: !s.selected } : s,
+        s.name === style.name ? { ...s, selected: !s.selected } : s
       ),
     );
   };
 
   return (
     <section>
-      <input type="hidden" name="styles" value={JSON.stringify(styles)} />
+      <input
+        type="hidden"
+        name="styles"
+        value={JSON.stringify(styles.filter(s => s.selected).map(s => s.name))}
+      />
       <div className="mb-12 flex-row justify-center">
-        <div className="mb-5 flex flex-row items-center gap-1 text-xl">
-          <h3 className="text-lg font-medium">Styles</h3>
-          <div className="">
+        <div className="mb-1 flex flex-row items-center justify-between">
+          <div className="flex items-center gap-1 text-xl">
+            <h3 className="text-lg font-medium">Styles</h3>
             <FiMusic />
+            <span className="ml-2 text-sm text-muted-foreground">
+              ({styles.filter(s => s.selected).length} selected)
+            </span>
           </div>
         </div>
+        <p className="mb-5 text-sm text-muted-foreground">
+          Not required, but selecting specific styles helps attendees understand what music to expect alongside the genre selection.
+        </p>
 
         <div className="grid grid-cols-2 gap-x-20 gap-y-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {styles.map((style) => (

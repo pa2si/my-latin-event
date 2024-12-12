@@ -1,7 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import LikeToggleButton from "./LikeToggleButton";
+import { format } from 'date-fns';
 import { EventCardProps } from "@/utils/types";
+import LikeToggleButton from "./LikeToggleButton";
 
 const EventCard = ({
   event,
@@ -12,45 +11,75 @@ const EventCard = ({
   inSheet?: boolean;
   likeId?: string | null;
 }) => {
-  const { name, image, id: eventId, subtitle, eventDateAndTime } = event;
+  const { name, image, id: eventId, subtitle, eventDateAndTime, genres } = event;
 
   const formatDate = (date: Date | string) => {
     const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}.${month}.${year}`;
+    return format(d, 'dd.MM.yyyy');
   };
 
   const CardContent = () => (
-    <div className="group relative">
-      <div className="relative mb-2 h-[300px] overflow-hidden rounded-md">
-        <Image
-          src={image}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw"
-          alt={name}
-          className="transform rounded-md object-cover transition-transform duration-500 group-hover:scale-110"
-          unoptimized
-        />
-      </div>
-      <div className="flex items-center justify-between">
-        <h3 className="mt-1 text-sm font-semibold flex-1">
-          {name.length > 27 ? name.substring(0, 27) + '...' : name}
-        </h3>
-        <span className="ml-2 mt-1 text-sm text-muted-foreground whitespace-nowrap">
-          {formatDate(eventDateAndTime)}
-        </span>
-      </div>
-      {subtitle && (
-        <p className="mt-1 text-sm text-muted-foreground">
-          {subtitle.length > 40 ? subtitle.substring(0, 40) + '...' : subtitle}
-        </p>
-      )}
-      <div className="mt-1 flex items-center justify-between">
-      </div>
-      <div className="z-5 absolute right-5 top-5">
-        <LikeToggleButton eventId={eventId} likeId={likeId} />
+    <div className="group relative w-full">
+      {/* Image Container with fixed aspect ratio */}
+      <div className="relative rounded-md overflow-hidden">
+        {/* Create 3:4 aspect ratio container */}
+        <div className="relative pt-[133.33%]">
+          <div className="absolute inset-0">
+            <img
+              src={image}
+              alt={name}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              style={{
+                objectPosition: '50% 0%' // Align to top center
+              }}
+            />
+          </div>
+
+          {/* Like Button */}
+          <div className="absolute right-2 top-2 z-10">
+            <LikeToggleButton eventId={eventId} likeId={likeId} />
+          </div>
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+          {/* Content Overlay */}
+          <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            {/* Date */}
+            <div className="text-white/90 text-sm mb-2">
+              {formatDate(eventDateAndTime)}
+            </div>
+
+            {/* Title and Subtitle */}
+            <h3 className="text-white font-semibold text-lg leading-tight mb-2 capitalize">
+              {name}
+            </h3>
+            {subtitle && (
+              <p className="text-white/90 text-sm mb-2 line-clamp-2">
+                {subtitle}
+              </p>
+            )}
+
+            {/* Location */}
+            <div className="text-white/90 text-sm mb-2 capitalize">
+              @ {event.location}
+            </div>
+
+            {/* Genres */}
+            {genres && genres.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-auto">
+                {genres.map((genre, index) => (
+                  <span
+                    key={index}
+                    className="text-xs text-white bg-primary px-2 py-0.5 rounded-full backdrop-blur-sm"
+                  >
+                    {genre}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -60,9 +89,9 @@ const EventCard = ({
   }
 
   return (
-    <Link href={`/events/${eventId}`}>
+    <a href={`/events/${eventId}`} className="block">
       <CardContent />
-    </Link>
+    </a>
   );
 };
 

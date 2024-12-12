@@ -1,41 +1,35 @@
-"use client";
+"use client"
 
+import { useState, useEffect } from "react";
 import { genres } from "@/utils/genres";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "../ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Music } from "lucide-react";
-import { useState } from "react";
+import { Music, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCookies } from "next-client-cookies";
+import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel } from "@/components/ui/alert-dialog";
+import GenresSelectionDialog from "@/components/form/GenresSelectionDialog";
+import { useAuth } from "@clerk/nextjs";
 
-const GENRE_COOKIE_KEY = "selectedGenre";
-
-const GenreInfo = ({ genre }: { genre: string | null }) => (
+const GenreInfo = ({ selectedGenres }: { selectedGenres: string[] }) => (
   <>
     <div className="flex items-center gap-2">
       <Music className="h-4 w-4 text-primary" />
       <div className="font-medium">Genre Filter</div>
     </div>
-
     <div className="text-sm text-muted-foreground">
-      {genre ? (
+      {selectedGenres.length > 0 ? (
         <>
           Currently showing{" "}
-          <span className="font-medium text-foreground">{genre}</span> events.
+          <span className="font-medium text-foreground">
+            {selectedGenres[0]}{selectedGenres.length > 1 ? ` +${selectedGenres.length - 1}` : ''}
+          </span> events.
           Select another genre to change the filter.
         </>
       ) : (
-        "Select a genre to filter events by music style."
+        "Select genres to filter events by music style."
       )}
     </div>
   </>
@@ -43,44 +37,70 @@ const GenreInfo = ({ genre }: { genre: string | null }) => (
 
 const GenresDropdown = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isSheetOpen, setIsSheetOpen] = useState(false);  // New state for sheet
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showGenresDialog, setShowGenresDialog] = useState(false);
   const router = useRouter();
   const cookies = useCookies();
+  const { isSignedIn } = useAuth();
 
-  const genre = cookies.get(GENRE_COOKIE_KEY) || null;
+  const selectedGenres = JSON.parse(cookies.get('selectedGenres') || "[]") as string[];
 
-  const handleSelect = (selectedGenre: string) => {
+
+  // Remove the complex observer setup and simplify the conditions
+  useEffect(() => {
+    const genresCookie = cookies.get('selectedGenres');
+    const shouldShowDialog = !genresCookie && (
+      isSignedIn || cookies.get('guestLocation')
+    );
+
+    if (shouldShowDialog) {
+      setShowGenresDialog(true);
+    }
+  }, [cookies, isSignedIn]);
+
+  const handleSelect = (genre: string) => {
+    let newSelectedGenres: string[];
+
+    if (selectedGenres.includes(genre)) {
+      if (selectedGenres.length > 1) {
+        newSelectedGenres = selectedGenres.filter(g => g !== genre);
+      } else {
+        setShowAlert(true);
+        return;
+      }
+    } else {
+      newSelectedGenres = [...selectedGenres, genre];
+    }
+
     const expires = new Date();
     expires.setFullYear(expires.getFullYear() + 1);
-
-    cookies.set(GENRE_COOKIE_KEY, selectedGenre, {
-      expires,
-    });
+    cookies.set('selectedGenres', JSON.stringify(newSelectedGenres), { expires });
     router.refresh();
-    setIsHovered(false);
-    setIsSheetOpen(false);  // Update to use sheet state
   };
 
-  const handleClear = () => {
-    cookies.remove(GENRE_COOKIE_KEY);
-    router.refresh();
-    setIsHovered(false);
-    setIsSheetOpen(false);  // Update to use sheet state
-  };
+  const buttonText = selectedGenres.length > 0
+    ? `${selectedGenres[0]}${selectedGenres.length > 1 ? ` +${selectedGenres.length - 1}` : ''} Events`
+    : "Select Genres";
 
   return (
     <>
+      <GenresSelectionDialog
+        isOpen={showGenresDialog}
+        onOpenChange={setShowGenresDialog}
+      />
+
       {/* Mobile Sheet */}
       <div className="xl:hidden">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" className="text-primary">
-              {genre ? `${genre} Events` : "Select Genre"}
+              {buttonText}
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="">
-            <div className="grid gap-4 ">
-              <GenreInfo genre={genre} />
+          <SheetContent side="right">
+            <div className="grid gap-4">
+              <GenreInfo selectedGenres={selectedGenres} />
               <div className="rounded-xl bg-popover p-1">
                 {genres.map((item) => (
                   <button
@@ -88,75 +108,66 @@ const GenresDropdown = () => {
                     onClick={() => handleSelect(item.label)}
                     className={cn(
                       "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-                      genre === item.label && "text-primary",
+                      selectedGenres.includes(item.label) && "text-primary"
                     )}
                   >
-                    {item.label}
+                    <span className="flex-1">{item.label}</span>
+                    {selectedGenres.includes(item.label) && (
+                      <Check className="h-4 w-4 ml-2" />
+                    )}
                   </button>
                 ))}
               </div>
-              {genre && (
-                <Button
-                  variant="ghost"
-                  onClick={handleClear}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Clear Filter
-                </Button>
-              )}
             </div>
           </SheetContent>
         </Sheet>
       </div>
 
       {/* Desktop Hover Version */}
-      <div
-        className="hidden xl:block"
-        onMouseLeave={() => setIsHovered(false)}
-      >
+      <div className="hidden xl:block" onMouseLeave={() => setIsHovered(false)}>
         <Popover open={isHovered}>
           <PopoverTrigger asChild>
             <div onMouseEnter={() => setIsHovered(true)}>
               <Button variant="outline" className="text-primary">
-                {genre ? `${genre} Events` : "Select Genre"}
+                {buttonText}
               </Button>
             </div>
           </PopoverTrigger>
 
-          <PopoverContent
-            className="w-80"
-            align="start"
-            onMouseEnter={() => setIsHovered(true)}
-          >
+          <PopoverContent className="w-64" align="start" onMouseEnter={() => setIsHovered(true)}>
             <div className="grid gap-4">
-              <GenreInfo genre={genre} />
-              <div className="rounded-xl  bg-popover p-1">
+              <GenreInfo selectedGenres={selectedGenres} />
+              <div className="rounded-xl bg-popover p-1">
                 {genres.map((item) => (
                   <button
                     key={item.label}
                     onClick={() => handleSelect(item.label)}
                     className={cn(
-                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-                      genre === item.label && "text-primary",
+                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none text-left hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                      selectedGenres.includes(item.label) && "text-primary"
                     )}
                   >
-                    {item.label}
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {selectedGenres.includes(item.label) && (
+                      <Check className="h-4 w-4 ml-2" />
+                    )}
                   </button>
                 ))}
               </div>
-              {genre && (
-                <Button
-                  variant="ghost"
-                  onClick={handleClear}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Clear Filter
-                </Button>
-              )}
             </div>
           </PopoverContent>
         </Popover>
       </div>
+
+      <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
+        <AlertDialogContent>
+          <AlertDialogTitle>Cannot Remove Genre</AlertDialogTitle>
+          <AlertDialogDescription>
+            You must maintain at least one genre selection to help us show you relevant events.
+          </AlertDialogDescription>
+          <AlertDialogCancel onClick={() => setShowAlert(false)}>OK</AlertDialogCancel>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

@@ -1,7 +1,6 @@
 import { create } from "zustand";
-import { Booking } from "./types";
+import { Booking, Style } from "./types";
 import { DateRange } from "react-day-picker";
-import { Style } from "./styles";
 
 // Define the state's shape
 type EventState = {
@@ -12,8 +11,8 @@ type EventState = {
 };
 
 interface GenreStylesState {
-  selectedGenre: string;
-  setSelectedGenre: (genre: string) => void;
+  selectedGenres: string[]; // Changed from selectedGenre: string
+  setSelectedGenres: (genres: string[]) => void; // Changed from setSelectedGenre
   styles: Style[];
   setStyles: (styles: Style[]) => void;
 }
@@ -30,8 +29,8 @@ export const useEvent = create<EventState>(() => {
 
 // Create the genreStyle store
 export const useGenreStylesStore = create<GenreStylesState>((set) => ({
-  selectedGenre: "",
-  setSelectedGenre: (genre) => set({ selectedGenre: genre }),
+  selectedGenres: [], // Changed from selectedGenre: ""
+  setSelectedGenres: (genres) => set({ selectedGenres: genres }), // Changed from setSelectedGenre
   styles: [],
   setStyles: (styles) => set({ styles }),
 }));

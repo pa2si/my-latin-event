@@ -6,7 +6,7 @@ import CounterInput from "@/components/form/CounterInput";
 import { SubmitButton } from "@/components/form/Buttons";
 import { redirect } from "next/navigation";
 import DateAndTimePickerContainer from "@/components/form/DateAndTimePickerContainer";
-import { Style } from "@/utils/styles";
+import { Style, latinStyles } from "@/utils/styles";
 import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer";
 import ImageInput from "@/components/form/ImageInput";
 import GenresInput from "@/components/form/GenresInput";
@@ -18,12 +18,11 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
 
   if (!event) redirect("/");
 
-  let parsedStyles: Style[] = [];
-  try {
-    parsedStyles = JSON.parse(event.styles as string);
-  } catch (error) {
-    parsedStyles = [];
-  }
+  // Convert the string array from database to Style objects
+  const styleObjects: Style[] = latinStyles.map(style => ({
+    ...style,
+    selected: event.styles.includes(style.name)
+  }));
 
   return (
     <section>
@@ -40,13 +39,13 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
           <div className="mb-4 grid gap-8 md:grid-cols-2">
             <PriceInput defaultValue={event.price} />
             <GenresInput
-              defaultValue={event.genre}
-              defaultStyles={parsedStyles}
+              defaultValue={event.genres}
+              defaultStyles={styleObjects}
             />
           </div>
           <StylesInput
-            defaultGenre={event.genre}
-            defaultStyles={parsedStyles}
+            defaultGenres={event.genres}
+            defaultStyles={styleObjects}
           />
           <TextAreaInput
             name="description"
@@ -70,7 +69,10 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
             detail="floors"
             defaultValue={event.floors ?? undefined}
           />
-          <CounterInput detail="bars" defaultValue={event.bars ?? undefined} />
+          <CounterInput
+            detail="bars"
+            defaultValue={event.bars ?? undefined}
+          />
           <CounterInput
             detail="outdoorAreas"
             defaultValue={event.outdoorAreas ?? undefined}
@@ -85,4 +87,5 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
     </section>
   );
 }
+
 export default EditMyEventPage;

@@ -55,8 +55,8 @@ model Event {
   postalCode          String?
   country             String
   googleMapsLink      String?
-  genre               String
-  styles              String
+  genres              String[]  // Changed from genre: String
+  styles              String[]  // Changed from String to String[]
   image               String
   description         String?
   price               Int

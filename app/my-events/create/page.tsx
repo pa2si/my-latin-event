@@ -10,7 +10,7 @@ import TextAreaInput from "@/components/form/TextAreaInput";
 import ImageInput from "@/components/form/ImageInput";
 import CounterInput from "@/components/form/CounterInput";
 import DateAndTimePickerContainer from "@/components/form/DateAndTimePickerContainer";
-import { Style } from "@/utils/styles";
+import { Style } from "@/utils/types";
 import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer";
 import GenresInput from "@/components/form/GenresInput";
 import StylesInput from "@/components/form/StylesInput";
@@ -22,7 +22,7 @@ import { User, MapPin } from "lucide-react";
 
 
 
-const defaultGenre = "Latin";
+const defaultGenres: string[] = []; // Changed from defaultGenre
 const defaultStyles: Style[] = [];
 
 
@@ -73,12 +73,12 @@ const CreateEvent = () => {
           <div className="mb-4 grid gap-8 md:grid-cols-2">
             <PriceInput />
             <GenresInput
-              defaultValue={defaultGenre}
+              defaultValue={defaultGenres}
               defaultStyles={defaultStyles}
             />
           </div>
           <StylesInput
-            defaultGenre={defaultGenre}
+            defaultGenres={defaultGenres}
             defaultStyles={defaultStyles}
           />
           <TextAreaInput

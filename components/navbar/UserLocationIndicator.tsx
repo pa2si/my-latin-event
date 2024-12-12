@@ -12,13 +12,13 @@ interface LocationState {
   isCity: boolean;
 }
 
-interface ClientLocationIndicatorProps {
+interface UserLocationIndicatorProps {
   userLocation: LocationState | null;
 }
 
-const ClientLocationIndicator = ({
+const UserLocationIndicator = ({
   userLocation,
-}: ClientLocationIndicatorProps) => {
+}: UserLocationIndicatorProps) => {
   const [showMobilePopup, setShowMobilePopup] = useState(false);
 
   useEffect(() => {
@@ -103,4 +103,4 @@ const ClientLocationIndicator = ({
   );
 };
 
-export default ClientLocationIndicator;
+export default UserLocationIndicator;

@@ -10,35 +10,49 @@ import {
   latinRockStyles,
   latinJazzStyles,
   musicaAndindaStyles,
-} from './styles';
+  folclorStyles,
+  cantinaStyles,
+} from "./styles";
 
 const getStyles = (genre: string) => {
   switch (genre) {
-    case 'Latin':
+    case "Latin":
       return latinStyles;
-    case 'Salsa':
+    case "Salsa":
       return salsaStyles;
-    case 'Cumbia':
+    case "Cumbia":
       return cumbiaStyles;
-    case 'Tropical':
+    case "Tropical":
       return tropicalStyles;
-    case 'Reggeaton':
+    case "Reggeaton":
       return reggeatonStyles;
-    case 'Bachata':
+    case "Bachata":
       return bachataStyles;
-    case 'Merengue':
+    case "Merengue":
       return merengueStyles;
-    case 'Bolero':
+    case "Bolero":
       return boleroStyles;
-    case 'Latin-Rock':
+    case "Latin-Rock":
       return latinRockStyles;
-    case 'Latin-Jazz':
+    case "Latin-Jazz":
       return latinJazzStyles;
-    case 'Musica Andina':
+    case "Musica Andina":
       return musicaAndindaStyles;
+    case "Folclor":
+      return folclorStyles;
+    case "Cantina":
+      return cantinaStyles;
     default:
       return [];
   }
+};
+
+// Helper function to get styles for multiple genres
+export const getStylesForMultipleGenres = (genres: string[]) => {
+  const allStyles = genres.flatMap((genre) => getStyles(genre));
+  return Array.from(new Set(allStyles.map((style) => style.name))).map(
+    (name) => allStyles.find((s) => s.name === name)!,
+  );
 };
 
 export default getStyles;
