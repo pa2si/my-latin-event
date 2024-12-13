@@ -12,6 +12,11 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.61
+
+- correct Hover effects for all daycards in all views.
+- modified daycard dimensions for in day view
+
 v 0.1.60
 
 - new loadingCards for EventCards in EventsList

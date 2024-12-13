@@ -28,6 +28,47 @@ interface DayCardProps {
     view: 'day' | 'week' | 'month';
 }
 
+const HoverOverlay = ({ event, view }: { event: EventCardProps, view: 'day' | 'week' | 'month' }) => (
+    <>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <h3 className={`text-white font-semibold capitalize ${view === 'month' ? 'text-sm' : 'text-sm md:text-base'} mb-2`}>
+                {event.name}
+            </h3>
+            <div className="text-white/90 text-xs mb-2 capitalize">
+                @ {event.location}
+            </div>
+            {event.genres && event.genres.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                    {event.genres.map((genre, index) => (
+                        <span
+                            key={index}
+                            className="text-xs text-white bg-primary px-2 py-0.5 rounded-full backdrop-blur-sm"
+                        >
+                            {genre}
+                        </span>
+                    ))}
+                </div>
+            )}
+        </div>
+    </>
+);
+
+const MultiEventOverlay = ({ events, view }: { events: EventCardProps[], view: 'week' | 'month' }) => (
+    <>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="flex items-center gap-2 text-white/90 text-sm mb-2">
+                <ListFilter className="h-4 w-4" />
+                <span>{events.length} events</span>
+            </div>
+            <h3 className={`text-white font-semibold ${view === 'month' ? 'text-xs' : 'text-sm md:text-base'}`}>
+                Click to view all events
+            </h3>
+        </div>
+    </>
+);
+
 const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
 
     const router = useRouter();
@@ -65,14 +106,14 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
         ? 'flex-1 min-w-[140px] max-w-[100px] md:min-w-[170px] md:max-w-[170px] h-[230px]'
         : '';
     const dayViewClass = view === 'day'
-        ? 'max-w-[600px] cursor-default w-[500px] h-[540px]'
+        ? `max-w-[600px] cursor-pointer w-[500px] ${events.length > 1 ? 'h-[580px]' : 'h-[540px]'} md:w-[400px] ${events.length > 1 ? 'md:h-[640px]' : 'md:h-[600px]'} group`
         : '';
 
     // Render content based on the view and events
     const renderEventContent = () => {
         if (view === 'day' && hasEvents) {
             return (
-                <div className="w-full h-full relative rounded-lg overflow-visible">
+                <div className="w-full h-full relative rounded-lg overflow-visible group">
                     {events.length === 1 ? (
                         <>
                             <img
@@ -80,17 +121,13 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                 alt={events[0].name}
                                 className="w-full h-full object-cover absolute inset-0"
                             />
-                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                                <h3 className={`text-white font-semibold ${view === 'month' ? 'text-' : 'text-sm md:text-base'}`}>
-                                    {events[0].name}
-                                </h3>
-                            </div>
+                            <HoverOverlay event={events[0]} view={view} />
                         </>
                     ) : (
-                        <div className="relative h-full overflow-visible">
+                        <div className="relative h-full overflow-visible group">
                             <Carousel
                                 setApi={setCarouselApi}
-                                className="w-full h-[500px]"
+                                className="w-full h-[540px]"
                                 opts={{
                                     align: 'start',
                                     loop: true,
@@ -100,7 +137,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                     {events.map((event, index) => (
                                         <CarouselItem key={event.id}>
                                             <div
-                                                className="relative w-full h-[500px] cursor-pointer group"
+                                                className="relative w-full h-[510px] md:h-[560px] cursor-pointer group"
                                                 onClick={() => router.push(`/events/${event.id}`)}
                                             >
                                                 <img
@@ -108,24 +145,15 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                                     alt={event.name}
                                                     className="w-full h-full object-cover absolute inset-0"
                                                 />
-                                                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 mb-8">
-                                                    <h3 className="text-white font-semibold">
-                                                        {event.name}
-                                                    </h3>
-                                                </div>
+                                                <HoverOverlay event={event} view={view} />
                                             </div>
                                         </CarouselItem>
                                     ))}
                                 </CarouselContent>
-
                                 {events.length > 1 && (
                                     <>
-                                        <CarouselPrevious
-                                            className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
-                                        />
-                                        <CarouselNext
-                                            className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
-                                        />
+                                        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
+                                        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
                                     </>
                                 )}
                             </Carousel>
@@ -156,35 +184,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                         alt={events[0].name}
                                         className="w-full h-full object-cover absolute inset-0"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-
-
-                                        {/* Title */}
-                                        <h3 className={`text-white font-semibold capitalize ${view === 'month' ? 'text-sm' : 'text-sm md:text-base'
-                                            } mb-2`}>
-                                            {events[0].name}
-                                        </h3>
-
-                                        {/* Location */}
-                                        <div className="text-white/90 text-xs mb-2 capitalize">
-                                            @ {events[0].location}
-                                        </div>
-
-                                        {/* Genres */}
-                                        {events[0].genres && events[0].genres.length > 0 && (
-                                            <div className="flex flex-wrap gap-1">
-                                                {events[0].genres.map((genre, index) => (
-                                                    <span
-                                                        key={index}
-                                                        className="text-xs text-white bg-primary px-2 py-0.5 rounded-full backdrop-blur-sm"
-                                                    >
-                                                        {genre}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
+                                    <HoverOverlay event={events[0]} view={view} />
                                 </>
                             ) : (
                                 <>
@@ -198,6 +198,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                                 alt={event.name}
                                                 className="w-full h-full object-cover absolute inset-0"
                                             />
+                                            {view === 'day' && <HoverOverlay event={event} view={view} />}
                                         </div>
                                     ))}
                                     {events.length > 4 && (
@@ -205,17 +206,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                             +{events.length - 4}
                                         </div>
                                     )}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                                        <div className="flex items-center gap-2 text-white/90 text-sm mb-2">
-                                            <ListFilter className="h-4 w-4" />
-                                            <span>{events.length} events</span>
-                                        </div>
-                                        <h3 className={`text-white font-semibold ${view === 'month' ? 'text-xs' : 'text-sm md:text-base'
-                                            }`}>
-                                            Click to view all events
-                                        </h3>
-                                    </div>
+                                    {view !== 'day' && <MultiEventOverlay events={events} view={view} />}
                                 </>
                             )}
                         </div>
