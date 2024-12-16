@@ -36,18 +36,12 @@ const CalendarContainer = ({
         setCurrentDate(newDate);
     };
 
-    // Convert eventDateAndTime to Date if it is a string
-    const processedEvents = events.map(event => ({
-        ...event,
-        eventDateAndTime: typeof event.eventDateAndTime === 'string' ? new Date(event.eventDateAndTime) : event.eventDateAndTime
-    }));
-
     return (
         <AnimatePresence mode="wait">
             <div className="relative">
                 {/* Calendar Toggle Button */}
                 <div className="fixed bottom-4 right-4 z-50 sm:bottom-8 sm:right-8">
-                    <CalendarToggleBtn events={processedEvents} />
+                    <CalendarToggleBtn events={events} />
                 </div>
 
                 {showCalendar && (
@@ -65,7 +59,7 @@ const CalendarContainer = ({
                             onViewChange={setView}
                         />
                         <Calendar
-                            events={processedEvents}
+                            events={events}
                             currentDate={currentDate}
                             view={view}
                             likeIds={likeIds}

@@ -8,6 +8,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.65
+
+- modified EventCardProps type and adaption in CalendarContainer and EventsContainer
+
 v 0.1.64
 
 - HomePage now also displays a CalendaToggleBtn

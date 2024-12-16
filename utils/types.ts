@@ -15,7 +15,7 @@ export type EventCardProps = {
   location: string;
   subtitle?: string | null;
   image: string;
-  eventDateAndTime: string | Date;
+  eventDateAndTime: Date; // Ensure this is strictly Date
   price: number;
 };
 

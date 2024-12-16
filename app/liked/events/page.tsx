@@ -3,6 +3,7 @@ import EmptyList from "@/components/home/EmptyList";
 import EventsList from "@/components/home/EventsList";
 import HeaderSection from "@/components/ui/HeaderSection";
 import { fetchLikes, fetchEventsWithLikes } from "@/utils/actions";
+import type { EventCardProps } from "@/utils/types";
 
 const LikedEventsPage = async () => {
   const { events: likedEvents, likeIds } = await fetchEventsWithLikes(fetchLikes);

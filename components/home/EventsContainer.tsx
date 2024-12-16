@@ -55,7 +55,7 @@ const EventsContainer = async ({ searchParams }: EventsContainerProps) => {
     selectedGenres = undefined;
   }
 
-  const events = await fetchEvents({
+  const events: EventCardProps[] = await fetchEvents({
     genres: selectedGenres,
     search,
     ...locationParams,
