@@ -1,11 +1,11 @@
 import HeaderSection from "@/components/ui/HeaderSection";
 import EventsList from "@/components/home/EventsList";
 import EmptyList from "@/components/home/EmptyList";
-import { fetchFollowedOrganizersEvents } from "@/utils/actions";
+import { fetchFollowedOrganizersEvents, fetchEventsWithLikes } from "@/utils/actions";
 import CalendarToggleBtn from "@/components/events/CalendarToggleBtn";
 
 const FollowedOrganizerEventsPage = async () => {
-  const events = await fetchFollowedOrganizersEvents();
+  const { events, likeIds } = await fetchEventsWithLikes(fetchFollowedOrganizersEvents);
 
   if (events.length === 0) {
     return (
@@ -28,7 +28,7 @@ const FollowedOrganizerEventsPage = async () => {
           parentName: "Home",
         }}
       />
-      <EventsList events={events} />
+      <EventsList events={events} likeIds={likeIds} />
       <CalendarToggleBtn events={events} />
     </div>
   );

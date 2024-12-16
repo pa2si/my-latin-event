@@ -115,14 +115,20 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
             return (
                 <div className="w-full h-full relative rounded-lg overflow-visible group">
                     {events.length === 1 ? (
-                        <>
+                        <div
+                            className="relative w-full h-full cursor-pointer group"
+                            onClick={() => router.push(`/events/${events[0].id}`)}
+                        >
                             <img
                                 src={events[0].image}
                                 alt={events[0].name}
-                                className="w-full h-full object-cover absolute inset-0"
+                                className="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-110"
+                                style={{
+                                    objectPosition: '50% 0%' // Align to top center
+                                }}
                             />
                             <HoverOverlay event={events[0]} view={view} />
-                        </>
+                        </div>
                     ) : (
                         <div className="relative h-full overflow-visible group">
                             <Carousel
@@ -143,7 +149,10 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                                                 <img
                                                     src={event.image}
                                                     alt={event.name}
-                                                    className="w-full h-full object-cover absolute inset-0"
+                                                    className="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-110"
+                                                    style={{
+                                                        objectPosition: '50% 0%' // Align to top center
+                                                    }}
                                                 />
                                                 <HoverOverlay event={event} view={view} />
                                             </div>

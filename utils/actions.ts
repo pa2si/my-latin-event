@@ -18,6 +18,7 @@ import { formatDate } from "./format";
 import { backendClient } from "@/lib/edgestore-server";
 import { optimizeImage } from "@/utils/imageOptimizer";
 import type { Prisma } from "@prisma/client";
+
 /* Helper Functions */
 export const getAuthUser = async () => {
   const user = await currentUser();
@@ -663,6 +664,15 @@ export const fetchLikeIds = async ({ eventIds }: { eventIds: string[] }) => {
     console.error("Error fetching likes:", error);
     return {};
   }
+};
+
+export const fetchEventsWithLikes = async (
+  fetchEventsFn: () => Promise<any[]>,
+) => {
+  const events = await fetchEventsFn();
+  const eventIds = events.map((event) => event.id);
+  const likeIds = await fetchLikeIds({ eventIds });
+  return { events, likeIds };
 };
 
 // export const toggleLikeAction = async (prevState: {
@@ -1462,6 +1472,7 @@ export const fetchFollowedOrganizersEvents = async () => {
         subtitle: true,
         location: true,
         country: true,
+        genres: true,
         image: true,
         price: true,
         eventDateAndTime: true,

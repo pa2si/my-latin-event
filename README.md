@@ -12,6 +12,11 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.62
+
+- corrected Hover effects for all daycards in all views.
+- implemented a fetch all events incusing likes server function and called in likes and follow route
+
 v 0.1.61
 
 - correct Hover effects for all daycards in all views.
