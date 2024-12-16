@@ -36,6 +36,9 @@ export type Organizer = {
   organizerImage: string;
   slogan?: string | null;
   profileId?: string;
+  _count?: {
+    events: number;
+  };
 };
 
 // types.ts or can be in the same file

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { differenceInDays, format } from "date-fns";
 import ImageContainer from "@/components/events/ImageContainer";
 import {
   checkEventAccess,
@@ -15,6 +15,7 @@ import LikesCard from "@/components/events/LikesCard";
 import { QuickInfoCard } from "@/components/events/QuickInfoCard";
 import EventDetailsCard from "@/components/events/EventDetailsCard";
 import HeaderSection from "@/components/events/HeaderSection";
+
 
 const DynamicMap = dynamic(() => import("@/components/events/EventMap"), {
   ssr: false,
@@ -46,6 +47,16 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
     ? format(eventEndDateAndTime, "HH:mm")
     : "";
 
+  // Calculate days to go
+  const daysToGo = differenceInDays(selectedDate, new Date());
+  const daysMessage = daysToGo < 0
+    ? "Event has passed"
+    : daysToGo === 0
+      ? "Today!"
+      : daysToGo === 1
+        ? "Tomorrow!"
+        : `${daysToGo} days to go`;
+
   // Convert styles array to StyleItem array
   const selectedStyles: StyleItem[] = event.styles.map(style => ({
     name: style,
@@ -75,7 +86,8 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             time={formattedTime}
             endTime={formattedEndTime}
             price={event.price}
-            genres={event.genres} // Using genres directly from event
+            genres={event.genres}
+            daysMessage={daysMessage}  // Add this
           />
           <p className="mt-2 text-sm text-muted-foreground">
             Created {format(event.createdAt, "dd.MM.yyyy")}
@@ -127,10 +139,11 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                 />
               )}
               <OrganizerCard
-                id={event.organizer.id} // Updated from organizerId to id
+                id={event.organizer.id}
                 organizerName={event.organizer.organizerName}
                 organizerImage={event.organizer.organizerImage}
                 slogan={event.organizer.slogan || undefined}
+                _count={event.organizer._count}
               />
               <LikesCard likes={event._count.likes} />
             </div>
@@ -142,10 +155,11 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
           <div className="sticky top-8 space-y-6">
             <CalendarCard selectedDate={selectedDate} />
             <OrganizerCard
-              id={event.organizer.id} // Updated from organizerId to id
+              id={event.organizer.id}
               organizerName={event.organizer.organizerName}
               organizerImage={event.organizer.organizerImage}
               slogan={event.organizer.slogan || undefined}
+              _count={event.organizer._count}
             />
             {hasVenueFeatures && (
               <VenueFeaturesCard

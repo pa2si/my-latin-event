@@ -675,44 +675,6 @@ export const fetchEventsWithLikes = async (
   return { events, likeIds };
 };
 
-// export const toggleLikeAction = async (prevState: {
-//   eventId: string;
-//   likeId: string | null;
-//   pathname: string;
-// }) => {
-//   try {
-//     const { eventId, likeId, pathname } = prevState;
-//     const user = await getAuthUser();
-
-//     // Get current user's profile
-//     const profile = await db.profile.findUnique({
-//       where: { clerkId: user.id },
-//       select: { id: true },
-//     });
-
-//     if (!profile) throw new Error("Profile not found");
-
-//     if (likeId) {
-//       await db.like.delete({
-//         where: {
-//           id: likeId,
-//         },
-//       });
-//     } else {
-//       await db.like.create({
-//         data: {
-//           eventId,
-//           profileId: profile.id,
-//         },
-//       });
-//     }
-//     revalidatePath(pathname);
-//     return { message: likeId ? "Removed from Likes" : "Added to Likes" };
-//   } catch (error: any) {
-//     return renderError(error);
-//   }
-// };
-
 export const toggleLikeAction = async (prevState: {
   eventId: string;
   likeId: string | null;
@@ -819,7 +781,12 @@ export const fetchEventDetails = async (id: string) => {
           slogan: true,
           profile: {
             select: {
-              clerkId: true, // Only needed for ownership check
+              clerkId: true,
+            },
+          },
+          _count: {
+            select: {
+              events: true,
             },
           },
         },
@@ -1495,6 +1462,7 @@ export const fetchFollowedOrganizersEvents = async () => {
     return [];
   }
 };
+
 export const fetchBreadcrumbInfo = async () => {
   try {
     return {

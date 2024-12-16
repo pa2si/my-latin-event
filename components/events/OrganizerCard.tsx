@@ -2,16 +2,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import UserInfo from "@/components/events/UserInfo";
 import FollowToggleButton from "@/components/card/FollowToggleButton";
 import { checkFollowAccess } from "@/utils/actions";
+import { Calendar } from "lucide-react";
 import { Organizer } from "@/utils/types";
-
-// Pick only the fields we need from Organizer type for UserInfo
-type UserInfoOrganizerProps = Pick<Organizer, 'organizerName' | 'organizerImage' | 'slogan'>;
 
 const OrganizerCard = async ({
   id,
   organizerName,
   organizerImage,
   slogan,
+  _count
 }: Organizer) => {
   const { canFollow } = await checkFollowAccess(id);
 
@@ -33,6 +32,10 @@ const OrganizerCard = async ({
             slogan,
           }}
         />
+        <div className="mt-4 flex items-center gap-2 text-muted-foreground">
+          <Calendar className="h-4 w-4" />
+          <span className="text-sm">{_count?.events || 0} events created</span>
+        </div>
       </CardContent>
     </Card>
   );

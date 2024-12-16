@@ -1,11 +1,17 @@
 To do:
 
 - set helper functions for at least DayCard component
+- add
 - different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.67
+
+- in OrganizerCard now we display how many events the organizer has created.
+- also we display now how many days to go to the event in QuickInfoCard
 
 v 0.1.66
 
