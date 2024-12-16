@@ -37,7 +37,7 @@ const CalendarToggleBtn = ({ events }: CalendarToggleBtnProps) => {
       case '/followed/organizers/events':
         return 'See dates with events from your followed organizers';
       default:
-        return 'See event dates';
+        return 'See all event dates';
     }
   };
 

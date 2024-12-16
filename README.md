@@ -1,16 +1,16 @@
 To do:
 
-- in daycard also set the hover effect of week and monthview in day view
 - set helper functions for at least DayCard component
-- must think in a way to better filter genres. eventually with serach params and a list of styles and Latin must be acutally clear filter
-- add a calendarToggleBtn in homePage. set the tooltip text for home route!
 - when clicking in an empty daycard i must be redirected to create event and the correct date must be pre selected!
-- adapt flyer dimensions event component
 - different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.64
+
+- HomePage now also displays a CalendaToggleBtn
 
 v 0.1.63
 
