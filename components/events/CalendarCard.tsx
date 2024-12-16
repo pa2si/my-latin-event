@@ -1,17 +1,9 @@
-"use client";
+"use client"
 
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Image from "next/image";
+import ModalCarousel from "./ModalCarousel";
 
 interface CalendarCardProps {
   selectedDate?: Date;
@@ -31,6 +23,7 @@ const CalendarCard = ({
   mode = "single",
   events,
 }: CalendarCardProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [dayEvents, setDayEvents] = useState<
     Array<{
       name: string;
@@ -38,7 +31,6 @@ const CalendarCard = ({
       image: string;
     }>
   >([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSelect = (day: Date) => {
     const eventsForDay = events?.filter(
@@ -51,6 +43,12 @@ const CalendarCard = ({
       setIsModalOpen(true);
     }
   };
+
+  const modalImages = dayEvents.map(event => ({
+    url: event.image,
+    name: event.name,
+    id: event.id
+  }));
 
   return (
     <>
@@ -79,35 +77,11 @@ const CalendarCard = ({
         </CardContent>
       </Card>
 
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-h-[90vh] max-w-[90vw] border-none bg-transparent p-0">
-          <Carousel className="w-full max-w-[90vw]">
-            <CarouselContent>
-              {dayEvents.map((event) => (
-                <CarouselItem key={event.id}>
-                  <div className="relative h-[80vh] w-full">
-                    <Image
-                      src={event.image}
-                      fill
-                      sizes="90vw"
-                      alt={event.name}
-                      className="rounded-md object-contain"
-                      priority
-                      unoptimized
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            {dayEvents.length > 1 && (
-              <>
-                <CarouselPrevious className="left-4" />
-                <CarouselNext className="right-4" />
-              </>
-            )}
-          </Carousel>
-        </DialogContent>
-      </Dialog>
+      <ModalCarousel
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        images={modalImages}
+      />
     </>
   );
 };

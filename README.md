@@ -12,6 +12,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.63
+
+- CalendarCard is now using a custom Modal "ModalCarousel" to display events when clicking in days in Calendar
+
 v 0.1.62
 
 - corrected Hover effects for all daycards in all views.
