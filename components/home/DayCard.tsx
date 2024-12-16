@@ -83,7 +83,9 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                 router.push(`/events/${events[0].id}`);
             }
         } else {
-            router.push(`/events/create?date=${format(day, 'yyyy-MM-dd')}`);
+            // Format the date in ISO format and encode for URL
+            const formattedDate = format(day, 'yyyy-MM-dd');
+            router.push(`/my-events/create?date=${formattedDate}`);
         }
     };
 

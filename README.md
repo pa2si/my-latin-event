@@ -1,12 +1,15 @@
 To do:
 
 - set helper functions for at least DayCard component
-- when clicking in an empty daycard i must be redirected to create event and the correct date must be pre selected!
 - different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.66
+
+- now when i click in an empty daycard i get to create Event and the eventDateandTime gets read right away via params
 
 v 0.1.65
 

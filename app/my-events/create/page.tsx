@@ -1,7 +1,7 @@
 "use client"
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+222
+import { useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import FormContainer from "@/components/form/FormContainer";
 import { createEventAction } from "@/utils/actions";
 import { SubmitButton } from "@/components/form/Buttons";
@@ -31,9 +31,14 @@ const CreateEvent = () => {
   const router = useRouter();
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
-  const defaultEventDateAndTime = new Date();
-  defaultEventDateAndTime.setDate(defaultEventDateAndTime.getDate());
-  defaultEventDateAndTime.setHours(20, 0, 0, 0);
+  // Get date from URL and parse it, defaulting to today if not provided
+  const searchParams = useSearchParams();
+  const defaultEventDateAndTime = useMemo(() => {
+    const dateParam = searchParams?.get('date');
+    const date = dateParam ? new Date(dateParam) : new Date();
+    date.setHours(20, 0, 0, 0);
+    return date;
+  }, [searchParams]);
 
   // Wrap the createEventAction to handle success state
   const handleEventAction = async (prevState: any, formData: FormData) => {
