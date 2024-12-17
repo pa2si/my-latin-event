@@ -108,7 +108,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
         ? 'flex-1 min-w-[140px] max-w-[100px] md:min-w-[170px] md:max-w-[170px] h-[230px]'
         : '';
     const dayViewClass = view === 'day'
-        ? `max-w-[600px] cursor-pointer w-[500px] ${events.length > 1 ? 'h-[580px]' : 'h-[540px]'} md:w-[400px] ${events.length > 1 ? 'md:h-[640px]' : 'md:h-[600px]'} group`
+        ? `max-w-[600px] cursor-pointer w-[500px] ${events.length > 1 ? 'h-[6000px]' : 'h-[540px]'} md:w-[400px] ${events.length > 1 ? 'md:h-[640px]' : 'md:h-[600px]'} group`
         : '';
 
     // Render content based on the view and events
@@ -121,15 +121,19 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                             className="relative w-full h-full cursor-pointer group"
                             onClick={() => router.push(`/events/${events[0].id}`)}
                         >
-                            <img
-                                src={events[0].image}
-                                alt={events[0].name}
-                                className="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-110"
-                                style={{
-                                    objectPosition: '50% 0%' // Align to top center
-                                }}
-                            />
-                            <HoverOverlay event={events[0]} view={view} />
+                            <div className="relative rounded-md overflow-hidden h-full">
+                                <div className="absolute inset-0">
+                                    <img
+                                        src={events[0].image}
+                                        alt={events[0].name}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        style={{
+                                            objectPosition: '50% 0%' // Align to top center
+                                        }}
+                                    />
+                                    <HoverOverlay event={events[0]} view={view} />
+                                </div>
+                            </div>
                         </div>
                     ) : (
                         <div className="relative h-full overflow-visible group">

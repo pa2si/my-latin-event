@@ -1,12 +1,17 @@
 To do:
 
+Event slug ui different. especially the flyer needs to be seen correctly
+
 - set helper functions for at least DayCard component
-- add
 - different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.68
+
+- corrected DayCard hover effects in Day view
 
 v 0.1.67
 

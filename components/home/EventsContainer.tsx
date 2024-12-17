@@ -1,5 +1,4 @@
 import { fetchEvents, fetchLikeIds } from "@/utils/actions";
-import EmptyList from "./EmptyList";
 import { LoadingCalendar } from "@/components/card/LoadingCards";
 import type { EventCardProps } from "@/utils/types";
 import { currentUser } from "@clerk/nextjs/server";
