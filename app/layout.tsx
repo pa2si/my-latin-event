@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { anton } from '@/utils/fonts'
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Providers from "./providers";
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`debug-screens ${inter.className}`}>
+        <body className={`debug-screens ${inter.className} ${anton.variable}`}>
           <CookiesProvider>
             <Providers>
               <Navbar />

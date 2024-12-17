@@ -9,6 +9,10 @@ Event slug ui different. especially the flyer needs to be seen correctly
 
 WHATS DONE IN VERSIONS
 
+v 0.1.69
+
+- integrated Anton google Font for displaying name of the event in event slug
+
 v 0.1.68
 
 - corrected DayCard hover effects in Day view

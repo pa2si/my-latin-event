@@ -64,7 +64,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   }));
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="mx-auto max-w-7xl ">
       {/* Header Section */}
       <HeaderSection
         eventId={event.id}
