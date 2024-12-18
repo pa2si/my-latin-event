@@ -10,6 +10,8 @@ import {
 import { Country } from "country-state-city";
 import { CheckIcon } from "lucide-react";
 import { FixedSizeList as List } from "react-window";
+import { useGenreStylesStore } from "@/utils/store";
+import { getCurrencyFromCountry } from "@/utils/currencyUtils";
 
 interface LocationData {
   name: string;
@@ -38,10 +40,12 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
     ref,
   ) => {
     const [query, setQuery] = useState("");
-    const [showOptions, setShowOptions] = useState(false);
     const [isInputActive, setIsInputActive] = useState(false);
+    const [showOptions, setShowOptions] = useState(false);
     const comboboxRef = useRef<HTMLDivElement>(null);
+    const setSelectedCurrency = useGenreStylesStore(state => state.setSelectedCurrency);
 
+    // Memoize countries list
     const countries = useMemo(() => {
       return Country.getAllCountries().sort((a, b) =>
         a.name.localeCompare(b.name),
@@ -54,8 +58,8 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
       return query === ""
         ? countries
         : countries.filter((country) => {
-            return country.name.toLowerCase().includes(query.toLowerCase());
-          });
+          return country.name.toLowerCase().includes(query.toLowerCase());
+        });
     }, [query, countries]);
 
     useEffect(() => {
@@ -65,11 +69,10 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
           !comboboxRef.current.contains(event.target as Node)
         ) {
           setShowOptions(false);
-          // Only clear if input is active and query is empty
           if (isInputActive && query === "") {
             onSelect({ name: "", isoCode: "" });
           }
-          setIsInputActive(false); // Reset input active state
+          setIsInputActive(false);
         }
       };
 
@@ -78,16 +81,6 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
         document.removeEventListener("mousedown", handleClickOutside);
       };
     }, [query, onSelect, isInputActive]);
-
-    const getDisplayValue = (country: any) => {
-      if (!country) return "";
-      return `${country.flag} ${country.name}`;
-    };
-
-    const getStoredValue = (country: any) => {
-      if (!country) return "";
-      return country.name;
-    };
 
     const Row = ({ index, style }: { index: number; style: any }) => {
       const country = filteredCountries[index];
@@ -101,9 +94,8 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
             {({ selected }) => (
               <>
                 <span
-                  className={`block truncate ${
-                    selected ? "font-semibold" : "font-normal"
-                  }`}
+                  className={`block truncate ${selected ? "font-semibold" : "font-normal"
+                    }`}
                 >
                   {country.flag} {country.name}
                 </span>
@@ -134,8 +126,10 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
             value={selectedCountry}
             onChange={(country) => {
               if (country) {
+                const currency = getCurrencyFromCountry(country.name);
+                setSelectedCurrency(currency);
                 onSelect({ name: country.name, isoCode: country.isoCode });
-                setQuery(country.name); // Update query with selected country name
+                setQuery(country.name);
               }
               setShowOptions(false);
             }}
@@ -147,16 +141,17 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
               <input
                 type="hidden"
                 name={name}
-                value={getStoredValue(selectedCountry)}
+                value={selectedCountry?.name || ""}
               />
 
               <ComboboxInput
                 placeholder={placeholder}
-                displayValue={getDisplayValue}
+                displayValue={(country: any) =>
+                  country ? `${country.flag} ${country.name}` : ""
+                }
                 onChange={(e) => {
                   const newValue = e.target.value;
                   setQuery(newValue);
-                  // If input is cleared, also clear the selection
                   if (newValue === "") {
                     onSelect({ name: "", isoCode: "" });
                   }
@@ -164,11 +159,10 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
                 }}
                 onFocus={() => {
                   setShowOptions(true);
-                  setIsInputActive(true); // Set input as active when focused
+                  setIsInputActive(true);
                 }}
-                className="flex h-9 w-full rounded-md border border-input bg-muted/20 px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                ref={ref}
                 autoComplete="off"
+                className="flex h-9 w-full rounded-md border border-input bg-muted/20 px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               />
 
               {showOptions && filteredCountries.length > 0 && (

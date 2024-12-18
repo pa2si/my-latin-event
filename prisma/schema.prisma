@@ -65,6 +65,7 @@ model Event {
   image               String
   description         String?
   price               String    // Changed from Int? to String
+  currency            String    @default("€")
   floors              Int
   bars                Int
   outdoorAreas        Int

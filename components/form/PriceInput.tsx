@@ -1,22 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import SelectionDialog from "@/components/form/SelectionDialog";
+import { useGenreStylesStore } from "@/utils/store";
 
 const name = "price";
 
-type FormInputPriceProps = {
-  defaultValue?: string;
-};
-
-const SPECIAL_OPTIONS = ["Free", "Donation"];
-
-function PriceInput({ defaultValue }: FormInputPriceProps) {
+function PriceInput({ defaultValue }: { defaultValue?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState(defaultValue || "8");
+  const currency = useGenreStylesStore(state => state.selectedCurrency);
 
   const handlePriceChange = (value: string) => {
     setSelectedPrice(value);
@@ -25,13 +21,11 @@ function PriceInput({ defaultValue }: FormInputPriceProps) {
 
   const displayValue = selectedPrice === "Free" || selectedPrice === "Donation"
     ? selectedPrice
-    : `${selectedPrice}€`;
+    : `${selectedPrice} ${currency}`;
 
   return (
-    <div className="mb-2">
-      <Label htmlFor={name} className="capitalize">
-        Price
-      </Label>
+    <div className="mb-4">
+      <Label htmlFor={name} className="capitalize">Price</Label>
       <div>
         <Button
           type="button"
@@ -41,6 +35,9 @@ function PriceInput({ defaultValue }: FormInputPriceProps) {
         >
           {displayValue}
         </Button>
+        <p className="mt-1.5 text-xs text-muted-foreground">
+          Currency is automatically set based on the event&apos;s country location
+        </p>
       </div>
 
       <SelectionDialog
@@ -50,7 +47,7 @@ function PriceInput({ defaultValue }: FormInputPriceProps) {
         width="w-72"
       >
         <div className="h-44" />
-        {SPECIAL_OPTIONS.map((option) => (
+        {["Free", "Donation"].map((option) => (
           <div
             key={option}
             onClick={() => handlePriceChange(option)}
@@ -71,12 +68,13 @@ function PriceInput({ defaultValue }: FormInputPriceProps) {
               price.toString() === selectedPrice && "font-bold text-primary",
             )}
           >
-            {price}€
+            {price} {currency}
           </div>
         ))}
         <div className="h-44" />
       </SelectionDialog>
 
+      <input type="hidden" name="currency" value={currency} />
       <input type="hidden" name={name} value={selectedPrice} />
     </div>
   );

@@ -1,12 +1,14 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { CalendarIcon, Clock, EuroIcon, Music } from "lucide-react";
-import { differenceInDays, parseISO } from "date-fns";
+import { CalendarIcon, Clock, Music, Ticket } from "lucide-react";
+import { parseISO } from "date-fns";
+
 
 interface QuickInfoCardProps {
   date: string;
   time: string;
   endTime?: string;
-  price: string; // Changed from number to string
+  price: string;
+  currency: string;
   genres: string[];
   daysMessage: string;
 }
@@ -16,6 +18,7 @@ export const QuickInfoCard = ({
   time,
   endTime,
   price,
+  currency,
   genres,
   daysMessage,
 }: QuickInfoCardProps) => {
@@ -34,7 +37,6 @@ export const QuickInfoCard = ({
           </div>
         </div>
 
-        {/* Rest of the component remains the same */}
         {/* Duration */}
         <div className="flex flex-col gap-2">
           <Clock className="h-5 w-5 text-primary" />
@@ -46,10 +48,12 @@ export const QuickInfoCard = ({
 
         {/* Price */}
         <div className="flex flex-col gap-2">
-          <EuroIcon className="h-5 w-5 text-primary" />
+          <Ticket className="h-5 w-5 text-primary" />
           <h3 className="font-semibold">Price</h3>
           <p className="text-sm text-muted-foreground">
-            {price === "Free" || price === "Donation" ? price : `${price}€`}
+            {price === "Free" || price === "Donation"
+              ? price
+              : `${price} ${currency}`}
           </p>
         </div>
 

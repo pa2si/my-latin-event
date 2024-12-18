@@ -18,8 +18,11 @@ import AddressInputContainer from "@/components/form/AddressInputContainer";
 import OrganizerSelect from "@/components/form/OrganizerSelect";
 import EventSuccessDialog from "@/components/form/EventSuccessDialog";
 import HeaderSection from "@/components/ui/HeaderSection";
-import { User, MapPin } from "lucide-react";
+import { User, MapPin, Info, Ticket } from "lucide-react";
 import FormInput from "@/components/form/FormInput";
+import { FaInfo } from "react-icons/fa6";
+
+
 
 const CreateEvent = () => {
 
@@ -63,26 +66,22 @@ const CreateEvent = () => {
         }}
       />
       <div className="-mx-4 rounded-md border p-8 sm:mx-0">
-        <div className="flex items-center gap-2 mb-4">
-          <p>📋</p>
+        <div className="flex items-center gap-1 mb-4">
+          <FaInfo className="text-xl pb-[2px]" />
+
+
           <h3 className="text-lg font-medium">General Info</h3>
         </div>
         <FormContainer action={handleEventAction}>
           <ImageInput />
           <NameAndSubtitleContainer defaultName="test" />
           <div className="mb-4 grid gap-8 md:grid-cols-2">
-            <PriceInput />
-            <FormInput
-              type="url"
-              name="ticketLink"
-              label="Ticket Link"
-              placeholder="https://..."
-            />
-            <GenresInput
-              defaultValue={[]}
-              defaultStyles={[]}
-            />
+
           </div>
+          <GenresInput
+            defaultValue={[]}
+            defaultStyles={[]}
+          />
           <StylesInput
             defaultGenres={[]}
             defaultStyles={[]}
@@ -100,7 +99,19 @@ const CreateEvent = () => {
           <AddressInputContainer />
           <div>
 
-            <div className="flex items-center mt-8 gap-2 mb-4">
+            <div className="flex items-center mt-12 gap-2 mb-4">
+              <Ticket />
+              <h3 className="text-lg font-medium">Tickets</h3>
+            </div>
+            <PriceInput />
+            <FormInput
+              type="url"
+              name="ticketLink"
+              label="Ticket Link"
+              placeholder="https://..."
+            />
+
+            <div className="flex items-center mt-12 gap-2 mb-4">
               <MapPin className="h-5 w-5" />
               <h3 className="text-lg font-medium">Location Details</h3>
             </div>
@@ -113,7 +124,7 @@ const CreateEvent = () => {
               defaultEndValue=""
             />
           </div>
-          <div className="flex items-center mt-8 gap-2 mb-4">
+          <div className="flex items-center mt-12 gap-2 mb-4">
             <User className="h-5 w-5" />
             <h3 className="text-lg font-medium">Organizer*</h3>
           </div>

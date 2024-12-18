@@ -782,6 +782,7 @@ export const fetchEventDetails = async (id: string) => {
       image: true,
       description: true,
       price: true,
+      currency: true,
       floors: true,
       bars: true,
       outdoorAreas: true,

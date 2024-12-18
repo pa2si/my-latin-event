@@ -106,7 +106,7 @@ const GenresInput = ({
   };
 
   return (
-    <div className="mb-2">
+    <div className="mb-4">
       <Label htmlFor={name} className="capitalize">
         Genres*
       </Label>

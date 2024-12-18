@@ -168,6 +168,11 @@ export const eventSchema = z
           "Price must be 'Free', 'Donation', or a number between 0 and 500",
       },
     ),
+    currency: z
+      .string()
+      .min(1, "Currency is required")
+      .max(3, "Currency code should be 3 characters or less")
+      .regex(/^[A-Z]{3}$|^[€$£¥]$/, "Invalid currency format"),
     genres: z.array(z.string()).min(1, "At least one genre is required"),
     description: z
       .string()

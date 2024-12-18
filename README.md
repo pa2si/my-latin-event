@@ -1,5 +1,6 @@
 To do:
 
+- update the price display in event slug
 - imlement new organizer elements in organizer form
   - display the new elements in eventdetails
 - correct skeleton for create Event and edit Event!!
@@ -14,6 +15,8 @@ v 0.1.72
 
 - you cant deselect the last genre once one is selected aynmore --> Alert Dialog gets dispayed
 - removed the currency helper function myEvent list
+- added currency-codes library to display automated currency depending on the country that is selected in location
+  therefore i added also in Event Model a currency field in prisma schema and in schemas
 
 v 0.1.71
 

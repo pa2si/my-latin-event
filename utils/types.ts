@@ -76,3 +76,9 @@ export type EmailListItemProps = {
 };
 
 export type ProfileTab = "profile" | "organizers" | "email" | "password";
+
+export interface PriceInputProps {
+  defaultValue?: string;
+  currency?: string;
+  onCurrencyChange?: (currency: string) => void;
+}

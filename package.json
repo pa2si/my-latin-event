@@ -1,6 +1,6 @@
 {
   "name": "my-latin-event",
-  "version": "0.1.71",
+  "version": "0.1.72",
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
@@ -35,6 +35,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "country-state-city": "^3.2.1",
+    "currency-codes": "^2.2.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.1",
     "framer-motion": "^11.9.0",

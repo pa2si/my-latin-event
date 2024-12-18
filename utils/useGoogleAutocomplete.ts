@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
+import { useGenreStylesStore } from "@/utils/store";
+import { getCurrencyFromCountry } from "@/utils/currencyUtils";
 
 declare global {
   interface Window {
@@ -10,6 +12,9 @@ declare global {
 const useGoogleAutocomplete = (
   setFormData: React.Dispatch<React.SetStateAction<any>>,
 ) => {
+  const setSelectedCurrency = useGenreStylesStore(
+    (state) => state.setSelectedCurrency,
+  );
   const locationRef = useRef<HTMLInputElement | null>(null);
   const cityRef = useRef<HTMLInputElement | null>(null);
   const streetRef = useRef<HTMLInputElement | null>(null);
@@ -45,6 +50,7 @@ const useGoogleAutocomplete = (
             let formData: Record<string, string> = {};
             let streetName = "";
             let streetNumber = "";
+            let countryName = "";
 
             addressComponents.forEach((component) => {
               const types = component.types;
@@ -52,6 +58,7 @@ const useGoogleAutocomplete = (
                 formData.city = component.long_name;
               }
               if (types.includes("country")) {
+                countryName = component.long_name;
                 formData.country = component.long_name;
               }
               if (types.includes("street_number")) {
@@ -67,6 +74,12 @@ const useGoogleAutocomplete = (
 
             if (streetName || streetNumber) {
               formData.street = `${streetName} ${streetNumber}`.trim();
+            }
+
+            // Update currency based on country
+            if (countryName) {
+              const currency = getCurrencyFromCountry(countryName);
+              setSelectedCurrency(currency);
             }
 
             setFormData((prevData: any) => ({
@@ -87,7 +100,7 @@ const useGoogleAutocomplete = (
     initAutocomplete(streetRef, ["address"]);
     initAutocomplete(postalCodeRef, ["postal_code"]);
     initAutocomplete(countryRef, ["(regions)"]);
-  }, [setFormData]);
+  }, [setFormData, setSelectedCurrency]);
 
   useEffect(() => {
     let isSubscribed = true;

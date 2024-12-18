@@ -87,8 +87,9 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             time={formattedTime}
             endTime={formattedEndTime}
             price={event.price}
+            currency={event.currency}
             genres={event.genres}
-            daysMessage={daysMessage}  // Add this
+            daysMessage={daysMessage}
           />
           <p className="mt-2 text-sm text-muted-foreground">
             Created {format(event.createdAt, "dd.MM.yyyy")}

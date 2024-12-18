@@ -15,8 +15,9 @@ import AddressInputContainer from "@/components/form/AddressInputContainer";
 import { Style } from "@/utils/types";
 import FormInput from "@/components/form/FormInput";
 import OrganizerSelect from "@/components/form/OrganizerSelect";
-import { User, Pencil, MapPin } from "lucide-react";
+import { User, Pencil, MapPin, Ticket } from "lucide-react";
 import HeaderSection from "@/components/ui/HeaderSection";
+import { FaInfo } from "react-icons/fa";
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {
   const event = await fetchMyLocationDetails(params.id);
@@ -41,8 +42,10 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
       />
 
       <div className="-mx-4 rounded-md border p-8 sm:mx-0">
-        <div className="flex items-center gap-2 mb-4">
-          <p>📋</p>
+        <div className="flex items-center gap-1 mb-4">
+          <FaInfo className="text-xl pb-[2px]" />
+
+
           <h3 className="text-lg font-medium">General Info</h3>
         </div>
         <FormContainer action={updateEventAction}>
@@ -53,19 +56,13 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
             defaultSubtitle={event.subtitle || ""}
           />
           <div className="mb-4 grid gap-8 md:grid-cols-2">
-            <PriceInput defaultValue={event.price} />
-            <FormInput
-              type="url"
-              name="ticketLink"
-              label="Ticket Link"
-              placeholder="https://..."
-              defaultValue={event.ticketLink || ""}
-            />
-            <GenresInput
-              defaultValue={event.genres}
-              defaultStyles={styleObjects}
-            />
+
+
           </div>
+          <GenresInput
+            defaultValue={event.genres}
+            defaultStyles={styleObjects}
+          />
           <StylesInput
             defaultGenres={event.genres}
             defaultStyles={styleObjects}
@@ -89,8 +86,20 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
               googleMapsLink: event.googleMapsLink ?? "",
             }}
           />
+          <div className="flex items-center mt-12 gap-2 mb-4">
+            <Ticket />
+            <h3 className="text-lg font-medium">Tickets</h3>
+          </div>
+          <PriceInput defaultValue={event.price} />
+          <FormInput
+            type="url"
+            name="ticketLink"
+            label="Ticket Link"
+            placeholder="https://..."
+            defaultValue={event.ticketLink || ""}
+          />
 
-          <div className="flex items-center mt-8 gap-2 mb-4">
+          <div className="flex items-center mt-12 gap-2 mb-4">
             <MapPin className="h-5 w-5" />
             <h3 className="text-lg font-medium">Location Details</h3>
           </div>
@@ -111,7 +120,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
             defaultEndValue={event.eventEndDateAndTime || ""}
           />
 
-          <div className="flex items-center mt-8 gap-2 mb-4">
+          <div className="flex items-center mt-12 gap-2 mb-4">
             <User className="h-5 w-5" />
             <h3 className="text-lg font-medium">Organizer*</h3>
           </div>

@@ -43,7 +43,7 @@ const StylesInput = ({
         name="styles"
         value={JSON.stringify(selectedStyles)}
       />
-      <div className="mb-12 flex-row justify-center">
+      <div className="mb-12 mt-6 flex-row justify-center">
         <div className="mb-1 flex flex-row items-center justify-between">
           <div className="flex items-center gap-1 ">
             <FiMusic />
