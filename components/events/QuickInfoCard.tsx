@@ -6,7 +6,7 @@ interface QuickInfoCardProps {
   date: string;
   time: string;
   endTime?: string;
-  price: number;
+  price: string; // Changed from number to string
   genres: string[];
   daysMessage: string;
 }
@@ -48,7 +48,9 @@ export const QuickInfoCard = ({
         <div className="flex flex-col gap-2">
           <EuroIcon className="h-5 w-5 text-primary" />
           <h3 className="font-semibold">Price</h3>
-          <p className="text-sm text-muted-foreground">{price}</p>
+          <p className="text-sm text-muted-foreground">
+            {price === "Free" || price === "Donation" ? price : `${price}€`}
+          </p>
         </div>
 
         {/* Genres */}

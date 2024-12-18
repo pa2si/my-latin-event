@@ -11,8 +11,16 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.71
+
+- padding in CalendarToggleBtn removed
+- Price is now a string and can be also free or donation
+  - no seperate input anymore
+  - schema and prisma schema updated accordingly
+
 v 0.1.70
 
+- imageContainer in event slug is not using Image Component anymore
 - updated the Genre and StylesInput used in create and edit Event. Now it works properly and can display the stored values
   - removed useGenreStyles (not in use aynmore)
 - - added to the required fields in createEvent components.

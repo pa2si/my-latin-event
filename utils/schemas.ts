@@ -157,13 +157,17 @@ export const eventSchema = z
       .url({ message: "Must be a valid URL" })
       .max(200, { message: "Ticket link must not exceed 200 characters" })
       .optional(),
-    price: z.coerce
-      .number()
-      .int()
-      .min(0, {
-        message: "price must be a positive number.",
-      })
-      .optional(), // Make price optional
+    price: z.string().refine(
+      (val) => {
+        if (val === "Free" || val === "Donation") return true;
+        const num = parseInt(val);
+        return !isNaN(num) && num >= 0 && num <= 500;
+      },
+      {
+        message:
+          "Price must be 'Free', 'Donation', or a number between 0 and 500",
+      },
+    ),
     genres: z.array(z.string()).min(1, "At least one genre is required"),
     description: z
       .string()

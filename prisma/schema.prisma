@@ -59,15 +59,15 @@ model Event {
   postalCode          String?
   country             String
   googleMapsLink      String?
-  genres              String[]  // Changed from genre: String
-  styles              String[]  // Changed from String to String[]
+  ticketLink          String? 
+  genres              String[] 
+  styles              String[] 
   image               String
   description         String?
-  price               Int
+  price               String    // Changed from Int? to String
   floors              Int
   bars                Int
   outdoorAreas        Int
-  ticketLink          String? 
   eventDateAndTime    DateTime
   eventEndDateAndTime DateTime?
   createdAt           DateTime   @default(now())

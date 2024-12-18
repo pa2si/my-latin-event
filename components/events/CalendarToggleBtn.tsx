@@ -68,7 +68,7 @@ const CalendarToggleBtn = ({ events }: CalendarToggleBtnProps) => {
           alignOffset={-40}
           sideOffset={16}
         >
-          <div className="p-2">
+          <div className=" ">
             <CalendarCard
               mode="multiple"
               selectedDates={events.map(
