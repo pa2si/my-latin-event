@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { genres } from "@/utils/genres";
 import { useGenreStylesStore } from "@/utils/store";
 import SelectionDialog from "@/components/form/SelectionDialog";
@@ -21,6 +22,7 @@ const GenresInput = ({
   defaultStyles: Style[];
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const {
     selectedGenres,
     setSelectedGenres,
@@ -93,6 +95,10 @@ const GenresInput = ({
 
   const handleGenreChange = (e: React.MouseEvent, value: string) => {
     e.preventDefault();
+    if (selectedGenres.length === 1 && selectedGenres.includes(value)) {
+      setShowAlert(true);
+      return;
+    }
     const newSelectedGenres = selectedGenres.includes(value)
       ? selectedGenres.filter((genre) => genre !== value)
       : [...selectedGenres, value];
@@ -140,6 +146,17 @@ const GenresInput = ({
           </Button>
         ))}
       </SelectionDialog>
+
+      <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
+        <AlertDialogContent>
+          <AlertDialogTitle>Cannot Remove Genre</AlertDialogTitle>
+          <AlertDialogDescription>
+            You must maintain at least one genre selection to help us show you relevant events.
+          </AlertDialogDescription>
+          <AlertDialogAction onClick={() => setShowAlert(false)}>OK</AlertDialogAction>
+        </AlertDialogContent>
+      </AlertDialog>
+
 
       <input
         type="hidden"

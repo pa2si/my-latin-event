@@ -62,7 +62,7 @@ async function MyEventsPage() {
                 </TableCell>
                 <TableCell>{formattedDate}</TableCell>
                 <TableCell>{event.location}</TableCell>
-                <TableCell>{formatCurrency(event.price)}</TableCell>
+                <TableCell>{event.price}</TableCell>
                 <TableCell>{event._count.likes}</TableCell>
                 <TableCell className="flex items-center gap-x-2">
                   <Link href={`/my-events/${event.id}/edit`}>

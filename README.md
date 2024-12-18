@@ -1,6 +1,5 @@
 To do:
 
-- price shall be a string because i want to offer donation as option
 - imlement new organizer elements in organizer form
   - display the new elements in eventdetails
 - correct skeleton for create Event and edit Event!!
@@ -10,6 +9,11 @@ To do:
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.72
+
+- you cant deselect the last genre once one is selected aynmore --> Alert Dialog gets dispayed
+- removed the currency helper function myEvent list
 
 v 0.1.71
 
