@@ -127,7 +127,7 @@ const DateAndTimePickerContainer = ({
             hours={hours}
             minutes={minutes}
             setTime={handleStartTimeChange}
-            label="Event Start Date & Time"
+            label="Event Start Date & Time*"
             name="eventDateAndTime"
           />
         </div>
@@ -148,7 +148,7 @@ const DateAndTimePickerContainer = ({
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="uppercase"
+            className=""
           >
             <EventDateAndTimeInput
               date={endDate}

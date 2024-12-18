@@ -1,13 +1,25 @@
 To do:
 
-Event slug ui different. especially the flyer needs to be seen correctly
-
-- set helper functions for at least DayCard component
+- price shall be a string because i want to offer donation as option
+- imlement new organizer elements in organizer form
+  - display the new elements in eventdetails
+- correct skeleton for create Event and edit Event!!
+- Event slug ui different. especially the flyer needs to be seen correctly
 - different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.70
+
+- updated the Genre and StylesInput used in create and edit Event. Now it works properly and can display the stored values
+  - removed useGenreStyles (not in use aynmore)
+- - added to the required fields in createEvent components.
+- added contactEmail, contactPhone, contactWebsite and contactSocialMedia to Organizer modal and schema
+- added ticketLink to Event modal and Schema and updated the create and update event Action
+  - added to the event slug in HeaderSection
+- Tooltips for all elements in HeaderSection of event slug
 
 v 0.1.69
 
@@ -104,6 +116,7 @@ v 0.1.56
 
 v 0.1.55
 
+- laoding skeleton for create Events!
 - installed next-client-cookies to store location for guest users
   - CookieProvider in layout.tsx
 - a dialog prompt appears on load of homepage asking for location selection

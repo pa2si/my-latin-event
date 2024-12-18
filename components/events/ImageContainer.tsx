@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Maximize2 } from "lucide-react";
@@ -20,14 +19,10 @@ function ImageContainer({
         className="group relative h-[300px] cursor-pointer md:h-[500px]"
         onClick={() => setIsOpen(true)}
       >
-        <Image
+        <img
           src={mainImage}
-          fill
-          // sizes="100vw"
           alt={name}
-          className="rounded-md object-cover transition-opacity duration-300"
-          priority
-          unoptimized
+          className="absolute h-full w-full rounded-md object-cover transition-opacity duration-300"
         />
         {/* Hover overlay */}
         <div className="absolute inset-0 flex items-center justify-center rounded-md bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -44,14 +39,10 @@ function ImageContainer({
           onInteractOutside={() => setIsOpen(false)}
         >
           <div className="relative h-[90vh] w-full">
-            <Image
+            <img
               src={mainImage}
-              fill
-              // sizes="90vw"
               alt={name}
-              className="rounded-md object-contain"
-              priority
-              unoptimized
+              className="h-full w-full rounded-md object-contain"
             />
           </div>
         </DialogContent>

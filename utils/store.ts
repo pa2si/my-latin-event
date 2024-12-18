@@ -11,10 +11,13 @@ type EventState = {
 };
 
 interface GenreStylesState {
-  selectedGenres: string[]; // Changed from selectedGenre: string
-  setSelectedGenres: (genres: string[]) => void; // Changed from setSelectedGenre
-  styles: Style[];
-  setStyles: (styles: Style[]) => void;
+  selectedGenres: string[];
+  setSelectedGenres: (genres: string[]) => void;
+  selectedStyles: string[]; // Add this to track selected style names
+  setSelectedStyles: (styles: string[]) => void; // Add setter
+  availableStyles: Style[]; // Track all available styles based on genres
+  setAvailableStyles: (styles: Style[]) => void;
+  reset: () => void; // Add reset function
 }
 
 // Create the store
@@ -29,8 +32,12 @@ export const useEvent = create<EventState>(() => {
 
 // Create the genreStyle store
 export const useGenreStylesStore = create<GenreStylesState>((set) => ({
-  selectedGenres: [], // Changed from selectedGenre: ""
-  setSelectedGenres: (genres) => set({ selectedGenres: genres }), // Changed from setSelectedGenre
-  styles: [],
-  setStyles: (styles) => set({ styles }),
+  selectedGenres: [],
+  setSelectedGenres: (genres) => set({ selectedGenres: genres }),
+  selectedStyles: [],
+  setSelectedStyles: (styles) => set({ selectedStyles: styles }),
+  availableStyles: [],
+  setAvailableStyles: (styles) => set({ availableStyles: styles }),
+  reset: () =>
+    set({ selectedGenres: [], selectedStyles: [], availableStyles: [] }),
 }));

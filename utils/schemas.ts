@@ -9,6 +9,20 @@ export const organizerSchema = z.object({
     .min(2, { message: "Organizer name must be at least 2 characters." })
     .max(50, { message: "Organizer name cannot exceed 50 characters." }),
   slogan: z.string().optional(),
+  contactEmail: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .optional(),
+  contactWebsite: z.string().url({ message: "Must be a valid URL" }).optional(),
+  contactPhone: z
+    .string()
+    .min(10, { message: "Phone number must be at least 10 digits" })
+    .max(20, { message: "Phone number is too long" })
+    .optional(),
+  contactSocialMedia: z
+    .string()
+    .max(100, { message: "Social media handle or link is too long" })
+    .optional(),
 });
 
 export const profileSchema = z.object({
@@ -138,9 +152,18 @@ export const eventSchema = z
       .string()
       .max(200, { message: "Google Maps link must not exceed 200 characters" })
       .optional(),
-    price: z.coerce.number().int().min(0, {
-      message: "price must be a positive number.",
-    }),
+    ticketLink: z
+      .string()
+      .url({ message: "Must be a valid URL" })
+      .max(200, { message: "Ticket link must not exceed 200 characters" })
+      .optional(),
+    price: z.coerce
+      .number()
+      .int()
+      .min(0, {
+        message: "price must be a positive number.",
+      })
+      .optional(), // Make price optional
     genres: z.array(z.string()).min(1, "At least one genre is required"),
     description: z
       .string()

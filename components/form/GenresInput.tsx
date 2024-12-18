@@ -9,6 +9,7 @@ import { useGenreStylesStore } from "@/utils/store";
 import SelectionDialog from "@/components/form/SelectionDialog";
 import { Check } from "lucide-react";
 import { Style } from "@/utils/types";
+import { getStylesForMultipleGenres } from "@/utils/getStyles";
 
 const name = "genres";
 
@@ -20,9 +21,17 @@ const GenresInput = ({
   defaultStyles: Style[];
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { selectedGenres, setSelectedGenres } = useGenreStylesStore();
+  const {
+    selectedGenres,
+    setSelectedGenres,
+    selectedStyles,
+    setSelectedStyles,
+    availableStyles,
+    setAvailableStyles
+  } = useGenreStylesStore();
   const [buttonWidth, setButtonWidth] = useState(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const previousGenresRef = useRef<string[]>([]);
 
   useEffect(() => {
     if (buttonRef.current) {
@@ -37,20 +46,50 @@ const GenresInput = ({
     }
   }, []);
 
-  const formatGenresString = (genres: string[]) => {
-    const joinedString = genres.join(", ");
-    // Approximate characters that fit in the button (assuming average char width of 8px)
-    const approximateMaxChars = Math.floor(buttonWidth / 8);
-    return joinedString.length > approximateMaxChars
-      ? joinedString.substring(0, approximateMaxChars) + "..."
-      : joinedString;
-  };
+  useEffect(() => {
+    if (defaultValue?.length > 0) {
+      setSelectedGenres(defaultValue);
+    }
+  }, [defaultValue, setSelectedGenres]);
+
+  useEffect(() => {
+    return () => {
+      useGenreStylesStore.getState().reset();
+    };
+  }, []);
 
   useEffect(() => {
     if (!selectedGenres || selectedGenres.length === 0) {
       setSelectedGenres(defaultValue || [genres[0].label]);
     }
   }, [defaultValue, selectedGenres, setSelectedGenres]);
+
+  useEffect(() => {
+    // Only update if genres actually changed
+    if (JSON.stringify(previousGenresRef.current) !== JSON.stringify(selectedGenres)) {
+      if (selectedGenres.length > 0) {
+        const newAvailableStyles = getStylesForMultipleGenres(selectedGenres);
+        setAvailableStyles(newAvailableStyles);
+
+        const validSelectedStyles = selectedStyles.filter(styleName =>
+          newAvailableStyles.some(style => style.name === styleName)
+        );
+
+        if (JSON.stringify(validSelectedStyles) !== JSON.stringify(selectedStyles)) {
+          setSelectedStyles(validSelectedStyles);
+        }
+      }
+      previousGenresRef.current = selectedGenres;
+    }
+  }, [selectedGenres, selectedStyles, setAvailableStyles, setSelectedStyles]);
+
+  const formatGenresString = (genres: string[]) => {
+    const joinedString = genres.join(", ");
+    const approximateMaxChars = Math.floor(buttonWidth / 8);
+    return joinedString.length > approximateMaxChars
+      ? joinedString.substring(0, approximateMaxChars) + "..."
+      : joinedString;
+  };
 
   const handleGenreChange = (e: React.MouseEvent, value: string) => {
     e.preventDefault();
@@ -63,7 +102,7 @@ const GenresInput = ({
   return (
     <div className="mb-2">
       <Label htmlFor={name} className="capitalize">
-        Genres
+        Genres*
       </Label>
       <Button
         ref={buttonRef}
@@ -102,7 +141,6 @@ const GenresInput = ({
         ))}
       </SelectionDialog>
 
-      {/* Change this to pass the array directly */}
       <input
         type="hidden"
         name="genres"

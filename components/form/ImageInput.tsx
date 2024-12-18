@@ -54,11 +54,10 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   return (
     <div
-      className={`relative mb-4 flex ${isProfileImage ? "h-32 w-32" : "h-52 w-52"} cursor-pointer flex-col items-center justify-center rounded-lg ${
-        imagePreview
+      className={`relative mb-4 flex ${isProfileImage ? "h-32 w-32" : "h-72 w-52"} cursor-pointer flex-col items-center justify-center rounded-lg ${imagePreview
           ? ""
           : "transition-color border-2 border-dashed duration-200 hover:border-primary"
-      }`}
+        }`}
     >
       <input
         ref={fileInputRef}

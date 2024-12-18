@@ -1,35 +1,38 @@
 "use client";
-222
+
 import { Style } from "@/utils/types";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { staggeredAnimationFromLeft } from "@/utils/animations";
 import { useGenreStylesStore } from "@/utils/store";
-import { useGenreStyles } from "@/utils/useGenreStyles";
 import { FiMusic } from "react-icons/fi";
 
-function StylesInput({
+const StylesInput = ({
   defaultGenres,
   defaultStyles,
 }: {
   defaultGenres: string[];
   defaultStyles: Style[];
-}) {
-  const { styles, setStyles } = useGenreStylesStore();
-  useGenreStyles(defaultGenres, defaultStyles);
+}) => {
+  const {
+    availableStyles,
+    selectedStyles,
+    setSelectedStyles,
+  } = useGenreStylesStore();
 
   useEffect(() => {
-    if (styles.length === 0) {
-      setStyles(defaultStyles);
+    // Initialize selected styles from defaultStyles if provided
+    if (defaultStyles?.length > 0) {
+      setSelectedStyles(defaultStyles.filter(style => style.selected).map(style => style.name));
     }
-  }, [defaultStyles, styles.length, setStyles]);
+  }, [defaultStyles, setSelectedStyles]);
 
-  const handleChange = (style: Style) => {
-    setStyles(
-      styles.map((s) =>
-        s.name === style.name ? { ...s, selected: !s.selected } : s
-      ),
+  const handleChange = (styleName: string) => {
+    setSelectedStyles(
+      selectedStyles.includes(styleName)
+        ? selectedStyles.filter(name => name !== styleName)
+        : [...selectedStyles, styleName]
     );
   };
 
@@ -38,24 +41,23 @@ function StylesInput({
       <input
         type="hidden"
         name="styles"
-        value={JSON.stringify(styles.filter(s => s.selected).map(s => s.name))}
+        value={JSON.stringify(selectedStyles)}
       />
       <div className="mb-12 flex-row justify-center">
         <div className="mb-1 flex flex-row items-center justify-between">
-          <div className="flex items-center gap-1 text-xl">
-            <h3 className="text-lg font-medium">Styles</h3>
+          <div className="flex items-center gap-1 ">
             <FiMusic />
+            <h3 className="font-medium">Styles</h3>
             <span className="ml-2 text-sm text-muted-foreground">
-              ({styles.filter(s => s.selected).length} selected)
+              ({selectedStyles.length} selected)
             </span>
           </div>
         </div>
         <p className="mb-5 text-sm text-muted-foreground">
           Not required, but selecting specific styles helps attendees understand what music to expect alongside the genre selection.
         </p>
-
         <div className="grid grid-cols-2 gap-x-20 gap-y-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {styles.map((style) => (
+          {availableStyles.map((style) => (
             <motion.div
               key={style.name}
               className="flex items-center space-x-2"
@@ -67,8 +69,8 @@ function StylesInput({
             >
               <Checkbox
                 id={style.name}
-                checked={style.selected}
-                onCheckedChange={() => handleChange(style)}
+                checked={selectedStyles.includes(style.name)}
+                onCheckedChange={() => handleChange(style.name)}
               />
               <label
                 htmlFor={style.name}
@@ -82,6 +84,6 @@ function StylesInput({
       </div>
     </section>
   );
-}
+};
 
 export default StylesInput;

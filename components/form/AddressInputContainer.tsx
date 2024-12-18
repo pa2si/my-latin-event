@@ -39,7 +39,7 @@ const AddressInputContainer = ({
   return (
     <div className="mt-4 grid gap-8 sm:grid-cols-2">
       <FormInput
-        label="Location Name"
+        label="Location Name*"
         name="location"
         type="text"
         defaultValue={defaultValues?.location}
@@ -50,7 +50,7 @@ const AddressInputContainer = ({
       />
 
       <FormInput
-        label="City"
+        label="City*"
         name="city"
         type="text"
         ref={cityRef}
@@ -60,7 +60,7 @@ const AddressInputContainer = ({
       />
 
       <FormInput
-        label="Street & Number"
+        label="Street & Number*"
         name="street"
         type="text"
         ref={streetRef}
@@ -79,7 +79,7 @@ const AddressInputContainer = ({
         placeholder="Enter postal code"
       />
       <CountrySelect
-        label="Country"
+        label="Country*"
         name="country"
         ref={countryRef}
         value={formData.country}

@@ -469,8 +469,21 @@ export const createEventAction = async (
 
     if (!organizerId) throw new Error("Organizer ID is required");
 
-    // Verify organizer ownership
-    const organizer = await verifyOrganizerOwnership(organizerId);
+    // Check if the user is an organizer
+    const isOrganizer = await db.organizer.findFirst({
+      where: {
+        id: organizerId,
+        profile: {
+          clerkId: user.id,
+        },
+      },
+    });
+
+    if (!isOrganizer) {
+      throw new Error(
+        "You are not authorized to create an event for this organizer",
+      );
+    }
 
     const rawData = Object.fromEntries(formData);
 
@@ -483,6 +496,7 @@ export const createEventAction = async (
       ...rawData,
       genres: rawGenres ? JSON.parse(rawGenres as string) : [],
       styles: rawStyles ? JSON.parse(rawStyles as string) : [],
+      ticketLink: (formData.get("ticketLink") as string) || undefined,
     };
 
     const validatedFields = validateWithZodSchema(eventSchema, processedData);
@@ -763,7 +777,7 @@ export const fetchEventDetails = async (id: string) => {
       postalCode: true,
       country: true,
       googleMapsLink: true,
-      genres: true, // Changed from genre
+      genres: true,
       styles: true,
       image: true,
       description: true,
@@ -773,9 +787,15 @@ export const fetchEventDetails = async (id: string) => {
       outdoorAreas: true,
       eventDateAndTime: true,
       eventEndDateAndTime: true,
+
+      ticketLink: true,
       organizer: {
         select: {
           id: true,
+          contactEmail: true,
+          contactWebsite: true,
+          contactPhone: true,
+          contactSocialMedia: true,
           organizerName: true,
           organizerImage: true,
           slogan: true,
@@ -1119,6 +1139,45 @@ export const fetchMyLocationDetails = async (eventId: string) => {
           },
         },
       },
+      select: {
+        id: true,
+        name: true,
+        subtitle: true,
+        location: true,
+        city: true,
+        street: true,
+        postalCode: true,
+        country: true,
+        googleMapsLink: true,
+        genres: true,
+        styles: true,
+        image: true,
+        description: true,
+        price: true,
+        floors: true,
+        bars: true,
+        outdoorAreas: true,
+        eventDateAndTime: true,
+        eventEndDateAndTime: true,
+        // New fields
+
+        ticketLink: true,
+        // Needed for authorization
+        organizer: {
+          select: {
+            id: true,
+            contactEmail: true,
+            contactWebsite: true,
+            contactPhone: true,
+            contactSocialMedia: true,
+            profile: {
+              select: {
+                clerkId: true,
+              },
+            },
+          },
+        },
+      },
     });
   } catch (error) {
     console.error("Error fetching location details:", error);
@@ -1131,9 +1190,23 @@ export const updateEventAction = async (
   formData: FormData,
 ): Promise<{ message: string }> => {
   const eventId = formData.get("id") as string;
+  const newOrganizerId = formData.get("organizerId") as string;
 
   try {
     const user = await getAuthUser();
+
+    const hasPermission = await db.organizer.findFirst({
+      where: {
+        id: newOrganizerId,
+        profile: {
+          clerkId: user.id,
+        },
+      },
+    });
+
+    if (!hasPermission) {
+      throw new Error("You don't have permission to assign this organizer");
+    }
 
     const rawData = Object.fromEntries(formData);
 
@@ -1142,6 +1215,7 @@ export const updateEventAction = async (
       ...rawData,
       genres: JSON.parse(rawData.genres as string),
       styles: JSON.parse(rawData.styles as string),
+      ticketLink: (formData.get("ticketLink") as string) || undefined,
     };
 
     const validatedFields = validateWithZodSchema(eventSchema, processedData);
@@ -1184,10 +1258,10 @@ export const updateEventAction = async (
     await db.event.update({
       where: {
         id: eventId,
-        organizerId: existingEvent.organizerId,
       },
       data: {
         ...validatedFields,
+        organizerId: newOrganizerId,
         image: imageUrl,
         eventDateAndTime,
         eventEndDateAndTime,

@@ -1,5 +1,5 @@
 "use client"
-222
+
 import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import FormContainer from "@/components/form/FormContainer";
@@ -19,15 +19,10 @@ import OrganizerSelect from "@/components/form/OrganizerSelect";
 import EventSuccessDialog from "@/components/form/EventSuccessDialog";
 import HeaderSection from "@/components/ui/HeaderSection";
 import { User, MapPin } from "lucide-react";
-
-
-
-const defaultGenres: string[] = []; // Changed from defaultGenre
-const defaultStyles: Style[] = [];
-
-
+import FormInput from "@/components/form/FormInput";
 
 const CreateEvent = () => {
+
   const router = useRouter();
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
@@ -77,14 +72,20 @@ const CreateEvent = () => {
           <NameAndSubtitleContainer defaultName="test" />
           <div className="mb-4 grid gap-8 md:grid-cols-2">
             <PriceInput />
+            <FormInput
+              type="url"
+              name="ticketLink"
+              label="Ticket Link"
+              placeholder="https://..."
+            />
             <GenresInput
-              defaultValue={defaultGenres}
-              defaultStyles={defaultStyles}
+              defaultValue={[]}
+              defaultStyles={[]}
             />
           </div>
           <StylesInput
-            defaultGenres={defaultGenres}
-            defaultStyles={defaultStyles}
+            defaultGenres={[]}
+            defaultStyles={[]}
           />
           <TextAreaInput
             name="description"
@@ -114,7 +115,7 @@ const CreateEvent = () => {
           </div>
           <div className="flex items-center mt-8 gap-2 mb-4">
             <User className="h-5 w-5" />
-            <h3 className="text-lg font-medium">Organizer</h3>
+            <h3 className="text-lg font-medium">Organizer*</h3>
           </div>
           <OrganizerSelect />
           <SubmitButton text="create event" className="mt-12" />

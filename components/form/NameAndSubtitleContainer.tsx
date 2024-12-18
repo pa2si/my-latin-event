@@ -32,7 +32,7 @@ const NameAndSubtitleContainer = ({
           <FormInput
             name="name"
             type="text"
-            label="Event Name"
+            label="Event Name*"
             placeholder="Enter your event name"
             required={true}
             defaultValue={defaultName}

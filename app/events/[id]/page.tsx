@@ -70,6 +70,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
         eventId={event.id}
         eventName={event.name}
         eventSubtitle={event.subtitle}
+        ticketLink={event.ticketLink}
         canEdit={canEdit}
       />
 
