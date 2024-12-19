@@ -2,9 +2,12 @@
 
 import { Card, CardHeader } from '@/components/ui/card';
 import { LuMinus, LuPlus } from 'react-icons/lu';
-
 import { Button } from '../ui/button';
 import { useState } from 'react';
+
+const formatCamelCase = (str: string) => {
+  return str.replace(/([A-Z])/g, ' $1').trim();
+};
 
 const CounterInput = ({
   detail,
@@ -40,11 +43,11 @@ const CounterInput = ({
       <CardHeader className="flex flex-col gap-y-5">
         <div className="flex items-center justify-between flex-wrap">
           <div className="flex flex-col">
-            <h2 className="font-medium capitalize">
-              {detailDisplayNames[detail] || detail}
+            <h2 className="capitalize font-antonio font-bold tracking-wide text-md">
+              {detailDisplayNames[detail] || formatCamelCase(detail)}
             </h2>
-            <p className="text-muted-foreground text-sm">
-              Specify the number of {detail}
+            <p className="text-muted-foreground text-sm font-antonio  tracking-wide text-md">
+              Specify the number of {detailDisplayNames[detail] || formatCamelCase(detail).toLowerCase()}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -56,7 +59,7 @@ const CounterInput = ({
             >
               <LuMinus className="w-5 h-5 text-primary" />
             </Button>
-            <span className="text-xl font-bold w-5 text-center">{count}</span>
+            <span className="text-xl  w-5 text-center font-antonio font-bold text-md">{count}</span>
             <Button
               variant="outline"
               size="icon"

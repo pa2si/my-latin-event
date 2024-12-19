@@ -28,7 +28,7 @@ const SelectionDialog: React.FC<SelectionDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={`top-[50%] ${width} ${height} p-0`}>
         <DialogHeader className="p-4 pb-0">
-          <DialogTitle className="text-center text-lg font-semibold text-muted-foreground">
+          <DialogTitle className="text-center text-lg text-muted-foreground font-antonio tracking-wide ">
             {title}
           </DialogTitle>
         </DialogHeader>

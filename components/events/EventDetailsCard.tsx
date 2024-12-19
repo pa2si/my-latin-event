@@ -1,10 +1,12 @@
 // components/events/cards/EventDetailsCard.tsx
-import { MapPin } from "lucide-react";
+import { MapPin, AudioLines, ExternalLink } from "lucide-react";
 import { FaMusic } from "react-icons/fa";
-import { AudioLines } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import CountryFlagAndName from "@/components/card/CountryFlagAndName";
+import TitleHFour from "@/components/shared/TitleHFour";
+import TitleHTwo from "../shared/TitleHTtwo";
+
 
 interface StyleItem {
   name: string;
@@ -35,15 +37,15 @@ const EventDetailsCard = ({
 
   return (
     <div className="mt-8">
-      <h2 className="mb-4 text-2xl font-bold">Event Details</h2>
+      <TitleHTwo text="Event Details" />
       <div className="grid gap-8 md:grid-cols-2">
         {/* Location Info */}
         <div className="space-y-4">
           <h3 className="flex items-center gap-2 text-lg font-semibold">
             <MapPin className="h-5 w-5 text-primary" />
-            Location Details
+            <TitleHFour text="Location Details" />
           </h3>
-          <div className="space-y-2 text-muted-foreground">
+          <div className="space-y-1 text-muted-foreground font-mono tracking-tight">
             <p>{location}</p>
             <p>{street}</p>
             <p>
@@ -57,8 +59,10 @@ const EventDetailsCard = ({
                 href={googleMapsLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="flex items-center gap-2"
               >
                 View on Google Maps
+                <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
           )}
@@ -69,7 +73,7 @@ const EventDetailsCard = ({
           <div className="space-y-4">
             <h3 className="flex items-center gap-2 text-lg font-semibold">
               <FaMusic className="h-5 w-5 text-primary" />
-              You will listen to:
+              <TitleHFour text='You will listen to' />
             </h3>
             <div className="space-y-2">
               <div className="flex flex-wrap gap-2">

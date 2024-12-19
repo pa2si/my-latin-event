@@ -32,7 +32,7 @@ const HoverOverlay = ({ event, view }: { event: EventCardProps, view: 'day' | 'w
     <>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-            <h3 className={`text-white font-semibold capitalize ${view === 'month' ? 'text-sm' : 'text-sm md:text-base'} mb-2`}>
+            <h3 className={`text-white font-anton tracking-wide text-md capitalize ${view === 'month' ? 'text-sm' : 'text-sm md:text-base'} mb-2`}>
                 {event.name}
             </h3>
             <div className="text-white/90 text-xs mb-2 capitalize">
@@ -229,7 +229,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
                     <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col">
                         <div className="absolute top-0 left-0 right-0 bg-background p-6 border-b z-10">
                             <SheetHeader>
-                                <SheetTitle className="text-xl">
+                                <SheetTitle className="text-xl font-anton">
                                     Events on {format(day, 'EEEE, MMMM d, yyyy')}
                                 </SheetTitle>
                             </SheetHeader>

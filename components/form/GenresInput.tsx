@@ -106,8 +106,8 @@ const GenresInput = ({
   };
 
   return (
-    <div className="mb-4">
-      <Label htmlFor={name} className="capitalize">
+    <div className="mb-4 font-antonio">
+      <Label htmlFor={name} className="capitalize text-md tracking-wider ">
         Genres*
       </Label>
       <Button
@@ -118,7 +118,7 @@ const GenresInput = ({
           e.preventDefault();
           setIsOpen(true);
         }}
-        className="w-full justify-start font-normal"
+        className="w-full justify-start font-normal tracking-wide"
       >
         {selectedGenres.length > 0
           ? formatGenresString(selectedGenres)
@@ -137,7 +137,7 @@ const GenresInput = ({
             variant="ghost"
             onClick={(e) => handleGenreChange(e, item.label)}
             className={cn(
-              "w-full justify-between text-left",
+              "w-full justify-between text-left font-antonio font-bold tracking-wide text-md",
               selectedGenres.includes(item.label) && "text-primary"
             )}
           >

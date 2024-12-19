@@ -131,7 +131,7 @@ const DateAndTimePickerContainer = ({
             name="eventDateAndTime"
           />
         </div>
-        <div className="mt-4 flex items-center text-muted-foreground">
+        <div className="mt-4 flex items-center text-muted-foreground font-antonio tracking-wide  ">
           <FormCheckbox
             id="set-ending"
             label="Set ending time"

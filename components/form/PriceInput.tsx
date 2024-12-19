@@ -25,7 +25,7 @@ function PriceInput({ defaultValue }: { defaultValue?: string }) {
 
   return (
     <div className="mb-4">
-      <Label htmlFor={name} className="capitalize">Price</Label>
+      <Label htmlFor={name} className="capitalize font-antonio font-bold tracking-wide text-md">Price</Label>
       <div>
         <Button
           type="button"
@@ -52,7 +52,7 @@ function PriceInput({ defaultValue }: { defaultValue?: string }) {
             key={option}
             onClick={() => handlePriceChange(option)}
             className={cn(
-              "flex w-full cursor-pointer items-center justify-center rounded p-2 hover:bg-gray-100",
+              "flex w-full cursor-pointer items-center justify-center rounded p-2 hover:bg-gray-100 font-antonio font-medium tracking-wide text-md",
               option === selectedPrice && "font-bold text-primary",
             )}
           >
@@ -64,7 +64,7 @@ function PriceInput({ defaultValue }: { defaultValue?: string }) {
             key={price}
             onClick={() => handlePriceChange(price.toString())}
             className={cn(
-              "flex w-full cursor-pointer items-center justify-center rounded p-2 hover:bg-gray-100",
+              "flex w-full cursor-pointer items-center justify-center rounded p-2 hover:bg-gray-100 font-antonio font-medium tracking-wide text-md",
               price.toString() === selectedPrice && "font-bold text-primary",
             )}
           >

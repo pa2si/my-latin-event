@@ -20,6 +20,7 @@ const config = {
     extend: {
       fontFamily: {
         anton: ["var(--font-anton)"],
+        antonio: ["var(--font-antonio)"],
       },
       colors: {
         border: "hsl(var(--border))",

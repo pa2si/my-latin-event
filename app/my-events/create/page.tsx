@@ -10,17 +10,17 @@ import TextAreaInput from "@/components/form/TextAreaInput";
 import ImageInput from "@/components/form/ImageInput";
 import CounterInput from "@/components/form/CounterInput";
 import DateAndTimePickerContainer from "@/components/form/DateAndTimePickerContainer";
-import { Style } from "@/utils/types";
 import NameAndSubtitleContainer from "@/components/form/NameAndSubtitleContainer";
 import GenresInput from "@/components/form/GenresInput";
 import StylesInput from "@/components/form/StylesInput";
 import AddressInputContainer from "@/components/form/AddressInputContainer";
 import OrganizerSelect from "@/components/form/OrganizerSelect";
 import EventSuccessDialog from "@/components/form/EventSuccessDialog";
-import HeaderSection from "@/components/ui/HeaderSection";
-import { User, MapPin, Info, Ticket } from "lucide-react";
+import HeaderSection from "@/components/shared/HeaderSection";
+import { User, MapPin, Ticket } from "lucide-react";
 import FormInput from "@/components/form/FormInput";
 import { FaInfo } from "react-icons/fa6";
+import TitleHThree from "@/components/shared/TitleHThree";
 
 
 
@@ -43,7 +43,7 @@ const CreateEvent = () => {
     const result = await createEventAction(prevState, formData);
     if (result.success) {
       setShowSuccessDialog(true);
-      return { ...result, success: false }; // Prevent default redirect
+      return { ...result, success: false };
     }
     return result;
   };
@@ -67,10 +67,8 @@ const CreateEvent = () => {
       />
       <div className="-mx-4 rounded-md border p-8 sm:mx-0">
         <div className="flex items-center gap-1 mb-4">
-          <FaInfo className="text-xl pb-[2px]" />
-
-
-          <h3 className="text-lg font-medium">General Info</h3>
+          <FaInfo className="text-xl " />
+          <TitleHThree text="General Info" />
         </div>
         <FormContainer action={handleEventAction}>
           <ImageInput />
@@ -93,7 +91,7 @@ const CreateEvent = () => {
 
           <div className="flex items-center mt-12 gap-2 mb-4">
             <p>📍</p>
-            <h3 className="text-lg font-medium">Direction</h3>
+            <TitleHThree text="Direction" />
           </div>
 
           <AddressInputContainer />
@@ -101,7 +99,7 @@ const CreateEvent = () => {
 
             <div className="flex items-center mt-12 gap-2 mb-4">
               <Ticket />
-              <h3 className="text-lg font-medium">Tickets</h3>
+              <TitleHThree text="Tickets" />
             </div>
             <PriceInput />
             <FormInput
@@ -113,7 +111,7 @@ const CreateEvent = () => {
 
             <div className="flex items-center mt-12 gap-2 mb-4">
               <MapPin className="h-5 w-5" />
-              <h3 className="text-lg font-medium">Location Details</h3>
+              <TitleHThree text="Location Details" />
             </div>
 
             <CounterInput detail="floors" />
@@ -125,8 +123,8 @@ const CreateEvent = () => {
             />
           </div>
           <div className="flex items-center mt-12 gap-2 mb-4">
-            <User className="h-5 w-5" />
-            <h3 className="text-lg font-medium">Organizer*</h3>
+            <User className="h-7 w-7" />
+            <TitleHThree text="Organizer*" />
           </div>
           <OrganizerSelect />
           <SubmitButton text="create event" className="mt-12" />

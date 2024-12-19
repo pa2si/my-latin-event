@@ -132,8 +132,8 @@ const OrganizerSelect = ({ defaultValue = "" }) => {
       </AlertDialog>
 
       <div className="mb-4">
-        <label className="mb-2 block text-sm font-medium">
-          Select Organizer
+        <label className="mb-2 block font-antonio font-medium tracking-wide text-md">
+          Select Organizer*
         </label>
         <Select
           name="organizerId"

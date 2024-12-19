@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { staggeredAnimationFromLeft } from "@/utils/animations";
 import { useGenreStylesStore } from "@/utils/store";
 import { FiMusic } from "react-icons/fi";
+import { Label } from "../ui/label";
 
 const StylesInput = ({
   defaultGenres,
@@ -46,17 +47,17 @@ const StylesInput = ({
       <div className="mb-12 mt-6 flex-row justify-center">
         <div className="mb-1 flex flex-row items-center justify-between">
           <div className="flex items-center gap-1 ">
-            <FiMusic />
-            <h3 className="font-medium">Styles</h3>
-            <span className="ml-2 text-sm text-muted-foreground">
+            {/* <FiMusic /> */}
+            <Label className="capitalize text-md tracking-wider font-antonio font-bold">Styles</Label>
+            <span className="ml-1 text-sm text-muted-foreground">
               ({selectedStyles.length} selected)
             </span>
           </div>
         </div>
-        <p className="mb-5 text-sm text-muted-foreground">
+        <p className="mb-5 text-sm text-muted-foreground ">
           Not required, but selecting specific styles helps attendees understand what music to expect alongside the genre selection.
         </p>
-        <div className="grid grid-cols-2 gap-x-20 gap-y-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-20 gap-y-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 font-antonio tracking-wide">
           {availableStyles.map((style) => (
             <motion.div
               key={style.name}

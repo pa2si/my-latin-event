@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Title from "./Title";
+import TitleHTwo from "../shared/TitleHTtwo";
 
 const Description = ({ description }: { description: string }) => {
   const [isFullDescriptionShown, setIsFullDescriptionShown] = useState(false);
@@ -20,9 +20,10 @@ const Description = ({ description }: { description: string }) => {
       : description;
 
   return (
-    <article className="mt-4">
-      <Title text="Description" />
-      <p className="font-light leading-loose text-muted-foreground">
+    <article className="mt-10">
+      <TitleHTwo text="Description" />
+
+      <p className="font-light leading-loose text-muted-foreground font-mono tracking-tight">
         {displayedDescription}
       </p>
       {isLongDescription && (

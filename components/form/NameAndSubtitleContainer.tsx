@@ -40,10 +40,10 @@ const NameAndSubtitleContainer = ({
         </div>
 
         {/* Checkbox for Subtitle */}
-        <div className="ml-1 mt-5 flex-grow text-muted-foreground">
+        <div className="ml-1 mt-5 flex-grow text-muted-foreground font-antonio tracking-wide">
           <FormCheckbox
             id="add-subtitle"
-            label="Add Subtitle"
+            label="Add subtitle"
             checked={showSubtitle}
             onCheckedChange={handleCheckboxChange}
           />

@@ -1,7 +1,7 @@
 import EmptyList from '@/components/home/EmptyList';
 import { deleteReviewAction, fetchEventReviewsByUser } from '@/utils/actions';
 import ReviewCard from '@/components/reviews/ReviewCard';
-import Title from '@/components/events/Title';
+import Title from '@/components/shared/TitleHThree';
 import FormContainer from '@/components/form/FormContainer';
 import { IconButton } from '@/components/form/Buttons';
 

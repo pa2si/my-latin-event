@@ -1,5 +1,5 @@
 import { fetchEventReviews } from '@/utils/actions';
-import Title from '@/components/events/Title';
+import Title from '@/components/shared/TitleHThree';
 
 import ReviewCard from './ReviewCard';
 async function EventReviews({ eventId }: { eventId: string }) {

@@ -8,7 +8,7 @@ import EmailSettings from "@/components/profile/EmailSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileSettings from "@/components/form/ProfileSettings";
 import OrganizersTab from "@/components/profile/OrganizersTab";
-import HeaderSection from "@/components/ui/HeaderSection";
+import HeaderSection from "@/components/shared/HeaderSection";
 import { currentUser } from "@clerk/nextjs/server";
 import { isValidTab } from "@/utils/isValidTab";
 import { ProfileTab } from "@/utils/types";

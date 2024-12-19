@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { icon } from "leaflet";
-import CountryFlagAndName from "../card/CountryFlagAndName";
-import Title from "./Title";
 
 const iconUrl =
   "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-2x.png";

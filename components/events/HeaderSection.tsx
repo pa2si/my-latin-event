@@ -8,7 +8,7 @@ import { fetchLikeId } from "@/utils/actions";
 import { Button } from "../ui/button";
 import { Ticket } from "lucide-react";
 import { TooltipProvider } from "../ui/tooltip";
-import TooltipWrapper from "../ui/TooltipWrapper"; // Add this import
+import TooltipWrapper from "@/components/shared/TooltipWrapper"; // Add this import
 
 interface HeaderSectionsProps {
   eventId: string;
@@ -35,9 +35,9 @@ const HeaderSections = async ({
 
         <div className="mt-4 items-center justify-between sm:flex">
           <div>
-            <h1 className="mb-1 font-anton text-4xl font-bold">{eventName}</h1>
+            <h1 className="text-3xl font-anton tracking-wide capitalize">{eventName}</h1>
             {eventSubtitle && (
-              <p className="text-xl text-muted-foreground">{eventSubtitle}</p>
+              <p className="text-xl font-anton text-muted-foreground">{eventSubtitle}</p>
             )}
           </div>
           <div className="mt-4 flex gap-4 sm:mt-0">

@@ -106,15 +106,15 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
                 )}
               </>
             )}
-          </ComboboxOption>
-        </div>
+          </ComboboxOption >
+        </div >
       );
     };
 
     return (
       <div className={className}>
-        <div className="-mb-1 items-baseline justify-between md:mt-[4px]">
-          <label className="-mb-[4px] block text-sm font-medium text-gray-900">
+        <div className="-mb-1 items-baseline justify-between md:mt-[4px]  capitalize font-antonio text-md">
+          <label className="-mb-[4px] block font-medium text-gray-900 ">
             {label}
           </label>
           {description && (

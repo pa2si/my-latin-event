@@ -4,7 +4,7 @@ import FormContainer from "@/components/form/FormContainer";
 import { createProfileAction } from "@/utils/actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import HeaderSection from "@/components/ui/HeaderSection";
+import HeaderSection from "@/components/shared/HeaderSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense } from "react";
 import { ProfileSkeleton } from "@/components/profile/LoadingProfile";
@@ -18,10 +18,10 @@ const CreateProfile = async () => {
 
   const profileData = user
     ? {
-        firstName: user.firstName ?? undefined,
-        lastName: user.lastName ?? undefined,
-        username: user.username ?? undefined,
-      }
+      firstName: user.firstName ?? undefined,
+      lastName: user.lastName ?? undefined,
+      username: user.username ?? undefined,
+    }
     : null;
 
   return (

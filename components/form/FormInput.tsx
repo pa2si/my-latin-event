@@ -37,7 +37,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ) => {
     return (
       <div className="mb-2">
-        <Label htmlFor={name} className="capitalize">
+        <Label htmlFor={name} className="capitalize font-antonio text-md tracking-wide">
           {label || name}
         </Label>
         {description && <p className="text-sm text-gray-500">{description}</p>}

@@ -2,6 +2,7 @@ import React from "react";
 import { DatePicker } from "@/components/form/DatePicker";
 import TimePicker from "./TimePicker";
 import { Clock } from "lucide-react";
+import TitleHThree from "../shared/TitleHThree";
 
 interface EventDateAndTimeProps {
   date: Date | null;
@@ -42,7 +43,8 @@ const EventDateAndTimeInput: React.FC<EventDateAndTimeProps> = ({
 
       <div className="flex items-center mt-8 gap-2 mb-4">
         <Clock className="h-5 w-5" />
-        <h3 className="text-lg font-medium">{label}</h3>
+        <TitleHThree text={label} />
+        {/* <h3 className="text-lg font-medium">{label}</h3> */}
       </div>
       <div>
         <div className="flex flex-col items-center gap-4 sm:flex-row">

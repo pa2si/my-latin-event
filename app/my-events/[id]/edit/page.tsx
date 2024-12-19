@@ -16,8 +16,9 @@ import { Style } from "@/utils/types";
 import FormInput from "@/components/form/FormInput";
 import OrganizerSelect from "@/components/form/OrganizerSelect";
 import { User, Pencil, MapPin, Ticket } from "lucide-react";
-import HeaderSection from "@/components/ui/HeaderSection";
+import HeaderSection from "@/components/shared/HeaderSection";
 import { FaInfo } from "react-icons/fa";
+import TitleHThree from "@/components/shared/TitleHThree";
 
 async function EditMyEventPage({ params }: { params: { id: string } }) {
   const event = await fetchMyLocationDetails(params.id);
@@ -43,10 +44,8 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
 
       <div className="-mx-4 rounded-md border p-8 sm:mx-0">
         <div className="flex items-center gap-1 mb-4">
-          <FaInfo className="text-xl pb-[2px]" />
-
-
-          <h3 className="text-lg font-medium">General Info</h3>
+          <FaInfo className="text-xl " />
+          <TitleHThree text="General Info" />
         </div>
         <FormContainer action={updateEventAction}>
           <input type="hidden" name="id" value={event.id} />
@@ -74,7 +73,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
           />
           <div className="flex items-center mt-12 gap-2 mb-4">
             <p>📍</p>
-            <h3 className="text-lg font-medium">Direction</h3>
+            <TitleHThree text="Direction" />
           </div>
           <AddressInputContainer
             defaultValues={{
@@ -88,7 +87,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
           />
           <div className="flex items-center mt-12 gap-2 mb-4">
             <Ticket />
-            <h3 className="text-lg font-medium">Tickets</h3>
+            <TitleHThree text="Tickets" />
           </div>
           <PriceInput defaultValue={event.price} />
           <FormInput
@@ -101,7 +100,7 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
 
           <div className="flex items-center mt-12 gap-2 mb-4">
             <MapPin className="h-5 w-5" />
-            <h3 className="text-lg font-medium">Location Details</h3>
+            <TitleHThree text="Location Details" />
           </div>
           <CounterInput
             detail="floors"
@@ -121,8 +120,8 @@ async function EditMyEventPage({ params }: { params: { id: string } }) {
           />
 
           <div className="flex items-center mt-12 gap-2 mb-4">
-            <User className="h-5 w-5" />
-            <h3 className="text-lg font-medium">Organizer*</h3>
+            <User className="h-7 w-7" />
+            <TitleHThree text="Organizer" />
           </div>
 
           <OrganizerSelect defaultValue={event.organizer.id} />

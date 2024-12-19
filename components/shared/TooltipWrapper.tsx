@@ -1,6 +1,6 @@
 import React from "react";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./tooltip";
-import { Button } from "./button";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+
 
 interface TooltipWrapperProps {
     tooltipText: string;

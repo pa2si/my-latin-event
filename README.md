@@ -1,15 +1,19 @@
 To do:
 
-- update the price display in event slug
 - imlement new organizer elements in organizer form
   - display the new elements in eventdetails
 - correct skeleton for create Event and edit Event!!
-- Event slug ui different. especially the flyer needs to be seen correctly
 - different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.73
+
+- added components TitleHOne, TitleHTwo, TitleHThree and TitleHFour and replaced them in createEvent and event slug
+- added font-antonio from google fonts and display it in forms.
+- also some small other style adaptions
 
 v 0.1.72
 

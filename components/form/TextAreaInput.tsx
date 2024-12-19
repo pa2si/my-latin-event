@@ -39,7 +39,7 @@ function TextAreaInput({ name, labelText, defaultValue }: TextAreaInputProps) {
 
   return (
     <div className="mb-2">
-      <Label htmlFor={name} className="capitalize">
+      <Label htmlFor={name} className="capitalize font-antonio font-bold tracking-wide text-md">
         {labelText || name}
       </Label>
 
@@ -48,7 +48,7 @@ function TextAreaInput({ name, labelText, defaultValue }: TextAreaInputProps) {
         name={name}
         defaultValue={defaultValue || tempDefaultDescription}
         rows={5}
-        className="leading-loose"
+        className="leading-loose font-mono tracking-tight"
         onInput={handleChange}
       />
 

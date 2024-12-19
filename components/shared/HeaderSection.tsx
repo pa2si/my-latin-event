@@ -1,5 +1,6 @@
 import React from 'react';
 import BreadCrumbs from "@/components/events/BreadCrumbs";
+import TitleHOne from '@/components/shared/TitleHOne'; // Add import
 
 interface HeaderSectionProps {
   title: string;
@@ -27,10 +28,10 @@ const HeaderSection = ({
           {icon && typeof icon !== 'string' &&
             React.createElement(icon, { className: "h-6 w-6" })
           }
-          <h1 className="text-2xl font-semibold capitalize">{title}</h1>
+          <TitleHOne text={title} />
           {/* Show emoji after title */}
           {icon && typeof icon === 'string' &&
-            <span className="text-2xl">{icon}</span>
+            <span className="text-2xl mt-1">{icon}</span>
           }
         </div>
         {description && (

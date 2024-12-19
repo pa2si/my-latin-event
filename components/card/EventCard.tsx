@@ -51,11 +51,11 @@ const EventCard = ({
             </div>
 
             {/* Title and Subtitle */}
-            <h3 className="text-white font-semibold text-lg leading-tight mb-2 capitalize">
+            <h3 className="text-white font-semibold text-lg leading-tight mb-2 capitalize font-anton tracking-wide">
               {name}
             </h3>
             {subtitle && (
-              <p className="text-white/90 text-sm mb-2 line-clamp-2">
+              <p className="text-white/90 text-sm mb-2 line-clamp-2 ">
                 {subtitle}
               </p>
             )}

@@ -18,7 +18,7 @@ const OrganizerCard = async ({
     <Card>
       <CardContent className="p-4">
         <div className="flex justify-between">
-          <h3 className={`text-lg font-semibold ${canFollow ? "mb-4" : ""}`}>
+          <h3 className={`text-lg font-semibold font-mono ${canFollow ? "mb-4" : ""}`}>
             Event Organizer
           </h3>
           <div className="-mt-2">
@@ -32,7 +32,7 @@ const OrganizerCard = async ({
             slogan,
           }}
         />
-        <div className="mt-4 flex items-center gap-2 text-muted-foreground">
+        <div className="mt-4 flex items-center gap-2 text-muted-foreground font-mono">
           <Calendar className="h-4 w-4" />
           <span className="text-sm">{_count?.events || 0} events created</span>
         </div>

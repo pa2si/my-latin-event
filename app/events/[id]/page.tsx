@@ -15,6 +15,7 @@ import LikesCard from "@/components/events/LikesCard";
 import { QuickInfoCard } from "@/components/events/QuickInfoCard";
 import EventDetailsCard from "@/components/events/EventDetailsCard";
 import HeaderSection from "@/components/events/HeaderSection";
+import TitleHTwo from "@/components/shared/TitleHTtwo";
 
 
 const DynamicMap = dynamic(() => import("@/components/events/EventMap"), {
@@ -91,12 +92,6 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             genres={event.genres}
             daysMessage={daysMessage}
           />
-          <p className="mt-2 text-sm text-muted-foreground">
-            Created {format(event.createdAt, "dd.MM.yyyy")}
-            {event.updatedAt &&
-              event.updatedAt !== event.createdAt &&
-              ` • Modified ${format(event.updatedAt, "dd.MM.yyyy HH:mm")}`}
-          </p>
 
           {/* Event Details */}
           <EventDetailsCard
@@ -114,7 +109,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
 
           {/* Map */}
           <div className="mt-8">
-            <h2 className="mb-4 text-2xl font-bold">{`locate ${event.location}`}</h2>
+            <TitleHTwo text={`Locate ${event.location}`} />
             <DynamicMap
               name={event.location}
               country={event.country}
@@ -171,6 +166,13 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               />
             )}
             <LikesCard likes={event._count.likes} />
+
+            <p className="mt-2 text-xs text-muted-foreground tracking-wide font-antonio">
+              Created {format(event.createdAt, "dd.MM.yyyy")}
+              {event.updatedAt &&
+                event.updatedAt !== event.createdAt &&
+                ` • Modified ${format(event.updatedAt, "dd.MM.yyyy HH:mm")}`}
+            </p>
           </div>
         </aside>
       </div>

@@ -1,4 +1,4 @@
-import HeaderSection from "@/components/ui/HeaderSection";
+import HeaderSection from "@/components/shared/HeaderSection";
 import EventsList from "@/components/home/EventsList";
 import EmptyList from "@/components/home/EmptyList";
 import { fetchFollowedOrganizersEvents, fetchEventsWithLikes } from "@/utils/actions";
