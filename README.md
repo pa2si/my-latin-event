@@ -10,6 +10,12 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.75
+
+- modified the dimensions of DayCard in week and day view.
+- now 7 daycards fit in xl screen and it has fixed weekdays positions
+  - days from previous month appear if there is the space for it but they are greyed out a bit
+
 v 0.1.74
 
 - changed price in EventCardProps to string instead of null

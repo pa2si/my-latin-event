@@ -26,6 +26,7 @@ interface DayCardProps {
   likeIds: Record<string, string | null>;
   events: EventCardProps[];
   view: "day" | "week" | "month";
+  isPreviousMonth?: boolean;
 }
 
 const HoverOverlay = ({
@@ -85,7 +86,13 @@ const MultiEventOverlay = ({
   </>
 );
 
-const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
+const DayCard = ({
+  day,
+  events,
+  view,
+  likeIds,
+  isPreviousMonth = false,
+}: DayCardProps) => {
   const router = useRouter();
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -118,11 +125,11 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
   const baseClasses = "relative bg-neutral-50";
   const weekViewClass =
     view === "week"
-      ? "flex-1 min-w-[140px] max-w-[160px] h-[270px] md:min-w-[280px] md:h-[350px] md:max-w-[280px]"
+      ? "flex-1 min-w-[160px] max-w-[] h-[270px] md:min-w-[160px] md:max-w-[180px] md:max-h-[320px] lg:min-w-[170px] md:h-[350px] lg:max-w-[200px] xl:min-w-[200px] xl:max-w-[230px]"
       : "";
   const monthViewClass =
     view === "month"
-      ? "flex-1 min-w-[140px] max-w-[100px] md:min-w-[170px] md:max-w-[170px] h-[230px]"
+      ? "flex-1 min-w-[140px] min-h-[300px] md:min-w-[170px] md:max-w-[170px] xl:w-full xl:min-w-0 xl:max-w-none md:min-h-[230px]"
       : "";
   const dayViewClass =
     view === "day"
@@ -298,7 +305,7 @@ const DayCard = ({ day, events, view, likeIds }: DayCardProps) => {
 
   return (
     <div
-      className={` ${baseClasses} ${weekViewClass} ${monthViewClass} ${dayViewClass} overflow-hidden rounded-lg shadow-md ${view !== "day" ? "duration-250 transform transition-transform hover:scale-105 hover:shadow-xl" : ""} relative flex flex-col`}
+      className={` ${baseClasses} ${weekViewClass} ${monthViewClass} ${dayViewClass} overflow-hidden rounded-lg shadow-md ${view !== "day" ? "duration-250 transform transition-transform hover:scale-105 hover:shadow-xl" : ""} relative flex flex-col ${isPreviousMonth ? "opacity-40" : ""}`}
     >
       {/* Header displaying the day and date */}
       <div
