@@ -1,15 +1,25 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import { genres } from "@/utils/genres";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Music, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCookies } from "next-client-cookies";
-import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 import GenresSelectionDialog from "@/components/form/GenresSelectionDialog";
 import { useAuth } from "@clerk/nextjs";
 
@@ -24,9 +34,10 @@ const GenreInfo = ({ selectedGenres }: { selectedGenres: string[] }) => (
         <>
           Currently showing{" "}
           <span className="font-medium text-foreground">
-            {selectedGenres[0]}{selectedGenres.length > 1 ? ` +${selectedGenres.length - 1}` : ''}
-          </span> events.
-          Select another genre to change the filter.
+            {selectedGenres[0]}
+            {selectedGenres.length > 1 ? ` +${selectedGenres.length - 1}` : ""}
+          </span>{" "}
+          events. Select another genre to change the filter.
         </>
       ) : (
         "Select genres to filter events by music style."
@@ -44,15 +55,15 @@ const GenresDropdown = () => {
   const cookies = useCookies();
   const { isSignedIn } = useAuth();
 
-  const selectedGenres = JSON.parse(cookies.get('selectedGenres') || "[]") as string[];
-
+  const selectedGenres = JSON.parse(
+    cookies.get("selectedGenres") || "[]",
+  ) as string[];
 
   // Remove the complex observer setup and simplify the conditions
   useEffect(() => {
-    const genresCookie = cookies.get('selectedGenres');
-    const shouldShowDialog = !genresCookie && (
-      isSignedIn || cookies.get('guestLocation')
-    );
+    const genresCookie = cookies.get("selectedGenres");
+    const shouldShowDialog =
+      !genresCookie && (isSignedIn || cookies.get("guestLocation"));
 
     if (shouldShowDialog) {
       setShowGenresDialog(true);
@@ -64,7 +75,7 @@ const GenresDropdown = () => {
 
     if (selectedGenres.includes(genre)) {
       if (selectedGenres.length > 1) {
-        newSelectedGenres = selectedGenres.filter(g => g !== genre);
+        newSelectedGenres = selectedGenres.filter((g) => g !== genre);
       } else {
         setShowAlert(true);
         return;
@@ -75,13 +86,16 @@ const GenresDropdown = () => {
 
     const expires = new Date();
     expires.setFullYear(expires.getFullYear() + 1);
-    cookies.set('selectedGenres', JSON.stringify(newSelectedGenres), { expires });
+    cookies.set("selectedGenres", JSON.stringify(newSelectedGenres), {
+      expires,
+    });
     router.refresh();
   };
 
-  const buttonText = selectedGenres.length > 0
-    ? `${selectedGenres[0]}${selectedGenres.length > 1 ? ` +${selectedGenres.length - 1}` : ''} Events`
-    : "Select Genres";
+  const buttonText =
+    selectedGenres.length > 0
+      ? `${selectedGenres[0]}${selectedGenres.length > 1 ? ` +${selectedGenres.length - 1}` : ""} Events`
+      : "Select Genres";
 
   return (
     <>
@@ -108,12 +122,12 @@ const GenresDropdown = () => {
                     onClick={() => handleSelect(item.label)}
                     className={cn(
                       "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-                      selectedGenres.includes(item.label) && "text-primary"
+                      selectedGenres.includes(item.label) && "text-primary",
                     )}
                   >
                     <span className="flex-1">{item.label}</span>
                     {selectedGenres.includes(item.label) && (
-                      <Check className="h-4 w-4 ml-2" />
+                      <Check className="ml-2 h-4 w-4" />
                     )}
                   </button>
                 ))}
@@ -134,7 +148,11 @@ const GenresDropdown = () => {
             </div>
           </PopoverTrigger>
 
-          <PopoverContent className="w-64" align="start" onMouseEnter={() => setIsHovered(true)}>
+          <PopoverContent
+            className="w-64"
+            align="start"
+            onMouseEnter={() => setIsHovered(true)}
+          >
             <div className="grid gap-4">
               <GenreInfo selectedGenres={selectedGenres} />
               <div className="rounded-xl bg-popover p-1">
@@ -143,13 +161,13 @@ const GenresDropdown = () => {
                     key={item.label}
                     onClick={() => handleSelect(item.label)}
                     className={cn(
-                      "relative font-antonio tracking-wider  flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none text-left hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-                      selectedGenres.includes(item.label) && "text-primary"
+                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-left font-anton text-sm tracking-wide outline-none transition-transform duration-100 hover:scale-105 hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                      selectedGenres.includes(item.label) && "text-primary",
                     )}
                   >
                     <span className="flex-1 text-left">{item.label}</span>
                     {selectedGenres.includes(item.label) && (
-                      <Check className="h-4 w-4 ml-2" />
+                      <Check className="ml-2 h-4 w-4" />
                     )}
                   </button>
                 ))}
@@ -163,9 +181,12 @@ const GenresDropdown = () => {
         <AlertDialogContent>
           <AlertDialogTitle>Cannot Remove Genre</AlertDialogTitle>
           <AlertDialogDescription>
-            You must maintain at least one genre selection to help us show you relevant events.
+            You must maintain at least one genre selection to help us show you
+            relevant events.
           </AlertDialogDescription>
-          <AlertDialogCancel onClick={() => setShowAlert(false)}>OK</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => setShowAlert(false)}>
+            OK
+          </AlertDialogCancel>
         </AlertDialogContent>
       </AlertDialog>
     </>

@@ -77,7 +77,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
       <SelectionDialog
         open={activePicker !== null}
         onOpenChange={(open) => !open && setActivePicker(null)}
-        title={`Choose a ${activePicker === "hour" ? "hour" : "minute"}`}
+        title={`Choose an ${activePicker === "hour" ? "hour" : "minute"}`}
       >
         {renderContent()}
       </SelectionDialog>

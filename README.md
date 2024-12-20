@@ -1,5 +1,6 @@
 To do:
 
+- 7 cards shall fit in month view
 - imlement new organizer elements in organizer form
   - display the new elements in eventdetails
 - correct skeleton for create Event and edit Event!!
@@ -8,6 +9,14 @@ To do:
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.74
+
+- changed price in EventCardProps to string instead of null
+- changed the font in genresDropdown
+-
+
+- tailwind css prettier plugin works again. a prettier setting was not set correctly
 
 v 0.1.73
 

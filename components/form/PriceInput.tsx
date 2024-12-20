@@ -12,20 +12,26 @@ const name = "price";
 function PriceInput({ defaultValue }: { defaultValue?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState(defaultValue || "8");
-  const currency = useGenreStylesStore(state => state.selectedCurrency);
+  const currency = useGenreStylesStore((state) => state.selectedCurrency);
 
   const handlePriceChange = (value: string) => {
     setSelectedPrice(value);
     setIsOpen(false);
   };
 
-  const displayValue = selectedPrice === "Free" || selectedPrice === "Donation"
-    ? selectedPrice
-    : `${selectedPrice} ${currency}`;
+  const displayValue =
+    selectedPrice === "Free" || selectedPrice === "Donation"
+      ? selectedPrice
+      : `${selectedPrice} ${currency}`;
 
   return (
     <div className="mb-4">
-      <Label htmlFor={name} className="capitalize font-antonio font-bold tracking-wide text-md">Price</Label>
+      <Label
+        htmlFor={name}
+        className="text-md font-antonio font-bold capitalize tracking-wide"
+      >
+        Price
+      </Label>
       <div>
         <Button
           type="button"
@@ -36,7 +42,8 @@ function PriceInput({ defaultValue }: { defaultValue?: string }) {
           {displayValue}
         </Button>
         <p className="mt-1.5 text-xs text-muted-foreground">
-          Currency is automatically set based on the event&apos;s country location
+          Currency is automatically set based on the event&apos;s country
+          location
         </p>
       </div>
 
@@ -52,7 +59,7 @@ function PriceInput({ defaultValue }: { defaultValue?: string }) {
             key={option}
             onClick={() => handlePriceChange(option)}
             className={cn(
-              "flex w-full cursor-pointer items-center justify-center rounded p-2 hover:bg-gray-100 font-antonio font-medium tracking-wide text-md",
+              "text-md flex w-full cursor-pointer items-center justify-center rounded p-2 font-antonio font-medium tracking-wide hover:bg-gray-100",
               option === selectedPrice && "font-bold text-primary",
             )}
           >
@@ -64,7 +71,7 @@ function PriceInput({ defaultValue }: { defaultValue?: string }) {
             key={price}
             onClick={() => handlePriceChange(price.toString())}
             className={cn(
-              "flex w-full cursor-pointer items-center justify-center rounded p-2 hover:bg-gray-100 font-antonio font-medium tracking-wide text-md",
+              "text-md flex w-full cursor-pointer items-center justify-center rounded p-2 font-antonio font-medium tracking-wide hover:bg-gray-100",
               price.toString() === selectedPrice && "font-bold text-primary",
             )}
           >
