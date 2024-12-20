@@ -1,12 +1,16 @@
-import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar as CalendarIcon,
+} from "lucide-react";
 
 export const LoadingCalendar = () => {
   return (
     <div className="w-full px-4 py-8">
       {/* Navigation Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+      <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
           <Button variant="outline" size="icon" disabled>
             <ChevronLeft className="h-4 w-4" />
@@ -25,16 +29,11 @@ export const LoadingCalendar = () => {
       </div>
 
       {/* Month View Day Cards */}
-      <div className="flex flex-wrap gap-4 justify-center">
-        {[...Array(35)].map((_, index) => (
+      <div className="flex flex-wrap justify-center gap-4 xl:grid xl:grid-cols-7 xl:gap-3">
+        {[...Array(42)].map((_, index) => (
           <Skeleton
             key={index}
-            className="
-              flex-1 
-              min-w-[140px] max-w-[100px] md:min-w-[170px] md:max-w-[170px] 
-              h-[230px]
-              rounded-lg
-            "
+            className="min-h-[300px] min-w-[140px] flex-1 rounded-lg md:min-h-[230px] md:min-w-[170px] md:max-w-[170px] xl:w-full xl:min-w-0 xl:max-w-none"
           />
         ))}
       </div>
@@ -47,12 +46,12 @@ export function LoadingCards() {
     <div className="mt-4">
       {/* Page Header Skeleton */}
       <div className="mb-8">
-        <Skeleton className="h-8 w-48 mb-2" /> {/* Title */}
+        <Skeleton className="mb-2 h-8 w-48" /> {/* Title */}
         <Skeleton className="h-6 w-96" /> {/* Subtitle */}
       </div>
 
       {/* Cards Grid */}
-      <section className="mt-4 gap-8 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <section className="mt-4 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {[...Array(8)].map((_, i) => (
           <SkeletonCard key={i} />
         ))}
@@ -69,8 +68,8 @@ export function SkeletonCard() {
         <Skeleton className="absolute inset-0 rounded-md" />
       </div>
       {/* Event details */}
-      <Skeleton className="h-4 mt-2 w-3/4" />
-      <Skeleton className="h-4 mt-2 w-1/2" />
+      <Skeleton className="mt-2 h-4 w-3/4" />
+      <Skeleton className="mt-2 h-4 w-1/2" />
     </div>
   );
 }

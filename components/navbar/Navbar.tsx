@@ -7,6 +7,7 @@ import GuestLocationIndicator from "@/components/navbar/GuestLocationIndicator";
 import { currentUser } from "@clerk/nextjs/server";
 import GenresDropdown from "@/components/navbar/GenresDropdown";
 import { getUserCity } from "@/utils/actions";
+import GenreBadges from "@/components/navbar/GenreBadges";
 
 const Navbar = async () => {
   const user = await currentUser();
@@ -14,21 +15,24 @@ const Navbar = async () => {
 
   return (
     <nav className="border-b">
-      <div className="container flex flex-wrap gap-4 py-8 flex-row items-center justify-between">
-        <Logo />
-        <div className="flex items-center gap-2 order-2 sm:order-1">
-          <NavSearch />
-          {user ? (
-            <UserLocationIndicator userLocation={userLocation} />
-          ) : (
-            <GuestLocationIndicator />
-          )}
-          <GenresDropdown />
+      <div className="container flex flex-col py-8">
+        <div className="flex flex-row flex-wrap items-center justify-between gap-4">
+          <Logo />
+          <div className="order-2 flex items-center gap-2 sm:order-1">
+            <NavSearch />
+            {user ? (
+              <UserLocationIndicator userLocation={userLocation} />
+            ) : (
+              <GuestLocationIndicator />
+            )}
+            <GenresDropdown />
+          </div>
+          <div className="order-1 flex items-center gap-4 sm:order-2">
+            <DarkMode />
+            <LinksDropdown />
+          </div>
         </div>
-        <div className="flex items-center gap-4 order-1 sm:order-2">
-          <DarkMode />
-          <LinksDropdown />
-        </div>
+        <GenreBadges />
       </div>
     </nav>
   );

@@ -4,7 +4,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { genres } from "@/utils/genres";
 import { useGenreStylesStore } from "@/utils/store";
 import SelectionDialog from "@/components/form/SelectionDialog";
@@ -29,7 +35,7 @@ const GenresInput = ({
     selectedStyles,
     setSelectedStyles,
     availableStyles,
-    setAvailableStyles
+    setAvailableStyles,
   } = useGenreStylesStore();
   const [buttonWidth, setButtonWidth] = useState(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -37,7 +43,7 @@ const GenresInput = ({
 
   useEffect(() => {
     if (buttonRef.current) {
-      const resizeObserver = new ResizeObserver(entries => {
+      const resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
           setButtonWidth(entry.contentRect.width);
         }
@@ -68,16 +74,21 @@ const GenresInput = ({
 
   useEffect(() => {
     // Only update if genres actually changed
-    if (JSON.stringify(previousGenresRef.current) !== JSON.stringify(selectedGenres)) {
+    if (
+      JSON.stringify(previousGenresRef.current) !==
+      JSON.stringify(selectedGenres)
+    ) {
       if (selectedGenres.length > 0) {
         const newAvailableStyles = getStylesForMultipleGenres(selectedGenres);
         setAvailableStyles(newAvailableStyles);
 
-        const validSelectedStyles = selectedStyles.filter(styleName =>
-          newAvailableStyles.some(style => style.name === styleName)
+        const validSelectedStyles = selectedStyles.filter((styleName) =>
+          newAvailableStyles.some((style) => style.name === styleName),
         );
 
-        if (JSON.stringify(validSelectedStyles) !== JSON.stringify(selectedStyles)) {
+        if (
+          JSON.stringify(validSelectedStyles) !== JSON.stringify(selectedStyles)
+        ) {
           setSelectedStyles(validSelectedStyles);
         }
       }
@@ -107,7 +118,7 @@ const GenresInput = ({
 
   return (
     <div className="mb-4 font-antonio">
-      <Label htmlFor={name} className="capitalize text-md tracking-wider ">
+      <Label htmlFor={name} className="text-md capitalize tracking-wider">
         Genres*
       </Label>
       <Button
@@ -137,12 +148,14 @@ const GenresInput = ({
             variant="ghost"
             onClick={(e) => handleGenreChange(e, item.label)}
             className={cn(
-              "w-full justify-between text-left font-antonio font-bold tracking-wide text-md",
-              selectedGenres.includes(item.label) && "text-primary"
+              "text-md w-full justify-between text-left font-antonio font-bold tracking-wide text-foreground/90",
+              selectedGenres.includes(item.label) && "text-primary",
             )}
           >
             <span>{item.label}</span>
-            {selectedGenres.includes(item.label) && <Check className="h-4 w-4" />}
+            {selectedGenres.includes(item.label) && (
+              <Check className="h-4 w-4" />
+            )}
           </Button>
         ))}
       </SelectionDialog>
@@ -151,12 +164,14 @@ const GenresInput = ({
         <AlertDialogContent>
           <AlertDialogTitle>Cannot Remove Genre</AlertDialogTitle>
           <AlertDialogDescription>
-            You must maintain at least one genre selection to help us show you relevant events.
+            You must maintain at least one genre selection to help us show you
+            relevant events.
           </AlertDialogDescription>
-          <AlertDialogAction onClick={() => setShowAlert(false)}>OK</AlertDialogAction>
+          <AlertDialogAction onClick={() => setShowAlert(false)}>
+            OK
+          </AlertDialogAction>
         </AlertDialogContent>
       </AlertDialog>
-
 
       <input
         type="hidden"

@@ -34,10 +34,9 @@ const GenreInfo = ({ selectedGenres }: { selectedGenres: string[] }) => (
         <>
           Currently showing{" "}
           <span className="font-medium text-foreground">
-            {selectedGenres[0]}
-            {selectedGenres.length > 1 ? ` +${selectedGenres.length - 1}` : ""}
+            {selectedGenres.length > 1 ? ` ${selectedGenres.length}` : ""}
           </span>{" "}
-          events. Select another genre to change the filter.
+          genres. Select another genre to change the filter.
         </>
       ) : (
         "Select genres to filter events by music style."
@@ -94,7 +93,7 @@ const GenresDropdown = () => {
 
   const buttonText =
     selectedGenres.length > 0
-      ? `${selectedGenres[0]}${selectedGenres.length > 1 ? ` +${selectedGenres.length - 1}` : ""} Events`
+      ? `${selectedGenres.length} ${selectedGenres.length === 1 ? "Genre" : "Genres"} selected`
       : "Select Genres";
 
   return (
@@ -121,7 +120,7 @@ const GenresDropdown = () => {
                     key={item.label}
                     onClick={() => handleSelect(item.label)}
                     className={cn(
-                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 font-anton text-sm tracking-wide outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                       selectedGenres.includes(item.label) && "text-primary",
                     )}
                   >
@@ -161,7 +160,7 @@ const GenresDropdown = () => {
                     key={item.label}
                     onClick={() => handleSelect(item.label)}
                     className={cn(
-                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-left font-anton text-sm tracking-wide outline-none transition-transform duration-100 hover:scale-105 hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-left font-anton text-sm tracking-wide text-foreground/80 outline-none transition-transform duration-100 hover:scale-105 hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                       selectedGenres.includes(item.label) && "text-primary",
                     )}
                   >

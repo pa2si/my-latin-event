@@ -1,6 +1,5 @@
 To do:
 
-- 7 cards shall fit in month view
 - imlement new organizer elements in organizer form
   - display the new elements in eventdetails
 - correct skeleton for create Event and edit Event!!
@@ -9,6 +8,13 @@ To do:
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.76
+
+- selected Genres in genreDropdown now appear in navbar as badges
+- GenresDropdown now displays different message
+  - text color is more geayish
+- LoadingCards for Calendar is updated to current month view with 7 daycards
 
 v 0.1.75
 
