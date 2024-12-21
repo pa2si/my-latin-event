@@ -1,5 +1,5 @@
-'use client';
-import { LoadingCards } from '@/components/card/LoadingCards';
+"use client";
+import { LoadingCards } from "@/components/shared/LoadingSkeletons";
 
 function loading() {
   return <LoadingCards />;

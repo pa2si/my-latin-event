@@ -1,9 +1,6 @@
 import { differenceInDays, format } from "date-fns";
 import ImageContainer from "@/components/events/ImageContainer";
-import {
-  checkEventAccess,
-  fetchEventDetails,
-} from "@/utils/actions";
+import { checkEventAccess, fetchEventDetails } from "@/utils/actions";
 import Description from "@/components/events/Description";
 import { redirect } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,9 +11,8 @@ import VenueFeaturesCard from "@/components/events/VenueFeaturesCard";
 import LikesCard from "@/components/events/LikesCard";
 import { QuickInfoCard } from "@/components/events/QuickInfoCard";
 import EventDetailsCard from "@/components/events/EventDetailsCard";
-import HeaderSection from "@/components/events/HeaderSection";
+import HeaderSectionEvent from "@/components/events/HeaderSectionEvent";
 import TitleHTwo from "@/components/shared/TitleHTtwo";
-
 
 const DynamicMap = dynamic(() => import("@/components/events/EventMap"), {
   ssr: false,
@@ -50,24 +46,25 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   // Calculate days to go
   const daysToGo = differenceInDays(selectedDate, new Date());
-  const daysMessage = daysToGo < 0
-    ? "Event has passed"
-    : daysToGo === 0
-      ? "Today!"
-      : daysToGo === 1
-        ? "Tomorrow!"
-        : `${daysToGo} days to go`;
+  const daysMessage =
+    daysToGo < 0
+      ? "Event has passed"
+      : daysToGo === 0
+        ? "Today!"
+        : daysToGo === 1
+          ? "Tomorrow!"
+          : `${daysToGo} days to go`;
 
   // Convert styles array to StyleItem array
-  const selectedStyles: StyleItem[] = event.styles.map(style => ({
+  const selectedStyles: StyleItem[] = event.styles.map((style) => ({
     name: style,
-    selected: true
+    selected: true,
   }));
 
   return (
-    <div className="mx-auto max-w-7xl ">
+    <div className="mx-auto max-w-7xl">
       {/* Header Section */}
-      <HeaderSection
+      <HeaderSectionEvent
         eventId={event.id}
         eventName={event.name}
         eventSubtitle={event.subtitle}
@@ -167,7 +164,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             )}
             <LikesCard likes={event._count.likes} />
 
-            <p className="mt-2 text-xs text-muted-foreground tracking-wide font-antonio">
+            <p className="mt-2 font-antonio text-xs tracking-wide text-muted-foreground">
               Created {format(event.createdAt, "dd.MM.yyyy")}
               {event.updatedAt &&
                 event.updatedAt !== event.createdAt &&

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { LoadingCalendar } from "@/components/card/LoadingCards";
+import { LoadingCalendar } from "@/components/shared/LoadingSkeletons";
 import EventsContainer from "@/components/home/EventsContainer";
 
 const HomePage = async ({

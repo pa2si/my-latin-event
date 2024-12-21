@@ -32,13 +32,13 @@ const ProfilePage = async ({ searchParams }: ProfilePageProps) => {
 
   const profileData = user
     ? {
-      firstName: user.firstName ?? undefined,
-      lastName: user.lastName ?? undefined,
-      username: user.username ?? undefined,
-      userCountry: locationData.userCountry,
-      userState: locationData.userState,
-      userCity: locationData.userCity,
-    }
+        firstName: user.firstName ?? undefined,
+        lastName: user.lastName ?? undefined,
+        username: user.username ?? undefined,
+        userCountry: locationData.userCountry,
+        userState: locationData.userState,
+        userCity: locationData.userCity,
+      }
     : null;
 
   console.log("Profile data being passed:", profileData); // Add this to debug

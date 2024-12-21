@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Skeleton } from '@/components/ui/skeleton';
+import { LoadingEventDetails } from "@/components/shared/LoadingSkeletons";
 
 const loading = () => {
-  return <Skeleton className="h-[300px] md:h-[500px] w-full rounded" />;
+  return <LoadingEventDetails />;
 };
 
 export default loading;

@@ -1,12 +1,12 @@
 import { fetchEvents, fetchLikeIds } from "@/utils/actions";
-import { LoadingCalendar } from "@/components/card/LoadingCards";
+import { LoadingCalendar } from "@/components/shared/LoadingSkeletons";
 import type { EventCardProps } from "@/utils/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
 // Dynamically import the CalendarContainer component
-const CalendarContainer = dynamic(() => import('./CalendarContainer'), {
+const CalendarContainer = dynamic(() => import("./CalendarContainer"), {
   loading: () => <LoadingCalendar />,
   ssr: false,
 });
@@ -61,7 +61,7 @@ const EventsContainer = async ({ searchParams }: EventsContainerProps) => {
   });
 
   // Fetch all likes for these events at once
-  const eventIds = events.map(event => event.id);
+  const eventIds = events.map((event) => event.id);
   const likeIds = user ? await fetchLikeIds({ eventIds }) : {};
 
   return <CalendarContainer events={events} likeIds={likeIds} />;

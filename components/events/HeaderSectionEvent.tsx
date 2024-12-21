@@ -18,34 +18,45 @@ interface HeaderSectionsProps {
   canEdit: boolean;
 }
 
-const HeaderSections = async ({
+const HeaderSectionEvent = async ({
   eventId,
   eventName,
   eventSubtitle,
   ticketLink,
   canEdit,
 }: HeaderSectionsProps) => {
-
   const likeId = await fetchLikeId({ eventId });
 
   return (
-    <div className="mb-4 ">
+    <div className="mb-4">
       <BreadCrumbs name={eventName} />
       <div className="mt-8">
-
         <div className="mt-4 items-center justify-between sm:flex">
           <div>
-            <h1 className="text-3xl font-anton tracking-wide capitalize">{eventName}</h1>
+            <h1 className="font-anton text-3xl capitalize tracking-wide">
+              {eventName}
+            </h1>
             {eventSubtitle && (
-              <p className="text-xl font-anton text-muted-foreground">{eventSubtitle}</p>
+              <p className="font-anton text-xl text-muted-foreground">
+                {eventSubtitle}
+              </p>
             )}
           </div>
           <div className="mt-4 flex gap-4 sm:mt-0">
             <TooltipProvider>
               {ticketLink && (
                 <TooltipWrapper tooltipText="Buy Ticket">
-                  <Button asChild variant="outline" size="icon" className="cursor-pointer p-2">
-                    <a href={ticketLink} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="icon"
+                    className="cursor-pointer p-2"
+                  >
+                    <a
+                      href={ticketLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <Ticket className="h-4 w-4" />
                     </a>
                   </Button>
@@ -83,4 +94,4 @@ const HeaderSections = async ({
   );
 };
 
-export default HeaderSections;
+export default HeaderSectionEvent;
