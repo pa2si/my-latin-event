@@ -1,13 +1,19 @@
 To do:
 
-- imlement new organizer elements in organizer form
-  - display the new elements in eventdetails
-- correct skeleton for create Event and edit Event!!
+- different font for location and genre in navigation
 - different menu ui
 - in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.78
+
+- added email, website, phone and socialMedia details to organizerForm
+  - added the values to the Event Slug / OrganizerCard
+  - modified some styles in Event slug
+- modified the FormInput to acept maxChar prop and value in order to give a visual feedback for max character which is set for slogan now! also adapted in schemas.ts
+- some style adaption for the descriptions in FormInput and other location for Organizer
 
 v 0.1.77
 

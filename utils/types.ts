@@ -35,6 +35,10 @@ export type Organizer = {
   organizerName: string;
   organizerImage: string;
   slogan?: string | null;
+  contactEmail?: string | null;
+  contactWebsite?: string | null;
+  contactPhone?: string | null;
+  contactSocialMedia?: string | null;
   profileId?: string;
   _count?: {
     events: number;

@@ -137,6 +137,12 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
                 organizerName={event.organizer.organizerName}
                 organizerImage={event.organizer.organizerImage}
                 slogan={event.organizer.slogan || undefined}
+                contactEmail={event.organizer.contactEmail || undefined}
+                contactWebsite={event.organizer.contactWebsite || undefined}
+                contactPhone={event.organizer.contactPhone || undefined}
+                contactSocialMedia={
+                  event.organizer.contactSocialMedia || undefined
+                }
                 _count={event.organizer._count}
               />
               <LikesCard likes={event._count.likes} />
@@ -153,6 +159,12 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
               organizerName={event.organizer.organizerName}
               organizerImage={event.organizer.organizerImage}
               slogan={event.organizer.slogan || undefined}
+              contactEmail={event.organizer.contactEmail || undefined}
+              contactWebsite={event.organizer.contactWebsite || undefined}
+              contactPhone={event.organizer.contactPhone || undefined}
+              contactSocialMedia={
+                event.organizer.contactSocialMedia || undefined
+              }
               _count={event.organizer._count}
             />
             {hasVenueFeatures && (

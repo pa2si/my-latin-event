@@ -333,15 +333,20 @@ export const createOrganizerAction = async (
     if (!currentProfile) throw new Error("Profile not found");
 
     const rawData = Object.fromEntries(formData);
-    // Handle image upload
-    console.log("thats the raw data", rawData);
     const file = formData.get("image") as File;
 
-    const validatedFields = validateWithZodSchema(organizerSchema, rawData);
+    const validatedFields = validateWithZodSchema(organizerSchema, {
+      organizerName: rawData.organizerName,
+      slogan: rawData.slogan || undefined,
+      contactEmail: rawData.contactEmail || undefined,
+      contactWebsite: rawData.contactWebsite || undefined,
+      contactPhone: rawData.contactPhone || undefined,
+      contactSocialMedia: rawData.contactSocialMedia || undefined,
+    });
+
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
     const fullPath = await uploadOrganizerImage(validatedFile.image);
 
-    // Create the organizer
     await db.organizer.create({
       data: {
         ...validatedFields,
@@ -381,11 +386,18 @@ export const updateOrganizerAction = async (
     if (!organizer) throw new Error("Organizer not found or access denied");
 
     const rawData = Object.fromEntries(formData);
-    const validatedFields = validateWithZodSchema(organizerSchema, rawData);
+    const validatedFields = validateWithZodSchema(organizerSchema, {
+      organizerName: rawData.organizerName,
+      slogan: rawData.slogan || undefined,
+      contactEmail: rawData.contactEmail || undefined,
+      contactWebsite: rawData.contactWebsite || undefined,
+      contactPhone: rawData.contactPhone || undefined,
+      contactSocialMedia: rawData.contactSocialMedia || undefined,
+    });
 
     // Only handle image if a new one was uploaded
     const file = formData.get("image") as File;
-    let imageUrl = organizer.organizerImage; // Keep existing image by default
+    let imageUrl = organizer.organizerImage;
 
     if (file?.size > 0) {
       const validatedFile = validateWithZodSchema(imageSchema, { image: file });
@@ -397,7 +409,7 @@ export const updateOrganizerAction = async (
       where: { id: organizerId },
       data: {
         ...validatedFields,
-        organizerImage: imageUrl, // Use new image if uploaded, otherwise keep existing
+        organizerImage: imageUrl,
       },
     });
 

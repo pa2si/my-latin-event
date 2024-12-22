@@ -10,7 +10,7 @@ export async function optimizeImage(
   // Different optimization settings based on type
   const settings = {
     avatar: {
-      maxWidth: 50,
+      maxWidth: 150,
       quality: 80,
       format: "webp" as const,
     },

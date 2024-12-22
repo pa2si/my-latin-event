@@ -8,7 +8,10 @@ export const organizerSchema = z.object({
     .trim()
     .min(2, { message: "Organizer name must be at least 2 characters." })
     .max(50, { message: "Organizer name cannot exceed 50 characters." }),
-  slogan: z.string().optional(),
+  slogan: z
+    .string()
+    .max(40, { message: "Slogan cannot exceed 40 characters." })
+    .optional(),
   contactEmail: z
     .string()
     .email({ message: "Invalid email address" })

@@ -35,22 +35,59 @@ const OrganizerForm: React.FC<OrganizerFormProps> = ({
       {organizer && <input type="hidden" name="id" value={organizer.id} />}
 
       <ImageInput imageUrl={organizer?.organizerImage} isProfileImage />
+      <div className="flex flex-col space-y-4">
+        <FormInput
+          type="text"
+          name="organizerName"
+          label="Organizer Name*"
+          defaultValue={organizer?.organizerName}
+          required
+        />
 
-      <FormInput
-        type="text"
-        name="organizerName"
-        label="Organizer Name"
-        defaultValue={organizer?.organizerName}
-        required
-      />
+        <FormInput
+          type="text"
+          name="slogan"
+          label="Slogan"
+          defaultValue={organizer?.slogan || ""}
+          description="A catchy phrase that describes your organization"
+          hasMaxChar
+          maxChar={40}
+        />
 
-      <FormInput
-        type="text"
-        name="slogan"
-        label="Slogan"
-        defaultValue={organizer?.slogan || ""}
-        description="A catchy phrase that describes your organization"
-      />
+        <FormInput
+          type="email"
+          name="contactEmail"
+          label="Contact Email"
+          defaultValue={organizer?.contactEmail || ""}
+          description="Email address for inquiries"
+        />
+
+        <FormInput
+          type="url"
+          name="contactWebsite"
+          label="Website"
+          defaultValue={organizer?.contactWebsite || ""}
+          description="Your organization's website URL"
+        />
+
+        <FormInput
+          type="tel"
+          name="contactPhone"
+          label="Contact Phone"
+          defaultValue={organizer?.contactPhone || ""}
+          description="Your phone number (e.g., WhatsApp)"
+        />
+
+        <FormInput
+          type="text"
+          name="contactSocialMedia"
+          label="Social Media"
+          defaultValue={organizer?.contactSocialMedia || ""}
+          description="Your primary social media profile link"
+        />
+
+        <p className="mb-4 mt-2 text-sm text-gray-500">* Required field</p>
+      </div>
 
       <SubmitButton
         text={isEdit ? "Update Organizer" : "Add Organizer"}

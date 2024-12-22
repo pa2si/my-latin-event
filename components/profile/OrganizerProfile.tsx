@@ -1,4 +1,3 @@
-// OrganizerProfile.tsx (Server Component)
 import React from "react";
 import { Organizer } from "@/utils/types";
 import { EditOrganizerDialog } from "./OrganizerDialog";

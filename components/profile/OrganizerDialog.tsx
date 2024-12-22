@@ -38,7 +38,7 @@ export function OrganizerDialog({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="h-3/4 overflow-scroll sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
             {isEdit ? "Edit Organizer" : "Add New Organizer"}

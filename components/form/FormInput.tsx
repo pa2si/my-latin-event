@@ -1,4 +1,6 @@
-import React, { forwardRef } from "react";
+"use client";
+
+import React, { forwardRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
@@ -15,6 +17,8 @@ type FormInputProps = {
   className?: string;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  hasMaxChar?: boolean;
+  maxChar?: number;
 };
 
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
@@ -32,29 +36,57 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       onChange,
       onFocus,
       disabled,
+      hasMaxChar,
+      maxChar = 50, // Default value if hasMaxChar is true
     },
     ref,
   ) => {
+    const [charCount, setCharCount] = useState(defaultValue?.length || 0);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (hasMaxChar) {
+        setCharCount(e.target.value.length);
+      }
+      onChange?.(e);
+    };
+
     return (
       <div className="mb-2">
-        <Label htmlFor={name} className="capitalize font-antonio text-md tracking-wide">
+        <Label
+          htmlFor={name}
+          className="text-md font-antonio capitalize tracking-wide"
+        >
           {label || name}
         </Label>
         {description && <p className="text-sm text-gray-500">{description}</p>}
-        <Input
-          id={name}
-          name={name}
-          type={type}
-          defaultValue={defaultValue}
-          placeholder={placeholder}
-          onChange={onChange}
-          required={required}
-          value={value}
-          className={className}
-          ref={ref}
-          onFocus={onFocus}
-          disabled={disabled}
-        />
+        <div className="relative">
+          <Input
+            id={name}
+            name={name}
+            type={type}
+            defaultValue={defaultValue}
+            placeholder={placeholder}
+            onChange={handleChange}
+            required={required}
+            value={value}
+            className={className}
+            ref={ref}
+            onFocus={onFocus}
+            disabled={disabled}
+            maxLength={hasMaxChar ? maxChar : undefined}
+          />
+          {hasMaxChar && (
+            <div
+              className={`absolute bottom-2 right-2 text-xs ${
+                charCount >= maxChar
+                  ? "text-destructive"
+                  : "text-muted-foreground"
+              }`}
+            >
+              {charCount}/{maxChar}
+            </div>
+          )}
+        </div>
       </div>
     );
   },

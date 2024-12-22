@@ -2,7 +2,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CalendarIcon, Clock, Music, Ticket } from "lucide-react";
 import { parseISO } from "date-fns";
 
-
 interface QuickInfoCardProps {
   date: string;
   time: string;
@@ -30,18 +29,22 @@ export const QuickInfoCard = ({
       <CardContent className="grid grid-cols-2 gap-4 p-6 md:grid-cols-4">
         <div className="flex flex-col gap-2">
           <CalendarIcon className="h-5 w-5 text-primary" />
-          <h3 className="text-[19px] font-antonio font-bold tracking-wider">Date</h3>
+          <h3 className="font-antonio text-[19px] font-bold tracking-wider">
+            Date
+          </h3>
           <div className="flex flex-col gap-1">
-            <p className="text-md text-muted-foreground tracking-tighter">{date}</p>
-            <p className="text-xs text-primary font-medium font-mono">{daysMessage}</p>
+            <p className="text-[1.05rem] text-muted-foreground">{date}</p>
+            <p className="text-xs font-medium text-primary">{daysMessage}</p>
           </div>
         </div>
 
         {/* Duration */}
         <div className="flex flex-col gap-2">
           <Clock className="h-5 w-5 text-primary" />
-          <h3 className="text-[19px] font-antonio font-bold tracking-wider">{endTime ? "Duration" : "Start"}</h3>
-          <p className="text-md text-muted-foreground tracking-tighter">
+          <h3 className="font-antonio text-[19px] font-bold tracking-wider">
+            {endTime ? "Duration" : "Start"}
+          </h3>
+          <p className="text-[1.05rem] text-muted-foreground">
             {time} {endTime && `- ${endTime}`}
           </p>
         </div>
@@ -49,8 +52,10 @@ export const QuickInfoCard = ({
         {/* Price */}
         <div className="flex flex-col gap-2">
           <Ticket className="h-5 w-5 text-primary" />
-          <h3 className="text-[19px] font-antonio font-bold tracking-wider">Price</h3>
-          <p className="text-md text-muted-foreground tracking-tighter">
+          <h3 className="font-antonio text-[19px] font-bold tracking-wider">
+            Price
+          </h3>
+          <p className="text-[1.05rem] text-muted-foreground">
             {price === "Free" || price === "Donation"
               ? price
               : `${price} ${currency}`}
@@ -60,8 +65,12 @@ export const QuickInfoCard = ({
         {/* Genres */}
         <div className="flex flex-col gap-2">
           <Music className="h-5 w-5 text-primary" />
-          <h3 className="text-[19px] font-antonio font-bold tracking-wider ">Genres</h3>
-          <p className="text-md text-muted-foreground tracking-tighter">{genres.join(", ")}</p>
+          <h3 className="font-antonio text-[19px] font-bold tracking-wider">
+            Genres
+          </h3>
+          <p className="text-[1.05rem] text-muted-foreground">
+            {genres.join(", ")}
+          </p>
         </div>
       </CardContent>
     </Card>

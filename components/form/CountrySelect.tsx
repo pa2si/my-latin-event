@@ -43,7 +43,9 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
     const [isInputActive, setIsInputActive] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
     const comboboxRef = useRef<HTMLDivElement>(null);
-    const setSelectedCurrency = useGenreStylesStore(state => state.setSelectedCurrency);
+    const setSelectedCurrency = useGenreStylesStore(
+      (state) => state.setSelectedCurrency,
+    );
 
     // Memoize countries list
     const countries = useMemo(() => {
@@ -58,8 +60,8 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
       return query === ""
         ? countries
         : countries.filter((country) => {
-          return country.name.toLowerCase().includes(query.toLowerCase());
-        });
+            return country.name.toLowerCase().includes(query.toLowerCase());
+          });
     }, [query, countries]);
 
     useEffect(() => {
@@ -94,8 +96,9 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
             {({ selected }) => (
               <>
                 <span
-                  className={`block truncate ${selected ? "font-semibold" : "font-normal"
-                    }`}
+                  className={`block truncate ${
+                    selected ? "font-semibold" : "font-normal"
+                  }`}
                 >
                   {country.flag} {country.name}
                 </span>
@@ -106,15 +109,15 @@ const CountrySelect = forwardRef<HTMLInputElement, CountrySelectProps>(
                 )}
               </>
             )}
-          </ComboboxOption >
-        </div >
+          </ComboboxOption>
+        </div>
       );
     };
 
     return (
       <div className={className}>
-        <div className="-mb-1 items-baseline justify-between md:mt-[4px]  capitalize font-antonio text-md">
-          <label className="-mb-[4px] block font-medium text-gray-900 ">
+        <div className="text-md -mb-1 items-baseline justify-between capitalize md:mt-[4px]">
+          <label className="-mb-[4px] block font-antonio font-medium text-gray-900">
             {label}
           </label>
           {description && (

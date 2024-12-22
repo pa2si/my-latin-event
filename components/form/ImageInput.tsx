@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { MdOutlineCancel } from "react-icons/md";
@@ -54,10 +53,11 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   return (
     <div
-      className={`relative mb-4 flex ${isProfileImage ? "h-32 w-32" : "h-72 w-52"} cursor-pointer flex-col items-center justify-center rounded-lg ${imagePreview
+      className={`relative mb-4 flex ${isProfileImage ? "h-32 w-32" : "h-72 w-52"} cursor-pointer flex-col items-center justify-center rounded-lg ${
+        imagePreview
           ? ""
           : "transition-color border-2 border-dashed duration-200 hover:border-primary"
-        }`}
+      }`}
     >
       <input
         ref={fileInputRef}
@@ -71,13 +71,10 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
       {imagePreview ? (
         <>
-          <Image
+          <img
             src={imagePreview}
             alt="Preview"
             className="h-full w-full rounded-lg object-cover"
-            fill
-            // sizes="(max-width: 768px) 30vw, 20vw"
-            unoptimized
           />
           <button
             onClick={handleClearImage}
