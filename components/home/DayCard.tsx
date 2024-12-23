@@ -35,33 +35,61 @@ const HoverOverlay = ({
 }: {
   event: EventCardProps;
   view: "day" | "week" | "month";
-}) => (
-  <>
-    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-    <div className="absolute inset-x-0 bottom-0 translate-y-2 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-      <h3
-        className={`text-md font-anton capitalize tracking-wide text-white ${view === "month" ? "text-sm" : "text-sm md:text-base"} mb-2`}
-      >
-        {event.name}
-      </h3>
-      <div className="mb-2 text-xs capitalize text-white/90">
-        @ {event.location}
-      </div>
-      {event.genres && event.genres.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {event.genres.map((genre, index) => (
-            <span
-              key={index}
-              className="rounded-full bg-primary px-2 py-0.5 text-xs text-white backdrop-blur-sm"
-            >
-              {genre}
-            </span>
-          ))}
+}) => {
+  const displayedGenres =
+    view === "month" ? event.genres?.slice(0, 1) : event.genres;
+  const remainingGenres =
+    view === "month" ? (event.genres?.length || 0) - 1 : 0;
+
+  return (
+    <>
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="absolute inset-x-0 bottom-0 translate-y-2 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+        <h3
+          className={`font-anton capitalize tracking-wide text-white ${
+            view === "day"
+              ? "mb-3 text-xl md:text-2xl"
+              : view === "month"
+                ? "mb-2 text-lg"
+                : "mb-2 text-sm md:text-xl"
+          }`}
+        >
+          {event.name}
+        </h3>
+        <div
+          className={`block capitalize text-white/90 sm:hidden lg:block ${
+            view === "day" ? "mb-3 text-base md:text-lg" : "mb-2 text-xs"
+          }`}
+        >
+          @ {event.location}
         </div>
-      )}
-    </div>
-  </>
-);
+        {displayedGenres && displayedGenres.length > 0 && (
+          <div className="flex flex-wrap gap-1 sm:hidden lg:flex">
+            {displayedGenres.map((genre, index) => (
+              <span
+                key={index}
+                className={`rounded-full bg-primary px-2 py-0.5 text-white backdrop-blur-sm ${
+                  view === "day" ? "text-sm md:text-[0.9rem]" : "text-xs"
+                }`}
+              >
+                {genre}
+              </span>
+            ))}
+            {remainingGenres > 0 && (
+              <span
+                className={`rounded-full bg-primary/80 px-2 py-0.5 text-white backdrop-blur-sm ${
+                  view === "day" ? "text-sm md:text-base" : "text-xs"
+                }`}
+              >
+                +{remainingGenres}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
 
 const MultiEventOverlay = ({
   events,
@@ -78,7 +106,9 @@ const MultiEventOverlay = ({
         <span>{events.length} events</span>
       </div>
       <h3
-        className={`font-semibold text-white ${view === "month" ? "text-xs" : "text-sm md:text-base"}`}
+        className={`hidden font-semibold text-white lg:block ${
+          view === "month" ? "text-xs" : "text-sm md:text-base"
+        }`}
       >
         Click to view all events
       </h3>
@@ -129,7 +159,7 @@ const DayCard = ({
       : "";
   const monthViewClass =
     view === "month"
-      ? "flex-1 min-w-[140px] min-h-[300px] md:min-w-[170px] md:max-w-[170px] xl:w-full xl:min-w-0 xl:max-w-none md:min-h-[230px]"
+      ? "month-view xl-view-reset flex-1 min-w-[140px] min-h-[300px] min-w-custom-640 min-w-custom-700 min-w-custom-740 min-w-custom-770 min-w-custom-780  md:min-w-[80px] md:max-w-[90px] md:min-h-[150px] max-h-[140px] min-w-custom-820  min-w-custom-848 min-w-custom-900 min-w-custom-928 min-w-custom-1008 min-w-custom-1024 min-w-custom-1132 md:max-w-[150px] lg:min-w-[119px] "
       : "";
   const dayViewClass =
     view === "day"
@@ -291,10 +321,10 @@ const DayCard = ({
           className="flex h-full w-full flex-col items-center justify-center text-muted-foreground hover:cursor-pointer hover:text-foreground"
         >
           <Upload
-            className={`${view === "day" ? "mb-2 h-8 w-8" : "mb-2 h-7 w-7"}`}
+            className={`${view === "day" ? "mb-2 h-8 w-8" : "mb-2 h-8 w-8 sm:mb-0 sm:h-10 sm:w-5 md:mb-2 md:h-6 md:w-6 lg:h-7 lg:w-7"}`}
           />
           <span
-            className={`${view === "day" ? "text-[1.5rem]" : "text-[1.1rem]"}`}
+            className={`${view === "day" ? "text-[1.5rem]" : "text-center text-[1rem] leading-tight sm:text-[0.8rem] md:text-[0.9rem] md:leading-normal lg:text-[1rem] xl:text-[1.1rem]"} font-semibold`}
           >
             Create Event
           </span>
@@ -309,20 +339,22 @@ const DayCard = ({
     >
       {/* Header displaying the day and date */}
       <div
-        className={`flex flex-row items-center justify-between p-1 md:p-2 ${view === "day" ? "p-2 md:p-3" : ""} rounded-0 ${isToday ? "bg-primary text-primary-foreground" : "bg-secondary"} `}
+        className={`flex flex-row items-center justify-between p-2 sm:p-1 lg:p-2 ${view === "day" ? "p-2 md:p-3" : ""} ${view === "week" ? "p-3 sm:p-2 md:p-2" : ""} ${view === "month" ? "p-3 sm:p-1 md:p-1" : ""} rounded-0 ${isToday ? "bg-primary text-primary-foreground" : "bg-secondary"} `}
       >
         {/* Day of the week */}
         <span
-          className={`text-xs md:text-sm ${view === "day" ? "text-base md:text-lg" : ""} font-medium`}
+          className={`month-header-text-768 month-header-text-830 text-xs md:text-sm ${view === "day" ? "text-base md:text-lg" : ""} font-medium`}
         >
           {format(day, "EEE")}
         </span>
         {/* Date */}
         <div
-          className={`text-xs md:text-sm ${view === "day" ? "text-base md:text-lg" : ""}`}
+          className={`month-header-text-768 month-header-text-830 text-xs md:text-sm ${view === "day" ? "text-base md:text-lg" : ""}`}
         >
           <span>{format(day, "dd")}</span>
-          <span className="text-muted-foreground">{format(day, " MMM")}</span>
+          <span className="hidden text-muted-foreground md:inline-block">
+            {format(day, " MMM")}
+          </span>
         </div>
       </div>
 

@@ -8,6 +8,138 @@
   }
 }
 
+/* Custom breakpoint classes with higher specificity */
+@media (min-width: 640px) and (max-width: 779px) {
+  div[class*="month-view"] .month-header-text-768,
+  div[class*="month-view"] .month-header-text-830 {
+    font-size: 0.7rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    align-items: center !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 930px) {
+  div[class*="month-view"] .month-header-text-768 {
+    font-size: 0.75rem !important;
+  }
+}
+
+@media (min-width: 830px) and (max-width: 930px) {
+  div[class*="month-view"] .month-header-text-830 {
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .min-w-custom-640 {
+    min-width: 65px !important;
+    max-width: 75px !important;
+    min-height: 125px !important;
+    max-height: 130px !important;
+  }
+}
+
+@media (min-width: 700px) {
+  .min-w-custom-700 {
+    min-width: 70px !important;
+    max-width: 80px !important;
+    min-height: 145px !important;
+  }
+}
+
+@media (min-width: 740px) {
+  .min-w-custom-740 {
+    min-width: 80px !important;
+    max-width: 80px !important;
+    min-height: 150px !important;
+    min-height: 160px !important;
+  }
+}
+@media (min-width: 770px) {
+  .min-w-custom-770 {
+    min-width: 80px !important;
+    max-width: 80px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+  }
+}
+
+/* Rest of your media queries remain the same */
+@media (min-width: 780px) {
+  .min-w-custom-780 {
+    min-width: 85px !important;
+    max-width: 91px !important;
+    min-height: 160px !important;
+    max-height: 170px !important;
+  }
+}
+
+@media (min-width: 820px) {
+  .min-w-custom-820 {
+    min-width: 90px !important;
+    max-width: 100px !important;
+    min-height: 165px !important;
+  }
+}
+
+@media (min-width: 848px) {
+  div[class*="month-view"].min-w-custom-848 {
+    min-width: 90px !important;
+    max-width: 100px !important;
+    min-height: 170px !important;
+  }
+}
+
+@media (min-width: 900px) {
+  div[class*="month-view"].min-w-custom-900 {
+    min-width: 100px !important;
+    max-width: 120px !important;
+    max-width: 120px !important;
+    min-height: 180px !important;
+  }
+}
+
+@media (min-width: 980px) {
+  div[class*="month-view"].min-w-custom-900 {
+    min-width: 110px !important;
+    min-height: 190px !important;
+  }
+}
+
+@media (min-width: 1008px) {
+  .min-w-custom-1008 {
+    min-width: 120px;
+  }
+}
+
+@media (min-width: 1024px) {
+  div[class*="month-view"].min-w-custom-1024 {
+    min-width: 119px !important;
+    max-width: 140px !important;
+    min-height: 200px !important;
+  }
+}
+
+@media (min-width: 1132px) {
+  div[class*="month-view"].min-w-custom-1132 {
+    min-width: 130px !important;
+    max-width: 140px !important;
+    min-height: 205px !important;
+  }
+}
+
+/* XL breakpoint class */
+@media (min-width: 1280px) {
+  div[class*="month-view"].xl-view-reset {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 220px !important;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

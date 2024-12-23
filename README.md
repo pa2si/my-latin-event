@@ -7,6 +7,13 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.79
+
+- modified ui for month view for all screen sizes.
+  - css classes set to achieve the necessary detailes adaptions
+  - now always displaying 7 week days in month view.
+  - the hover displaying varies regarding the day week or month view
+
 v 0.1.78
 
 - added email, website, phone and socialMedia details to organizerForm

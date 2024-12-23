@@ -47,13 +47,13 @@ interface CalendarDay {
   isPreviousMonth: boolean;
 }
 
-// Add screen size hook
+// Update screen size hook name and comment
 const useScreenSize = () => {
-  const [isXl, setIsXl] = useState(false);
+  const [isSmOrAbove, setIsSmOrAbove] = useState(false);
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsXl(window.innerWidth >= 1280); // xl breakpoint is 1280px in Tailwind by default
+      setIsSmOrAbove(window.innerWidth >= 640); // sm breakpoint is 640px
     };
 
     checkScreenSize();
@@ -61,7 +61,7 @@ const useScreenSize = () => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  return isXl;
+  return isSmOrAbove;
 };
 
 const Calendar = ({
@@ -71,7 +71,7 @@ const Calendar = ({
   view,
   direction,
 }: CalendarProps) => {
-  const isXl = useScreenSize();
+  const isSmOrAbove = useScreenSize();
   const days = eachDayOfInterval({
     start:
       view === "day"
@@ -90,8 +90,8 @@ const Calendar = ({
   const renderMonthGrid = (): CalendarDay[] => {
     if (view !== "month") return days;
 
-    // Only add previous month days for xl screens and above
-    if (!isXl) return days;
+    // Only add previous month days for sm screens and above
+    if (!isSmOrAbove) return days;
 
     const firstDayOfMonth = startOfMonth(currentDate);
     let dayOfWeek = getDay(firstDayOfMonth);
@@ -121,7 +121,7 @@ const Calendar = ({
         animate="visible"
         exit="exit"
         custom={direction}
-        className={`flex flex-wrap justify-center gap-4 xl:mx-auto xl:max-w-[96vw] ${
+        className={`flex flex-wrap justify-center gap-3 xl:mx-auto ${
           view === "month" ? "xl:grid xl:grid-cols-7 xl:gap-3" : ""
         }`}
       >
