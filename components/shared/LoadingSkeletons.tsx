@@ -1,42 +1,37 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Calendar as CalendarIcon,
-} from "lucide-react";
-import { Card, CardContent } from "../ui/card";
 
 export const LoadingCalendar = () => {
   return (
-    <div className="w-full px-4 py-8">
-      {/* Navigation Header */}
-      <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-        <div className="flex items-center gap-4">
-          <Button variant="outline" size="icon" disabled>
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Skeleton className="h-10 w-40" />
-          <Button variant="outline" size="icon" disabled>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+    <div className="relative">
+      <div className="w-full px-4">
+        {/* Navigation Header */}
+        <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-9 w-9 rounded-lg" />
+            <Skeleton className="h-9 w-32 rounded-lg" />
+            <Skeleton className="h-9 w-9 rounded-lg" />
+          </div>
+          <div className="flex gap-2">
+            <Skeleton className="h-9 w-16 rounded-lg" />
+            <Skeleton className="h-9 w-16 rounded-lg" />
+            <Skeleton className="h-9 w-16 rounded-lg" />
+          </div>
         </div>
 
-        <div className="flex gap-2">
-          <Skeleton className="h-10 w-20 flex-1 sm:flex-none" />
-          <Skeleton className="h-10 w-20 flex-1 sm:flex-none" />
-          <Skeleton className="h-10 w-20 flex-1 sm:flex-none" />
+        {/* Calendar Grid */}
+        <div className="flex flex-wrap justify-center gap-3 xl:grid xl:grid-cols-7">
+          {[...Array(35)].map((_, index) => (
+            <Skeleton
+              key={index}
+              className="month-view xl-view-reset min-w-custom-640 min-w-custom-700 min-w-custom-740 min-w-custom-770 min-w-custom-780 min-w-custom-820 min-w-custom-848 min-w-custom-900 min-w-custom-928 min-w-custom-1008 min-w-custom-1024 min-w-custom-1132 max-h-[140px] min-h-[300px] min-w-[140px] flex-1 rounded-lg md:min-h-[150px] md:min-w-[80px] md:max-w-[90px] lg:min-w-[119px]"
+            />
+          ))}
         </div>
-      </div>
 
-      {/* Month View Day Cards */}
-      <div className="flex flex-wrap justify-center gap-4 xl:grid xl:grid-cols-7 xl:gap-3">
-        {[...Array(42)].map((_, index) => (
-          <Skeleton
-            key={index}
-            className="min-h-[300px] min-w-[140px] flex-1 rounded-lg md:min-h-[230px] md:min-w-[170px] md:max-w-[170px] xl:w-full xl:min-w-0 xl:max-w-none"
-          />
-        ))}
+        {/* Fixed Calendar Toggle Button */}
+        <div className="fixed bottom-4 right-4 z-50 sm:bottom-8 sm:right-8">
+          <Skeleton className="h-10 w-10 rounded-full sm:h-12 sm:w-12" />
+        </div>
       </div>
     </div>
   );

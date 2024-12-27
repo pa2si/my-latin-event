@@ -78,9 +78,9 @@ const GuestLocationIndicator = () => {
     <div className="grid gap-4">
       <div className="flex items-center gap-2">
         <MapPin className="h-4 w-4 text-muted-foreground" />
-        <div className="font-medium">Location Filter Active</div>
+        <div className="font-semibold">Location Filter Active</div>
       </div>
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm font-medium text-muted-foreground">
         Currently showing events in{" "}
         <span className="font-medium text-foreground">{displayLocation}</span>.
         This filter is based on your settings.

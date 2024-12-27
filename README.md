@@ -1,11 +1,18 @@
 To do:
 
-- different font for location and genre in navigation
 - different menu ui
-- in my event the list shall have a select all button
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.80
+
+- my-events table has now a select option and deleteMultipleEventsAction got intruduced
+  - also implemented sorting feature for the table
+- the genresselected font got updated to font-antonio
+- font for Counterinput description modified to font-mono
+- font for StylesInput description modified to font-mono
+- adapted LoadingCards
 
 v 0.1.79
 

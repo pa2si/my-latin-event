@@ -1140,6 +1140,80 @@ export const deleteEventAction = async (prevState: { eventId: string }) => {
   }
 };
 
+export const deleteMultipleEventsAction = async (
+  prevState: any,
+  formData: FormData,
+) => {
+  const user = await getAuthUser();
+  try {
+    const eventIds = JSON.parse(formData.get("eventIds") as string);
+
+    if (!Array.isArray(eventIds) || eventIds.length === 0) {
+      return { message: "No events selected for deletion" };
+    }
+
+    // Find all events with organizer and profile info
+    const events = await db.event.findMany({
+      where: {
+        id: { in: eventIds },
+        organizer: {
+          profile: {
+            clerkId: user.id,
+          },
+        },
+      },
+      include: {
+        organizer: {
+          select: {
+            profile: {
+              select: {
+                clerkId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Check authorization
+    const isAdminUser = user.id === process.env.ADMIN_USER_ID;
+    const unauthorizedEvents = events.filter(
+      (event) => event.organizer.profile.clerkId !== user.id && !isAdminUser,
+    );
+
+    if (unauthorizedEvents.length > 0) {
+      return {
+        message: "Not authorized to delete some of the selected events",
+      };
+    }
+
+    // Delete images from EdgeStore
+    for (const event of events) {
+      if (event.image) {
+        try {
+          await backendClient.eventImages.deleteFile({
+            url: event.image,
+          });
+        } catch (error) {
+          console.error("Failed to delete image from EdgeStore:", error);
+        }
+      }
+    }
+
+    // Delete all events
+    await db.event.deleteMany({
+      where: {
+        id: { in: eventIds },
+      },
+    });
+
+    revalidatePath("/my-events");
+    return { message: `Successfully deleted ${events.length} events` };
+  } catch (error: any) {
+    return renderError(error);
+  }
+};
+
 export const fetchMyLocationDetails = async (eventId: string) => {
   try {
     const user = await getAuthUser();

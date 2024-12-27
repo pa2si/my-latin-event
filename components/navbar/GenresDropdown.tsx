@@ -27,9 +27,9 @@ const GenreInfo = ({ selectedGenres }: { selectedGenres: string[] }) => (
   <>
     <div className="flex items-center gap-2">
       <Music className="h-4 w-4 text-primary" />
-      <div className="font-medium">Genre Filter</div>
+      <div className="font-semibold">Genre Filter</div>
     </div>
-    <div className="text-sm text-muted-foreground">
+    <div className="text-sm font-medium text-muted-foreground">
       {selectedGenres.length > 0 ? (
         <>
           Currently showing{" "}
@@ -107,7 +107,7 @@ const GenresDropdown = () => {
       <div className="xl:hidden">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" className="text-primary">
+            <Button variant="outline" className="tracking-wide text-primary">
               {buttonText}
             </Button>
           </SheetTrigger>
@@ -120,7 +120,7 @@ const GenresDropdown = () => {
                     key={item.label}
                     onClick={() => handleSelect(item.label)}
                     className={cn(
-                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 font-anton text-sm tracking-wide outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm font-bold tracking-wide outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                       selectedGenres.includes(item.label) && "text-primary",
                     )}
                   >
@@ -141,7 +141,7 @@ const GenresDropdown = () => {
         <Popover open={isHovered}>
           <PopoverTrigger asChild>
             <div onMouseEnter={() => setIsHovered(true)}>
-              <Button variant="outline" className="text-primary">
+              <Button variant="outline" className="tracking-wide text-primary">
                 {buttonText}
               </Button>
             </div>
@@ -160,7 +160,7 @@ const GenresDropdown = () => {
                     key={item.label}
                     onClick={() => handleSelect(item.label)}
                     className={cn(
-                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-left font-anton text-sm tracking-wide text-foreground/80 outline-none transition-transform duration-100 hover:scale-105 hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                      "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-left text-sm font-bold tracking-wide text-foreground/80 outline-none transition-transform duration-100 hover:scale-105 hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                       selectedGenres.includes(item.label) && "text-primary",
                     )}
                   >

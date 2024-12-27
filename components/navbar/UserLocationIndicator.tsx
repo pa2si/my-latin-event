@@ -42,9 +42,9 @@ const UserLocationIndicator = ({
     <div className="grid gap-4">
       <div className="flex items-center gap-2">
         <MapPin className="h-4 w-4 text-muted-foreground" />
-        <div className="font-medium">Location Filter</div>
+        <div className="font-semibold">Location Filter</div>
       </div>
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm font-medium text-muted-foreground">
         Currently showing events in{" "}
         <span className="font-medium text-foreground">
           {userLocation.location}

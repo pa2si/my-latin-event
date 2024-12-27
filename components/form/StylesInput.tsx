@@ -16,24 +16,25 @@ const StylesInput = ({
   defaultGenres: string[];
   defaultStyles: Style[];
 }) => {
-  const {
-    availableStyles,
-    selectedStyles,
-    setSelectedStyles,
-  } = useGenreStylesStore();
+  const { availableStyles, selectedStyles, setSelectedStyles } =
+    useGenreStylesStore();
 
   useEffect(() => {
     // Initialize selected styles from defaultStyles if provided
     if (defaultStyles?.length > 0) {
-      setSelectedStyles(defaultStyles.filter(style => style.selected).map(style => style.name));
+      setSelectedStyles(
+        defaultStyles
+          .filter((style) => style.selected)
+          .map((style) => style.name),
+      );
     }
   }, [defaultStyles, setSelectedStyles]);
 
   const handleChange = (styleName: string) => {
     setSelectedStyles(
       selectedStyles.includes(styleName)
-        ? selectedStyles.filter(name => name !== styleName)
-        : [...selectedStyles, styleName]
+        ? selectedStyles.filter((name) => name !== styleName)
+        : [...selectedStyles, styleName],
     );
   };
 
@@ -46,18 +47,21 @@ const StylesInput = ({
       />
       <div className="mb-12 mt-6 flex-row justify-center">
         <div className="mb-1 flex flex-row items-center justify-between">
-          <div className="flex items-center gap-1 ">
+          <div className="flex items-center gap-1">
             {/* <FiMusic /> */}
-            <Label className="capitalize text-md tracking-wider font-antonio font-bold">Styles</Label>
+            <Label className="text-md font-antonio font-bold capitalize tracking-wider">
+              Styles
+            </Label>
             <span className="ml-1 text-sm text-muted-foreground">
               ({selectedStyles.length} selected)
             </span>
           </div>
         </div>
-        <p className="mb-5 text-sm text-muted-foreground ">
-          Not required, but selecting specific styles helps attendees understand what music to expect alongside the genre selection.
+        <p className="mb-5 font-mono text-[0.8rem] tracking-tighter text-muted-foreground">
+          Not required, but selecting specific styles helps attendees understand
+          what music to expect alongside the genre selection.
         </p>
-        <div className="grid grid-cols-2 gap-x-20 gap-y-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 font-antonio tracking-wide">
+        <div className="grid grid-cols-2 gap-x-20 gap-y-4 font-semibold sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {availableStyles.map((style) => (
             <motion.div
               key={style.name}
