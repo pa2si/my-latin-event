@@ -5,9 +5,14 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.82
+
+- removed all review and booking code except for the admin route and the stats server actions
+
 v 0.1.81
 
 - updated MultipleDeleteEvents.tsx (type error)
+- also removed bookings and reviews in prisma schema
 
 v 0.1.80
 

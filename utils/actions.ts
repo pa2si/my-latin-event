@@ -1,7 +1,6 @@
 "use server";
 
 import {
-  createReviewSchema,
   imageSchema,
   profileSchema,
   eventSchema,
@@ -13,7 +12,6 @@ import db from "./db";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { calculateTotals } from "./calculateTotals";
 import { formatDate } from "./format";
 import { backendClient } from "@/lib/edgestore-server";
 import { optimizeImage } from "@/utils/imageOptimizer";
@@ -833,218 +831,6 @@ export const fetchEventDetails = async (id: string) => {
   });
 };
 
-//hasnt been updated to profile id reference
-export const createReviewAction = async (
-  prevState: any,
-  formData: FormData,
-) => {
-  const user = await getAuthUser();
-  try {
-    const rawData = Object.fromEntries(formData);
-
-    const validatedFields = validateWithZodSchema(createReviewSchema, rawData);
-    await db.review.create({
-      data: {
-        ...validatedFields,
-        profileId: user.id,
-      },
-    });
-    revalidatePath(`/events/${validatedFields.eventId}`);
-    return { message: "Review submitted successfully" };
-  } catch (error) {
-    return renderError(error);
-  }
-};
-
-//hasnt been updated to profile id reference
-export async function fetchEventReviews(eventId: string) {
-  const reviews = await db.review.findMany({
-    where: {
-      eventId,
-    },
-    select: {
-      id: true,
-      rating: true,
-      comment: true,
-      profile: {
-        select: {
-          firstName: true,
-          profileImage: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  return reviews;
-}
-
-//hasnt been updated to profile id reference
-export const fetchEventReviewsByUser = async () => {
-  const user = await getAuthUser();
-  const reviews = await db.review.findMany({
-    where: {
-      profileId: user.id,
-    },
-    select: {
-      id: true,
-      rating: true,
-      comment: true,
-      event: {
-        select: {
-          name: true,
-          image: true,
-        },
-      },
-    },
-  });
-  return reviews;
-};
-
-//hasnt been updated to profile id reference
-export const deleteReviewAction = async (prevState: { reviewId: string }) => {
-  const { reviewId } = prevState;
-  const user = await getAuthUser();
-
-  try {
-    await db.review.delete({
-      where: {
-        id: reviewId,
-        profileId: user.id,
-      },
-    });
-
-    revalidatePath("/reviews");
-    return { message: "Review deleted successfully" };
-  } catch (error) {
-    return renderError(error);
-  }
-};
-
-//hasnt been updated to profile id reference
-export async function fetchEventRating(eventId: string) {
-  const result = await db.review.groupBy({
-    by: ["eventId"],
-    _avg: {
-      rating: true,
-    },
-    _count: {
-      rating: true,
-    },
-    where: {
-      eventId,
-    },
-  });
-
-  // empty array if no reviews
-  return {
-    rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
-    count: result[0]?._count.rating ?? 0,
-  };
-}
-
-//hasnt been updated to profile id reference
-export const findExistingReview = async (userId: string, eventId: string) => {
-  return db.review.findFirst({
-    where: {
-      profileId: userId,
-      eventId: eventId,
-    },
-  });
-};
-
-//hasnt been updated to profile id reference
-export const createBookingAction = async (prevState: {
-  eventId: string;
-  checkIn: Date;
-  checkOut: Date;
-}) => {
-  const user = await getAuthUser();
-  await db.booking.deleteMany({
-    where: {
-      profileId: user.id,
-      paymentStatus: false,
-    },
-  });
-  let bookingId: null | string = null;
-
-  const { eventId, checkIn, checkOut } = prevState;
-  const event = await db.event.findUnique({
-    where: { id: eventId },
-    select: { price: true },
-  });
-  if (!event) {
-    return { message: "Event not found" };
-  }
-  const { orderTotal, totalNights } = calculateTotals({
-    checkIn,
-    checkOut,
-    price: event.price,
-  });
-
-  try {
-    const booking = await db.booking.create({
-      data: {
-        checkIn,
-        checkOut,
-        orderTotal,
-        totalNights,
-        profileId: user.id,
-        eventId,
-      },
-    });
-    bookingId = booking.id;
-  } catch (error) {
-    return renderError(error);
-  }
-  redirect(`/checkout?bookingId=${bookingId}`);
-};
-
-//hasnt been updated to profile id reference
-export const fetchBookings = async () => {
-  const user = await getAuthUser();
-  const bookings = await db.booking.findMany({
-    where: {
-      profileId: user.id,
-      paymentStatus: true,
-    },
-    include: {
-      event: {
-        select: {
-          id: true,
-          name: true,
-          country: true,
-        },
-      },
-    },
-    orderBy: {
-      checkIn: "desc",
-    },
-  });
-  return bookings;
-};
-
-//hasnt been updated to profile id reference
-export const deleteBookingAction = async (prevState: { bookingId: string }) => {
-  const { bookingId } = prevState;
-  const user = await getAuthUser();
-
-  try {
-    const result = await db.booking.delete({
-      where: {
-        id: bookingId,
-        profileId: user.id,
-      },
-    });
-
-    revalidatePath("/bookings");
-    return { message: "Booking deleted successfully" };
-  } catch (error) {
-    return renderError(error);
-  }
-};
-
 export const fetchMyEvents = async () => {
   try {
     const user = await getAuthUser();
@@ -1363,36 +1149,6 @@ export const updateEventAction = async (
 };
 
 //hasnt been updated to profile id reference
-export const fetchReservations = async () => {
-  const user = await getAuthUser();
-
-  const reservations = await db.booking.findMany({
-    where: {
-      paymentStatus: true,
-      event: {
-        profileId: user.id,
-      },
-    },
-
-    orderBy: {
-      createdAt: "desc", // or 'asc' for ascending order
-    },
-
-    include: {
-      event: {
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          country: true,
-        },
-      }, // include event details in the result
-    },
-  });
-  return reservations;
-};
-
-//hasnt been updated to profile id reference
 export const fetchStats = async () => {
   await getAdminUser();
 
@@ -1444,33 +1200,6 @@ export const fetchChartsData = async () => {
     [] as Array<{ date: string; count: number }>,
   );
   return bookingsPerMonth;
-};
-
-export const fetchReservationStats = async () => {
-  const user = await getAuthUser();
-  const events = await db.event.count({
-    where: {
-      profileId: user.id,
-    },
-  });
-
-  const totals = await db.booking.aggregate({
-    _sum: {
-      orderTotal: true,
-      totalNights: true,
-    },
-    where: {
-      event: {
-        profileId: user.id,
-      },
-    },
-  });
-
-  return {
-    events,
-    nights: totals._sum.totalNights || 0,
-    amount: totals._sum.orderTotal || 0,
-  };
 };
 
 export async function fetchFollowId({ organizerId }: { organizerId: string }) {

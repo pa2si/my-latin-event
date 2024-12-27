@@ -257,9 +257,3 @@ export const eventSchema = z
         "The event end time must be at least 1 hour after the start time.",
     },
   );
-
-export const createReviewSchema = z.object({
-  eventId: z.string(),
-  rating: z.coerce.number().int().min(1).max(5),
-  comment: z.string().min(10).max(1000),
-});

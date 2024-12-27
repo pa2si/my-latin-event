@@ -9,9 +9,6 @@ export const links: NavLink[] = [
   { href: "/my-events", label: "my events" },
   { href: "/liked/events ", label: "liked events" },
   { href: "/followed/organizers/events ", label: "organizers feed" },
-  { href: "/bookings ", label: "bookings" },
-  { href: "/reviews ", label: "reviews" },
-  { href: "/reservations ", label: "reservations" },
   { href: "/profile?tab=profile ", label: "profile" },
   { href: "/admin ", label: "admin" },
 ];

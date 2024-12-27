@@ -25,11 +25,6 @@ export type DateRangeSelect = {
   key: string;
 };
 
-export type Booking = {
-  checkIn: Date;
-  checkOut: Date;
-};
-
 export type Organizer = {
   id: string;
   organizerName: string;

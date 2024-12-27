@@ -21,8 +21,6 @@ model Profile {
   organizers   Organizer[]
   // User activities
   likes        Like[]    
-  reviews      Review[]
-  bookings     Booking[]
   following    Follow[]
   userCountry  String
   userState    String
@@ -78,8 +76,6 @@ model Event {
   organizerId         String
 
   likes               Like[]    
-  reviews             Review[]
-  bookings            Booking[]
 }
 model Like {
   id        String   @id @default(uuid())
@@ -92,35 +88,8 @@ model Like {
   event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId   String
 }
-model Review {
-  id        String   @id @default(uuid())
-  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId String
 
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  eventId   String
 
-  rating    Int
-  comment   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-model Booking {
-  id            String   @id @default(uuid())
-  profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId     String
-
-  event         Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  eventId       String
-
-  orderTotal    Int
-  totalNights   Int
-  checkIn       DateTime
-  checkOut      DateTime
-  paymentStatus Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
 model Follow {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
