@@ -32,14 +32,14 @@ import DeleteEvent from "@/components/events/DeleteEvent";
 import { deleteMultipleEventsAction } from "@/utils/actions";
 
 type SortDirection = "asc" | "desc" | null;
-type SortField =
+type SortableField =
   | "name"
   | "organizer"
   | "date"
   | "location"
   | "price"
-  | "likes"
-  | null;
+  | "likes";
+type SortField = SortableField | null;
 
 interface SortState {
   field: SortField;
@@ -60,15 +60,13 @@ interface Event {
   };
 }
 
-const SortButton = ({
-  field,
-  currentSort,
-  onSort,
-}: {
-  field: SortField;
+type SortButtonProps = {
+  field: SortableField;
   currentSort: SortState;
-  onSort: (field: SortField) => void;
-}) => {
+  onSort: (field: SortableField) => void;
+};
+
+const SortButton = ({ field, currentSort, onSort }: SortButtonProps) => {
   return (
     <Button
       variant="ghost"
@@ -90,18 +88,14 @@ const SortButton = ({
   );
 };
 
-export function MultipleDeleteEvents({
-  events: initialEvents,
-}: {
-  events: Event[];
-}) {
+function MultipleDeleteEvents({ events: initialEvents }: { events: Event[] }) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [sort, setSort] = useState<SortState>({ field: null, direction: null });
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleSort = (field: SortField) => {
+  const handleSort = (field: SortableField) => {
     setSort((prevSort) => ({
       field,
       direction:
@@ -336,3 +330,5 @@ export function MultipleDeleteEvents({
     </>
   );
 }
+
+export default MultipleDeleteEvents;

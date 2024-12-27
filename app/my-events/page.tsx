@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { LoadingTable } from "@/components/shared/LoadingSkeletons";
 import HeaderSection from "@/components/shared/HeaderSection";
 import { ClipboardList } from "lucide-react";
-import { MultipleDeleteEvents } from "@/components/events/MultipleDeleteEvents";
+import MultipleDeleteEvents from "@/components/events/MultipleDeleteEvents";
 
 function MyEventsPage() {
   return (

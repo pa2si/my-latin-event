@@ -5,6 +5,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.81
+
+- updated MultipleDeleteEvents.tsx (type error)
+
 v 0.1.80
 
 - my-events table has now a select option and deleteMultipleEventsAction got intruduced
