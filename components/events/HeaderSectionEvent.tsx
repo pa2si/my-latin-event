@@ -1,5 +1,5 @@
 import React from "react";
-import BreadCrumbs from "./BreadCrumbs";
+import BreadCrumbs from "../shared/BreadCrumbs";
 import ShareButton from "./ShareButton";
 import LikeToggleButton from "../card/LikeToggleButton";
 import EditMyEvent from "./EditMyEvent";

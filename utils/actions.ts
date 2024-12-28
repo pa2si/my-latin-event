@@ -16,6 +16,7 @@ import { formatDate } from "./format";
 import { backendClient } from "@/lib/edgestore-server";
 import { optimizeImage } from "@/utils/imageOptimizer";
 import type { Prisma } from "@prisma/client";
+import { format } from "date-fns";
 
 /* Helper Functions */
 export const getAuthUser = async () => {
@@ -1148,60 +1149,6 @@ export const updateEventAction = async (
   }
 };
 
-//hasnt been updated to profile id reference
-export const fetchStats = async () => {
-  await getAdminUser();
-
-  const usersCount = await db.profile.count();
-  const eventsCount = await db.event.count();
-  const bookingsCount = await db.booking.count({
-    where: {
-      paymentStatus: true,
-    },
-  });
-
-  return {
-    usersCount,
-    eventsCount,
-    bookingsCount,
-  };
-};
-
-export const fetchChartsData = async () => {
-  await getAdminUser();
-
-  const date = new Date();
-  date.setMonth(date.getMonth() - 6);
-  const sixMonthsAgo = date;
-
-  const bookings = await db.booking.findMany({
-    where: {
-      paymentStatus: true,
-      createdAt: {
-        gte: sixMonthsAgo,
-      },
-    },
-    orderBy: {
-      createdAt: "asc",
-    },
-  });
-  let bookingsPerMonth = bookings.reduce(
-    (total, current) => {
-      const date = formatDate(current.createdAt, true);
-
-      const existingEntry = total.find((entry) => entry.date === date);
-      if (existingEntry) {
-        existingEntry.count += 1;
-      } else {
-        total.push({ date, count: 1 });
-      }
-      return total;
-    },
-    [] as Array<{ date: string; count: number }>,
-  );
-  return bookingsPerMonth;
-};
-
 export async function fetchFollowId({ organizerId }: { organizerId: string }) {
   try {
     const user = await getAuthUser();
@@ -1620,3 +1567,116 @@ export async function getUserCity() {
     return null;
   }
 }
+
+export const fetchAdminStats = async () => {
+  await getAdminUser();
+
+  const usersCount = await db.profile.count();
+  const eventsCount = await db.event.count();
+  const organizersCount = await db.organizer.count();
+  const likesCount = await db.like.count();
+  const followsCount = await db.follow.count();
+
+  return {
+    usersCount,
+    eventsCount,
+    organizersCount,
+    likesCount,
+    followsCount,
+  };
+};
+
+export const fetchChartsData = async () => {
+  await getAdminUser();
+
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+  // Get events created per month
+  const events = await db.event.findMany({
+    where: {
+      createdAt: {
+        gte: sixMonthsAgo,
+      },
+    },
+    select: {
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  // Get likes created per month
+  const likes = await db.like.findMany({
+    where: {
+      createdAt: {
+        gte: sixMonthsAgo,
+      },
+    },
+    select: {
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  // Get follows created per month
+  const follows = await db.follow.findMany({
+    where: {
+      createdAt: {
+        gte: sixMonthsAgo,
+      },
+    },
+    select: {
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  // Helper function to group data by month
+  const groupByMonth = (data: { createdAt: Date }[]) => {
+    return data.reduce((acc: { [key: string]: number }, item) => {
+      const date = format(item.createdAt, "MMM yyyy");
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }, {});
+  };
+
+  const getFullMonthRange = () => {
+    const months = [];
+    for (let i = 0; i < 6; i++) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      months.unshift(format(date, "MMM yyyy"));
+    }
+    return months;
+  };
+
+  const fillMissingMonths = (data: { [key: string]: number }) => {
+    const months = getFullMonthRange();
+    const filledData = { ...data };
+    months.forEach((month) => {
+      if (!filledData[month]) {
+        filledData[month] = 0;
+      }
+    });
+    return filledData;
+  };
+
+  const eventsPerMonth = fillMissingMonths(groupByMonth(events));
+  const likesPerMonth = fillMissingMonths(groupByMonth(likes));
+  const followsPerMonth = fillMissingMonths(groupByMonth(follows));
+
+  const chartData = Object.keys(eventsPerMonth).map((month) => ({
+    name: month,
+    events: eventsPerMonth[month],
+    likes: likesPerMonth[month],
+    follows: followsPerMonth[month],
+  }));
+
+  return chartData;
+};

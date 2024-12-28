@@ -1,36 +1,100 @@
-'use client';
+"use client";
 
 import {
-  BarChart,
-  Bar,
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
+} from "recharts";
 
-type ChartPropsType = {
+interface ChartProps {
   data: {
-    date: string;
-    count: number;
+    name: string;
+    events: number;
+    likes: number;
+    follows: number;
   }[];
+  type: "events" | "engagement";
+  colors: string[];
+}
+
+const Chart = ({ data, type, colors }: ChartProps) => {
+  // Get all values to find the max for YAxis domain
+  const allValues = data.reduce((acc, item) => {
+    if (type === "events") {
+      acc.push(item.events);
+    } else {
+      acc.push(item.likes, item.follows);
+    }
+    return acc;
+  }, [] as number[]);
+
+  const maxValue = Math.max(...allValues);
+  const yAxisDomain = [0, Math.ceil(maxValue * 1.1)]; // Add 10% padding
+
+  return (
+    <ResponsiveContainer width="100%" height={350}>
+      <AreaChart
+        data={data}
+        margin={{
+          top: 10,
+          right: 10,
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <XAxis
+          dataKey="name"
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <YAxis
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          domain={yAxisDomain}
+          allowDecimals={false}
+        />
+        <Tooltip />
+        {type === "events" ? (
+          <Area
+            type="monotone"
+            dataKey="events"
+            stroke={colors[0]}
+            fill={colors[0]}
+            fillOpacity={0.2}
+            strokeWidth={2}
+          />
+        ) : (
+          <>
+            <Area
+              type="monotone"
+              dataKey="likes"
+              stroke={colors[0]}
+              fill={colors[0]}
+              fillOpacity={0.2}
+              strokeWidth={2}
+              name="Likes"
+            />
+            <Area
+              type="monotone"
+              dataKey="follows"
+              stroke={colors[1]}
+              fill={colors[1]}
+              fillOpacity={0.2}
+              strokeWidth={2}
+              name="Follows"
+            />
+          </>
+        )}
+      </AreaChart>
+    </ResponsiveContainer>
+  );
 };
 
-function Chart({ data }: ChartPropsType) {
-  return (
-    <section className="mt-24">
-      <h1 className="text-4xl font-semibold text-center">Monthly Bookings</h1>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data} margin={{ top: 50 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis allowDecimals={false} />
-          <Tooltip />
-          <Bar dataKey="count" fill="#F97215" barSize={75} />
-        </BarChart>
-      </ResponsiveContainer>
-    </section>
-  );
-}
 export default Chart;

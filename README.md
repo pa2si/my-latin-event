@@ -5,6 +5,11 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.83
+
+- now all booking and review code removed from app!
+- amdin route now displays event information
+
 v 0.1.82
 
 - removed all review and booking code except for the admin route and the stats server actions

@@ -1,5 +1,5 @@
 import React from "react";
-import BreadCrumbs from "@/components/events/BreadCrumbs";
+import BreadCrumbs from "@/components/shared/BreadCrumbs";
 import TitleHOne from "@/components/shared/TitleHOne"; // Add import
 
 interface HeaderSectionProps {
