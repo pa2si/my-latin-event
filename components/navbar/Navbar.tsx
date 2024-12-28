@@ -1,5 +1,4 @@
 import NavSearch from "./NavSearch";
-import LinksDropdown from "./LinksDropdown";
 import DarkMode from "./DarkMode";
 import Logo from "./Logo";
 import UserLocationIndicator from "@/components/navbar/UserLocationIndicator";
@@ -8,6 +7,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import GenresDropdown from "@/components/navbar/GenresDropdown";
 import { getUserCity } from "@/utils/actions";
 import GenreBadges from "@/components/navbar/GenreBadges";
+import SheetLinks from "./SheetLinks";
 
 const Navbar = async () => {
   const user = await currentUser();
@@ -29,7 +29,7 @@ const Navbar = async () => {
           </div>
           <div className="order-1 flex items-center gap-4 sm:order-2">
             <DarkMode />
-            <LinksDropdown />
+            <SheetLinks />
           </div>
         </div>
         <GenreBadges />

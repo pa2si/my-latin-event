@@ -5,6 +5,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.84
+
+- now sheet menu with icons instead of dropdown menu
+
 v 0.1.83
 
 - now all booking and review code removed from app!
