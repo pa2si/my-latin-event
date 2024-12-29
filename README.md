@@ -5,6 +5,12 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.85
+
+- Eslint rule for <img> off
+- pathname in followToggleForm has fallback path
+-
+
 v 0.1.84
 
 - now sheet menu with icons instead of dropdown menu

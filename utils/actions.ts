@@ -12,7 +12,6 @@ import db from "./db";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { formatDate } from "./format";
 import { backendClient } from "@/lib/edgestore-server";
 import { optimizeImage } from "@/utils/imageOptimizer";
 import type { Prisma } from "@prisma/client";

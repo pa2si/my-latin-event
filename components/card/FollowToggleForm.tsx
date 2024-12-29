@@ -12,7 +12,8 @@ function FollowToggleForm({
   organizerId: string;
   followId: string | null;
 }) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/"; // Provide a default value of '/' if pathname is null
+
   const toggleAction = toggleFollowAction.bind(null, {
     organizerId,
     followId,
