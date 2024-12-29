@@ -1,9 +1,12 @@
 To do:
 
-- different menu ui
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.87
+
+- some skeletons adapted
 
 v 0.1.86
 

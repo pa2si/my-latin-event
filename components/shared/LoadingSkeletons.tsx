@@ -73,29 +73,20 @@ export function SkeletonCard() {
 export function LoadingTable({ rows }: { rows?: number }) {
   return (
     <section>
-      {/* Header Section Skeleton */}
-      <div className="mb-8">
-        {/* Breadcrumb skeleton */}
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-12" />
-          <Skeleton className="h-4 w-4" />
-          <Skeleton className="h-4 w-20" />
-        </div>
-        {/* Title and description skeleton */}
-        <div className="mt-8">
-          <div className="flex items-center gap-2">
-            <Skeleton className="h-8 w-48" />
-          </div>
-          <Skeleton className="mt-1 h-5 w-96" />
+      <div className="mt-4">
+        {/* Header Section */}
+        <div className="mb-8">
+          <Skeleton className="mb-2 h-10 w-48" /> {/* Title */}
+          <Skeleton className="h-6 w-72" /> {/* Subtitle */}
         </div>
       </div>
 
       {/* Table Section */}
       <div className="mt-16">
         <Skeleton className="mb-4 h-8 w-48" /> {/* Header skeleton */}
-        <div className="rounded-md border">
+        <div className="rounded-md">
           {/* Table header skeleton */}
-          <div className="border-b p-4">
+          <div className="">
             <div className="flex justify-between">
               {[...Array(6)].map((_, i) => (
                 <Skeleton key={i} className="h-5 w-20" />
@@ -103,7 +94,7 @@ export function LoadingTable({ rows }: { rows?: number }) {
             </div>
           </div>
           {/* Table rows */}
-          <div className="space-y-4 p-4">
+          <div className="space-y-4">
             {[...Array(rows || 5)].map((_, i) => (
               <Skeleton key={i} className="h-12 w-full" />
             ))}
@@ -117,60 +108,23 @@ export function LoadingTable({ rows }: { rows?: number }) {
 export function LoadingEventForm() {
   return (
     <section>
-      {/* Header Section Skeleton */}
       <div className="mb-8">
         {/* Breadcrumb skeleton */}
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-12" />
-          <Skeleton className="h-4 w-4" />
-          <Skeleton className="h-4 w-20" />
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-6 w-12" />
+          <Skeleton className="h-6 w-24" />
         </div>
         {/* Title and description skeleton */}
         <div className="mt-8">
-          <div className="flex items-center gap-2">
-            <Skeleton className="h-8 w-48" />
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-12 w-48" />
           </div>
-          <Skeleton className="mt-1 h-5 w-96" />
+          <Skeleton className="mt-3 h-6 w-72" />
         </div>
       </div>
 
       {/* Form Card Section */}
-      <div className="-mx-4 rounded-md border p-8 sm:mx-0">
-        {/* Section Title */}
-        <div className="mb-4 flex items-center gap-1">
-          <Skeleton className="h-5 w-5" /> {/* Icon */}
-          <Skeleton className="h-6 w-32" /> {/* Title */}
-        </div>
-
-        {/* Image Input Skeleton */}
-        <Skeleton className="mb-8 h-[300px] w-full rounded-lg" />
-
-        {/* Form Inputs */}
-        <div className="space-y-6">
-          {/* Single column inputs */}
-          <div className="space-y-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i}>
-                <Skeleton className="mb-2 h-4 w-24" /> {/* Label */}
-                <Skeleton className="h-10 w-full" /> {/* Input */}
-              </div>
-            ))}
-          </div>
-
-          {/* Two column grid inputs */}
-          <div className="grid gap-8 md:grid-cols-2">
-            {[...Array(6)].map((_, i) => (
-              <div key={i}>
-                <Skeleton className="mb-2 h-4 w-24" /> {/* Label */}
-                <Skeleton className="h-10 w-full" /> {/* Input */}
-              </div>
-            ))}
-          </div>
-
-          {/* Submit Button */}
-          <Skeleton className="mt-12 h-10 w-full max-w-[200px]" />
-        </div>
-      </div>
+      <Skeleton className="-mx-4 h-dvh w-full rounded-md p-8 sm:mx-0" />
     </section>
   );
 }
