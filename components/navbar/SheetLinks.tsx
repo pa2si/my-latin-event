@@ -1,4 +1,4 @@
-import { LuAlignLeft } from "react-icons/lu";
+import { LuAlignLeft, LuLogIn, LuUserPlus } from "react-icons/lu";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import UserIcon from "./UserIcon";
@@ -37,14 +37,22 @@ const SheetLinks = async () => {
             <div className="flex flex-col gap-2">
               <SignInButton mode="modal">
                 <SheetClose asChild>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
+                  >
+                    <LuLogIn size={20} />
                     Login
                   </Button>
                 </SheetClose>
               </SignInButton>
               <SignUpButton mode="modal">
                 <SheetClose asChild>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
+                  >
+                    <LuUserPlus size={20} />
                     Register
                   </Button>
                 </SheetClose>

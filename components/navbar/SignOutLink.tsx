@@ -2,6 +2,7 @@
 
 import { SignOutButton } from "@clerk/nextjs";
 import { useToast } from "../ui/use-toast";
+import { LuLogOut } from "react-icons/lu";
 
 const SignOutLink = () => {
   const { toast } = useToast();
@@ -13,7 +14,8 @@ const SignOutLink = () => {
   };
   return (
     <SignOutButton redirectUrl="/">
-      <button className="w-full text-left" onClick={handleLogout}>
+      <button className="flex w-full items-center gap-2" onClick={handleLogout}>
+        <LuLogOut size={20} />
         Logout
       </button>
     </SignOutButton>

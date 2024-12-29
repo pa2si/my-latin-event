@@ -5,6 +5,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.86
+
+- icons in menu sheet also for register login and logout
+
 v 0.1.85
 
 - Eslint rule for <img> off
