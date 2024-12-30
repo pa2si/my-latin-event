@@ -541,12 +541,14 @@ export const createEventAction = async (
 export const fetchEvents = async ({
   search = "",
   genres,
+  style, // Add style parameter
   country,
   state,
   city,
 }: {
   search?: string;
   genres?: string[];
+  style?: string; // Add type
   country?: string;
   state?: string;
   city?: string;
@@ -564,23 +566,15 @@ export const fetchEvents = async ({
       price: true,
       eventDateAndTime: true,
       genres: true,
+      styles: true, // Add
     } satisfies Prisma.EventSelect;
 
     const baseWhere: Prisma.EventWhereInput = {
       genres: genres ? { hasSome: genres } : undefined,
+      styles: style ? { has: style } : undefined, // Add
       OR: [
-        {
-          name: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
-        {
-          subtitle: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
+        { name: { contains: search, mode: "insensitive" } },
+        { subtitle: { contains: search, mode: "insensitive" } },
       ],
     };
 

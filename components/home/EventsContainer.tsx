@@ -14,11 +14,12 @@ const CalendarContainer = dynamic(() => import("./CalendarContainer"), {
 interface EventsContainerProps {
   searchParams: {
     search?: string;
+    style?: string;
   };
 }
 
 const EventsContainer = async ({ searchParams }: EventsContainerProps) => {
-  const { search } = searchParams;
+  const { search, style } = searchParams;
 
   const user = await currentUser();
   const cookieStore = cookies();
@@ -56,6 +57,7 @@ const EventsContainer = async ({ searchParams }: EventsContainerProps) => {
 
   const events: EventCardProps[] = await fetchEvents({
     genres: selectedGenres,
+    style, // Pass style parameter
     search,
     ...locationParams,
   });

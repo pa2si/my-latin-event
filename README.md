@@ -4,6 +4,10 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.88
+
+- created StylesSearch to filster for a specific style from the selected genres
+
 v 0.1.87
 
 - some skeletons adapted

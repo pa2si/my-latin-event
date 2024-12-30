@@ -8,6 +8,7 @@ import GenresDropdown from "@/components/navbar/GenresDropdown";
 import { getUserCity } from "@/utils/actions";
 import GenreBadges from "@/components/navbar/GenreBadges";
 import SheetLinks from "./SheetLinks";
+import StylesSearch from "./StylesSearch";
 
 const Navbar = async () => {
   const user = await currentUser();
@@ -26,6 +27,7 @@ const Navbar = async () => {
               <GuestLocationIndicator />
             )}
             <GenresDropdown />
+            <StylesSearch />
           </div>
           <div className="order-1 flex items-center gap-4 sm:order-2">
             <DarkMode />
