@@ -26,10 +26,12 @@ const Navbar = async () => {
             ) : (
               <GuestLocationIndicator />
             )}
+          </div>
+          <div className="order-3 flex gap-2 sm:order-2">
             <GenresDropdown />
             <StylesSearch />
           </div>
-          <div className="order-1 flex items-center gap-4 sm:order-2">
+          <div className="order-1 flex items-center gap-4 sm:order-3">
             <DarkMode />
             <SheetLinks />
           </div>

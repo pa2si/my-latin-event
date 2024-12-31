@@ -1,8 +1,13 @@
 To do:
 
+- lets implement for myEvents two tables. one for past events and one for future events. both shall be aufklappar and the future shall be open normoally
 - implement in liked events and upcoming events a max diplay page and automaic rendering when scrolling down
 
 WHATS DONE IN VERSIONS
+
+v 0.1.89
+
+- adapted some styling in navbar elements
 
 v 0.1.88
 
