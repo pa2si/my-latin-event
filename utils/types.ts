@@ -81,3 +81,27 @@ export interface PriceInputProps {
   currency?: string;
   onCurrencyChange?: (currency: string) => void;
 }
+
+export type TabEvent = {
+  id: string;
+  name: string;
+  location: string;
+  price: string;
+  eventDateAndTime: Date;
+  subtitle?: string | null;
+  image: string;
+  genres: string[];
+  organizer: {
+    organizerName: string;
+  };
+  _count: {
+    likes: number;
+  };
+};
+
+export type LikeIdsMap = Record<string, string | null>;
+
+export interface TabContainerProps {
+  events: TabEvent[];
+  likeIds: LikeIdsMap;
+}

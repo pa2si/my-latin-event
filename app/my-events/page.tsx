@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { fetchMyEvents } from "@/utils/actions";
-import EmptyList from "@/components/home/EmptyList";
+import { fetchEventsWithLikes, fetchMyEvents } from "@/utils/actions";
+import EmptyList from "@/components/shared/EmptyList";
 import { LoadingTable } from "@/components/shared/LoadingSkeletons";
 import HeaderSection from "@/components/shared/HeaderSection";
 import { ClipboardList } from "lucide-react";
@@ -15,7 +15,8 @@ function MyEventsPage() {
 }
 
 async function EventsContent() {
-  const myEvents = await fetchMyEvents();
+  const { events: myEvents, likeIds } =
+    await fetchEventsWithLikes(fetchMyEvents);
 
   if (myEvents.length === 0) {
     return (
@@ -49,9 +50,10 @@ async function EventsContent() {
       />
 
       <MyEventsContainer
-        allEvents={myEvents}
+        events={myEvents}
         upcomingEvents={upcomingEvents}
         pastEvents={pastEvents}
+        likeIds={likeIds}
       />
     </section>
   );

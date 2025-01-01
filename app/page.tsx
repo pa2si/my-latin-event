@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { LoadingCalendar } from "@/components/shared/LoadingSkeletons";
-import EventsContainer from "@/components/home/EventsContainer";
+import EventsContainer from "@/components/events/EventsContainer";
 
 const HomePage = async ({
   searchParams,

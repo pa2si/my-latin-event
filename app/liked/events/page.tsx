@@ -1,11 +1,22 @@
-import CalendarToggleBtn from "@/components/events/CalendarToggleBtn";
-import EmptyList from "@/components/home/EmptyList";
-import EventsList from "@/components/home/EventsList";
+import { Suspense } from "react";
+import EmptyList from "@/components/shared/EmptyList";
 import HeaderSection from "@/components/shared/HeaderSection";
-import { fetchLikes, fetchEventsWithLikes } from "@/utils/actions";
+import { LoadingCards } from "@/components/shared/LoadingSkeletons";
+import { TabEvent, LikeIdsMap } from "@/utils/types";
+import { fetchEventsWithLikes, fetchLikes } from "@/utils/actions";
+import LikedEventsContainer from "@/components/events/LikedEventsContainer";
 
-const LikedEventsPage = async () => {
-  const { events: likedEvents, likeIds } = await fetchEventsWithLikes(fetchLikes);
+function LikedEventsPage() {
+  return (
+    <Suspense fallback={<LoadingCards />}>
+      <EventsContent />
+    </Suspense>
+  );
+}
+
+async function EventsContent() {
+  const { events: likedEvents, likeIds } =
+    await fetchEventsWithLikes(fetchLikes);
 
   if (likedEvents.length === 0) {
     return (
@@ -19,23 +30,20 @@ const LikedEventsPage = async () => {
 
   return (
     <div className="relative">
-      <div className="mb-6 flex items-center justify-between">
-        <HeaderSection
-          title="Liked Events"
-          icon="❤️"
-          description="See all Events you have liked"
-          breadcrumb={{
-            name: "Liked Events",
-            parentPath: "/",
-            parentName: "Home",
-          }}
-        />
-        <CalendarToggleBtn events={likedEvents} />
-      </div>
+      <HeaderSection
+        title="Liked Events"
+        icon="❤️"
+        description="See all Events you have liked"
+        breadcrumb={{
+          name: "Liked Events",
+          parentPath: "/",
+          parentName: "Home",
+        }}
+      />
 
-      <EventsList events={likedEvents} likeIds={likeIds} />
+      <LikedEventsContainer events={likedEvents} likeIds={likeIds} />
     </div>
   );
-};
+}
 
 export default LikedEventsPage;

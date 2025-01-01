@@ -31,6 +31,7 @@ import { IconButton } from "@/components/form/Buttons";
 import DeleteEvent from "@/components/events/DeleteEvent";
 import { deleteMultipleEventsAction } from "@/utils/actions";
 import { usePathname, useSearchParams } from "next/navigation";
+import { LikeIdsMap, TabEvent } from "@/utils/types";
 
 type SortDirection = "asc" | "desc" | null;
 type SortableField =
@@ -90,9 +91,10 @@ const SortButton = ({ field, currentSort, onSort }: SortButtonProps) => {
 };
 
 interface MyEventsTableProps {
-  events: Event[];
-  upcomingEvents: Event[];
-  pastEvents: Event[];
+  events: TabEvent[];
+  upcomingEvents: TabEvent[];
+  pastEvents: TabEvent[];
+  likeIds: LikeIdsMap;
 }
 
 function MyEventsTable({
@@ -233,10 +235,23 @@ function MyEventsTable({
     setShowDeleteDialog(false);
   };
 
+  const getAllLabel = () => {
+    switch (currentTab) {
+      case "past":
+        return "All Past Events";
+      case "upcoming":
+        return "All Upcoming Events";
+      default:
+        return "All Events";
+    }
+  };
+
   return (
     <>
       <div className="mb-4 flex items-center justify-between">
-        <h4 className="capitalize">Total Events : {sortedEvents.length}</h4>
+        <h4 className="capitalize">
+          {getAllLabel()} : {sortedEvents.length}
+        </h4>
         {selectedEvents.length > 0 && (
           <Button
             variant="destructive"

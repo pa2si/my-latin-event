@@ -6,10 +6,13 @@ import { cookies } from "next/headers";
 import dynamic from "next/dynamic";
 
 // Dynamically import the CalendarContainer component
-const CalendarContainer = dynamic(() => import("./CalendarContainer"), {
-  loading: () => <LoadingCalendar />,
-  ssr: false,
-});
+const CalendarContainer = dynamic(
+  () => import("@/components/home/CalendarContainer"),
+  {
+    loading: () => <LoadingCalendar />,
+    ssr: false,
+  },
+);
 
 interface EventsContainerProps {
   searchParams: {

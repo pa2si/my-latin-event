@@ -1,11 +1,15 @@
 import HeaderSection from "@/components/shared/HeaderSection";
-import EventsList from "@/components/home/EventsList";
-import EmptyList from "@/components/home/EmptyList";
-import { fetchFollowedOrganizersEvents, fetchEventsWithLikes } from "@/utils/actions";
-import CalendarToggleBtn from "@/components/events/CalendarToggleBtn";
+import EmptyList from "@/components/shared/EmptyList";
+import {
+  fetchFollowedOrganizersEvents,
+  fetchEventsWithLikes,
+} from "@/utils/actions";
+import FollowedOrganizersEventsContainer from "@/components/events/FollowedOrganizersEventsContainer";
 
 const FollowedOrganizerEventsPage = async () => {
-  const { events, likeIds } = await fetchEventsWithLikes(fetchFollowedOrganizersEvents);
+  const { events, likeIds } = await fetchEventsWithLikes(
+    fetchFollowedOrganizersEvents,
+  );
 
   if (events.length === 0) {
     return (
@@ -20,7 +24,7 @@ const FollowedOrganizerEventsPage = async () => {
   return (
     <div className="relative">
       <HeaderSection
-        title="Upcoming Events From Organizers You Follow"
+        title="Events From Organizers You Follow"
         description="Stay updated with events from your favorite organizers"
         breadcrumb={{
           name: "Organizers Events Feed",
@@ -28,8 +32,7 @@ const FollowedOrganizerEventsPage = async () => {
           parentName: "Home",
         }}
       />
-      <EventsList events={events} likeIds={likeIds} />
-      <CalendarToggleBtn events={events} />
+      <FollowedOrganizersEventsContainer events={events} likeIds={likeIds} />
     </div>
   );
 };

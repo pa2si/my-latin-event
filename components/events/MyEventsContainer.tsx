@@ -2,31 +2,18 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MyEventsTable from "@/components/events/MyEventsTable";
+import { TabEvent, TabContainerProps } from "@/utils/types";
 
-interface Event {
-  id: string;
-  name: string;
-  location: string;
-  price: string;
-  eventDateAndTime: Date;
-  organizer: {
-    organizerName: string;
-  };
-  _count: {
-    likes: number;
-  };
-}
-
-interface MyEventsContainerProps {
-  allEvents: Event[];
-  upcomingEvents: Event[];
-  pastEvents: Event[];
+interface MyEventsContainerProps extends TabContainerProps {
+  upcomingEvents: TabEvent[];
+  pastEvents: TabEvent[];
 }
 
 export default function MyEventsContainer({
-  allEvents,
+  events: allEvents,
   upcomingEvents,
   pastEvents,
+  likeIds,
 }: MyEventsContainerProps) {
   return (
     <div className="mt-8">
@@ -52,6 +39,7 @@ export default function MyEventsContainer({
             events={allEvents}
             upcomingEvents={upcomingEvents}
             pastEvents={pastEvents}
+            likeIds={likeIds}
           />
         </div>
       </Tabs>

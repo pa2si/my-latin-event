@@ -4,6 +4,13 @@ To do:
 
 WHATS DONE IN VERSIONS
 
+v 0.1.91
+
+- updated MyEventsContainer and MyEventsTable to display again the CalendarToggleBtn.
+- also updated the display text of Active Events to a interactive message
+- implemented the same features with the tabs in followedOrganizersEvents route and created a Container
+- implemented types ans used them in both, likes and follower components.
+
 v 0.1.90
 
 - implemented tabs in MyEvents to display either past, upcoming or all events user created
