@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -30,6 +30,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { IconButton } from "@/components/form/Buttons";
 import DeleteEvent from "@/components/events/DeleteEvent";
 import { deleteMultipleEventsAction } from "@/utils/actions";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type SortDirection = "asc" | "desc" | null;
 type SortableField =
@@ -88,12 +89,44 @@ const SortButton = ({ field, currentSort, onSort }: SortButtonProps) => {
   );
 };
 
-function MultipleDeleteEvents({ events: initialEvents }: { events: Event[] }) {
+interface MyEventsTableProps {
+  events: Event[];
+  upcomingEvents: Event[];
+  pastEvents: Event[];
+}
+
+function MyEventsTable({
+  events,
+  upcomingEvents,
+  pastEvents,
+}: MyEventsTableProps) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [sort, setSort] = useState<SortState>({ field: null, direction: null });
   const { toast } = useToast();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [currentTab, setCurrentTab] = useState("upcoming");
+
+  useEffect(() => {
+    const tab = searchParams?.get("tab") || "upcoming";
+    setCurrentTab(tab);
+  }, [searchParams]);
+
+  // Get the correct set of events based on the current tab
+  const getCurrentEvents = () => {
+    switch (currentTab) {
+      case "past":
+        return pastEvents;
+      case "upcoming":
+        return upcomingEvents;
+      default:
+        return events;
+    }
+  };
+
+  const currentEvents = getCurrentEvents();
 
   const handleSort = (field: SortableField) => {
     setSort((prevSort) => ({
@@ -105,10 +138,10 @@ function MultipleDeleteEvents({ events: initialEvents }: { events: Event[] }) {
     }));
   };
 
-  const sortEvents = (events: Event[]): Event[] => {
-    if (!sort.field || !sort.direction) return events;
+  const sortEvents = (eventsToSort: Event[]): Event[] => {
+    if (!sort.field || !sort.direction) return eventsToSort;
 
-    return [...events].sort((a, b) => {
+    return [...eventsToSort].sort((a, b) => {
       let compareA: any;
       let compareB: any;
 
@@ -130,7 +163,6 @@ function MultipleDeleteEvents({ events: initialEvents }: { events: Event[] }) {
           compareB = b.location;
           break;
         case "price":
-          // Handle special cases like "Free" or "Donation"
           compareA =
             a.price === "Free"
               ? -1
@@ -158,7 +190,7 @@ function MultipleDeleteEvents({ events: initialEvents }: { events: Event[] }) {
     });
   };
 
-  const sortedEvents = sortEvents(initialEvents);
+  const sortedEvents = sortEvents(currentEvents);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -204,7 +236,7 @@ function MultipleDeleteEvents({ events: initialEvents }: { events: Event[] }) {
   return (
     <>
       <div className="mb-4 flex items-center justify-between">
-        <h4 className="capitalize">Active Events : {sortedEvents.length}</h4>
+        <h4 className="capitalize">Total Events : {sortedEvents.length}</h4>
         {selectedEvents.length > 0 && (
           <Button
             variant="destructive"
@@ -331,4 +363,4 @@ function MultipleDeleteEvents({ events: initialEvents }: { events: Event[] }) {
   );
 }
 
-export default MultipleDeleteEvents;
+export default MyEventsTable;

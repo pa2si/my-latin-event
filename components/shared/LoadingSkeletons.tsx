@@ -85,14 +85,6 @@ export function LoadingTable({ rows }: { rows?: number }) {
       <div className="mt-16">
         <Skeleton className="mb-4 h-8 w-48" /> {/* Header skeleton */}
         <div className="rounded-md">
-          {/* Table header skeleton */}
-          <div className="">
-            <div className="flex justify-between">
-              {[...Array(6)].map((_, i) => (
-                <Skeleton key={i} className="h-5 w-20" />
-              ))}
-            </div>
-          </div>
           {/* Table rows */}
           <div className="space-y-4">
             {[...Array(rows || 5)].map((_, i) => (
